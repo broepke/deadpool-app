@@ -16,6 +16,8 @@ df_players = load_players_table()
 # Add some text
 st.title("Deadpool 2024 :skull_and_crossbones:")
 
+st.image("deadpool.png", "Deadpool 2024")
+
 st.subheader("Current Players:")
 st.dataframe(df_players)
 
