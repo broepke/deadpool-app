@@ -32,9 +32,11 @@ with st.form("Draft Picks"):
     submitted = st.form_submit_button("Submit")
     if submitted:
         st.write("Draft Pick:", pick)
+        
+        wiki_page = pick.replace(" ", "_")
 
         write_query = (
-            f"INSERT INTO picks (name, picked_by) VALUES ('{pick}', '{email}')"
+            f"INSERT INTO picks (name, picked_by, wiki_page) VALUES ('{pick}', '{email}', '{wiki_page}')"
         )
 
         st.write(write_query)
