@@ -2,7 +2,7 @@
 Simple display of all picks
 """
 import streamlit as st
-from home import check_password
+from Deadpool import check_password
 
 if not check_password():
     st.stop()  # Do not continue if check_password is not True.
@@ -20,5 +20,11 @@ def load_picks_table():
 
 df_picks = load_picks_table()
 
-st.title("All Draft Picks:")
-st.dataframe(df_picks)
+df_2024 = df_picks[df_picks['YEAR'] == 2024]
+df_2023 = df_picks[df_picks['YEAR'] == 2023]
+
+st.title("2024 Draft Picks:")
+st.dataframe(df_2024)
+
+st.title("2023 Draft Picks:")
+st.dataframe(df_2023)

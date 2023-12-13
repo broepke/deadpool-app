@@ -1,5 +1,4 @@
-black
-pylint
+fuzzywuzzy
 streamlit
 snowflake-snowpark-python
 
