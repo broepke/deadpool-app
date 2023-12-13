@@ -26,5 +26,5 @@ df_2023 = df_picks[df_picks['YEAR'] == 2023]
 st.title("2024 Draft Picks:")
 st.dataframe(df_2024)
 
-st.title("2023 Draft Picks:")
+st.header("2023 Draft Picks:")
 st.dataframe(df_2023)

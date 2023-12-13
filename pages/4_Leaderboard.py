@@ -17,11 +17,23 @@ def load_score_table():
 
 df_score = load_score_table()
 
+df_score_2024 = df_score[df_score["YEAR"] == 2024]
+df_score_2023 = df_score[df_score["YEAR"] == 2023]
 
-st.title("Leaderboard")
+st.title("2024 Leaderboard:")
 
 st.dataframe(
-    df_score.style.highlight_max(axis=0, subset=["SCORE"]), use_container_width=True
+    df_score_2024.style.highlight_max(axis=0, subset=["SCORE"]),
+    use_container_width=True,
 )
 
-st.bar_chart(data=df_score, x="PLAYER", y="SCORE")
+st.bar_chart(data=df_score_2024, x="PLAYER", y="SCORE")
+
+st.header("2023 Leaderboard:")
+
+st.dataframe(
+    df_score_2023.style.highlight_max(axis=0, subset=["SCORE"]),
+    use_container_width=True,
+)
+
+st.bar_chart(data=df_score_2023, x="PLAYER", y="SCORE")

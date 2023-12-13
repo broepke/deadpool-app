@@ -12,7 +12,7 @@ except:
     st.write("Please login again")
 
 
-def has_fuzzy_match(value, value_set, threshold=92):
+def has_fuzzy_match(value, value_set, threshold=85):
     for item in value_set:
         if fuzz.token_sort_ratio(value.lower(), item.lower()) >= threshold:
             return True
