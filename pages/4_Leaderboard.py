@@ -10,15 +10,14 @@ conn = st.connection("snowflake")
 
 
 @st.cache_data
-def load_score_table():
+def load_score_table(table):
     session_score = conn.session()
-    return session_score.table("score").to_pandas()
+    return session_score.table(table).to_pandas()
 
 
-df_score = load_score_table()
+df_score_2024 = load_score_table("score_two")
+df_score_2023 = load_score_table("score_one")
 
-df_score_2024 = df_score[df_score["YEAR"] == 2024]
-df_score_2023 = df_score[df_score["YEAR"] == 2023]
 
 st.title("2024 Leaderboard:")
 
