@@ -33,6 +33,7 @@ with st.form("Registration"):
         st.write(last_name)
         st.write(email)
         st.write(sms)
+        st.write(opt_in)
         
         # Check the DF to see if the user has already registered
         
