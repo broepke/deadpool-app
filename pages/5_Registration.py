@@ -19,9 +19,11 @@ players = df["PLAYER"].tolist()
 
 st.title("New User Registration")
 with st.form("Registration"):
-    first_name = st.text_input("Please Enter Your First Name:", "")
-    last_name = st.text_input("Please Enter Your Last Name:", "")
-    email = st.text_input("Please Enter Your Email:", "")
+    first_name = st.text_input("Please Enter Your First Name:", "", 256, key="reg_first_name")
+    last_name = st.text_input("Please Enter Your Last Name:", "", 256, key="reg_last_name")
+    email = st.text_input("Please Enter Your Email:", "", 256, key="reg_email")
+    sms = st.text_input("Please Enter Your Mobile Number:", "", 256, key="reg_sms")
+    opt_in = st.checkbox("Opt-In to Receive SMS Alerts", True, key="reg_opt_in")
     
     email = email.lower()
 
@@ -30,11 +32,12 @@ with st.form("Registration"):
         st.write(first_name)
         st.write(last_name)
         st.write(email)
+        st.write(sms)
         
         # Check the DF to see if the user has already registered
         
         
         # Write the new user into the database
-        # write_query = f"INSERT INTO players (name, picked_by) VALUES ('{pick}', '{email}')"
+        # write_query = f"INSERT INTO players (name, email) VALUES ('{pick}', '{email}')"
 
         # conn.cursor().execute(write_query)
