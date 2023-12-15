@@ -75,32 +75,45 @@ else:
     st.header("Update Player Information")
 
     with st.form("Registration"):
-        form_first_name = st.text_input(
+        
+        try:
+            sel_first_name = st.session_state["reg_first_name"]
+            sel_first_name = st.session_state["reg_first_name"]
+            sel_last_name = st.session_state["reg_last_name"]
+            sel_email = st.session_state["reg_email"]
+            sel_opt_in = st.session_state["reg_opt_in"]
+            sel_sms = st.session_state["reg_sms"]
+            sub_player = st.session_state["reg_player"]
+        except:
+            sel_first_name = ""
+            sel_last_name = ""
+            sel_email = ""
+            sel_opt_in = ""
+            sel_sms = ""
+            sub_player = ""
+
+        
+        sub_first_name = st.text_input(
             "First Name:",
             sel_first_name,
             256,
             key="_reg_first_name",
         )
-        form_last_name = st.text_input(
+        sub_last_name = st.text_input(
             "Last Name:", sel_last_name, 256, key="_reg_last_name"
         )
-        form_email = st.text_input("Email:", sel_email, 256, key="_reg_email")
-        form_sms = st.text_input("Mobile Number:", sel_sms, 256, key="_reg_sms")
-        form_opt_in = st.checkbox("Opt-In", sel_opt_in, key="_reg_opt_in")
+        sub_email = st.text_input("Email:", sel_email, 256, key="_reg_email")
+        sub_sms = st.text_input("Mobile Number:", sel_sms, 256, key="_reg_sms")
+        sub_opt_in = st.checkbox("Opt-In", sel_opt_in, key="_reg_opt_in")
 
         submitted = st.form_submit_button("Submit")
         if submitted:
-            sub_first_name = st.session_state["reg_first_name"]
-            sub_last_name = st.session_state["reg_last_name"]
-            sub_email = st.session_state["reg_email"]
-            sub_opt_in = st.session_state["reg_opt_in"]
-            sub_sms = st.session_state["reg_sms"]
-            sub_player = st.session_state["reg_player"]
-
-            if sub_opt_in == 1:
-                sub_opt_in = True
+            
+            if sel_opt_in == 1:
+                sel_opt_in = True
             else:
                 sub_opt_in = False
+        
 
             write_query = "UPDATE players SET first_name = :1, last_name = :2, email = :3, opt_in = :4, sms = :5 WHERE email = :6"
 
