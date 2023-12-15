@@ -9,6 +9,24 @@ try:
     email = st.session_state["username"]
 except:
     st.write("Please login again")
-    
 
-st.header("Maintenance Tools")
+if email != "broepke@gmail.com":
+    st. write("Not authorized")
+else:
+    st.header("Maintenance Tools")
+
+    # Initialize connection.
+    conn = st.connection("snowflake")
+
+
+    @st.cache_data
+    def load_picks_table():
+        session_picks = conn.session()
+        return session_picks.table("players").to_pandas()
+
+
+    df_players = load_picks_table()
+
+
+    st.header("Current Players:")
+    st.dataframe(df_players)
