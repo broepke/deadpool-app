@@ -23,6 +23,12 @@ if email != "broepke@gmail.com":
     st.write("Not authorized")
 else:
     st.title("Pick Maintenance Tools")
+    st.markdown("""
+                Use this form to fix the Wikipedia links if they were not guessed properly by the code when loaded.  In some cases there are disambiguation data such as '(actor)' for common names or there can be other URL encoding for special characters in names.
+                1. Select a name.
+                2. Update the Wiki link only using the end of the URL such as '**Tina_Turner**' in https://en.wikipedia.org/wiki/Tina_Turner.
+                3. Submit your adjustments.
+                """)
 
     # Initialize important varibles
     sel_name = ""
@@ -42,6 +48,7 @@ else:
     df_picks_2024 = df_picks[df_picks["YEAR"] == 2024]
 
     df_picks_list = df_picks_2024["NAME"].to_list()
+    df_picks_list.sort()
 
     st.header("Pick Selection")
 
