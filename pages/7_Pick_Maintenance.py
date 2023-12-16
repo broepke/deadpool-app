@@ -22,7 +22,7 @@ except:
 if email != "broepke@gmail.com":
     st.write("Not authorized")
 else:
-    st.title("Maintenance Tools")
+    st.title("Pick Maintenance Tools")
 
     # Initialize important varibles
     sel_first_name = ""
@@ -38,22 +38,25 @@ else:
     @st.cache_data
     def load_picks_table():
         session_picks = conn.session()
-        return session_picks.table("players").to_pandas()
+        return session_picks.table("picks").to_pandas()
 
-    df_players = load_picks_table()
-    df_players_list = df_players["EMAIL"].to_list()
+    df_picks = load_picks_table()
+    
+    df_picks_2024 = df_picks[df_picks['YEAR'] == 2024]
+    
+    df_players_list = df_picks_2024["NAME"].to_list()
 
-    st.header("Player Selection")
+    st.header("Pick Selection")
 
     # Load all the players into a drop down for easy selection
-    with st.form("Player to Update"):
+    with st.form("Pick to Update"):
         sel_player = st.selectbox(
             "Select a Player", df_players_list, key="sel_selected_player"
         )
         submitted = st.form_submit_button("Choose Player")
 
         if submitted:
-            filtered_df = df_players[df_players["EMAIL"] == sel_player]
+            filtered_df = df_picks_2024[df_picks_2024["NAME"] == sel_player]
 
             if not filtered_df.empty:
                 sel_first_name = filtered_df.iloc[0]["FIRST_NAME"]
