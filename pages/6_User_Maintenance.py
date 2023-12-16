@@ -24,6 +24,14 @@ except:
 # else:
 
 st.title("User Maintenance Tools")
+st.markdown("""
+            Use this form to adjust any personal information you need.  The email is the key information here, and if you so choose to opt in to SMS messaging you can do so below.  If you opt out, you will not receive pick or death alerts.  It is highly reccomended that you opt in!
+            1. Select your name and click "Choose Player."
+            2. Adjust any information as needed.
+            3. Click "Submit".  
+            
+            If for any reason you see an error, please contact the Arbiter.
+            """)
 
 # Initialize important varibles
 sel_first_name = ""
