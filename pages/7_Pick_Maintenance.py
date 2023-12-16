@@ -19,89 +19,87 @@ try:
 except:
     st.write("Please login again")
 
-if email != "broepke@gmail.com":
-    st.write("Not authorized")
-else:
-    st.title("Pick Maintenance Tools")
-    st.markdown("""
-                Use this form to fix the Wikipedia links if they were not guessed properly by the code when loaded.  In some cases there are disambiguation data such as '(actor)' for common names or there can be other URL encoding for special characters in names.
-                1. Select a name.
-                2. Update the Wiki link only using the end of the URL such as '**Tina_Turner**' in https://en.wikipedia.org/wiki/Tina_Turner.
-                3. Submit your adjustments.
-                """)
+# if email != "broepke@gmail.com":
+#     st.write("Not authorized")
+# else:
 
-    # Initialize important varibles
-    sel_name = ""
-    sel_wiki_page = ""
+st.title("Pick Maintenance Tools")
+st.markdown("""
+            Use this form to fix the Wikipedia links if they were not guessed properly by the code when loaded.  In some cases there are disambiguation data such as '(actor)' for common names or there can be other URL encoding for special characters in names.
+            1. Select a name.
+            2. Update the Wiki link only using the end of the URL such as '**Tina_Turner**' in https://en.wikipedia.org/wiki/Tina_Turner.
+            3. Submit your adjustments.
+            """)
 
-    # Initialize connection.
-    conn = st.connection("snowflake")
+# Initialize important varibles
+sel_name = ""
+sel_wiki_page = ""
 
-    # Get a list off all curent picks
-    @st.cache_data
-    def load_picks_table():
-        session_picks = conn.session()
-        return session_picks.table("picks").to_pandas()
+# Initialize connection.
+conn = st.connection("snowflake")
 
-    df_picks = load_picks_table()
+# Get a list off all curent picks
+@st.cache_data
+def load_picks_table():
+    session_picks = conn.session()
+    return session_picks.table("picks").to_pandas()
 
-    df_picks_2024 = df_picks[df_picks["YEAR"] == 2024]
+df_picks = load_picks_table()
 
-    df_picks_list = df_picks_2024["NAME"].to_list()
-    df_picks_list.sort()
+df_picks_2024 = df_picks[df_picks["YEAR"] == 2024]
 
-    st.header("Pick Selection")
+df_picks_list = df_picks_2024["NAME"].to_list()
+df_picks_list.sort()
 
-    # Load all the picks into a drop down for easy selection
-    with st.form("Pick to Update"):
-        sel_pick = st.selectbox("Select a pick", df_picks_list, key="sel_selected_pick")
-        submitted = st.form_submit_button("Choose pick")
+st.header("Pick Selection")
 
-        if submitted:
-            filtered_df = df_picks_2024[df_picks_2024["NAME"] == sel_pick]
+# Load all the picks into a drop down for easy selection
+with st.form("Pick to Update"):
+    sel_pick = st.selectbox("Select a pick", df_picks_list, key="sel_selected_pick")
+    submitted = st.form_submit_button("Choose pick")
 
-            if not filtered_df.empty:
-                sel_name = filtered_df.iloc[0]["NAME"]
-                sel_wiki_page = filtered_df.iloc[0]["WIKI_PAGE"]
+    if submitted:
+        filtered_df = df_picks_2024[df_picks_2024["NAME"] == sel_pick]
 
-                st.session_state["reg_name"] = sel_name
-                st.session_state["reg_wiki_page"] = sel_wiki_page
+        if not filtered_df.empty:
+            sel_name = filtered_df.iloc[0]["NAME"]
+            sel_wiki_page = filtered_df.iloc[0]["WIKI_PAGE"]
 
-            else:
-                print("No user found with the given email")
+            st.session_state["reg_name"] = sel_name
+            st.session_state["reg_wiki_page"] = sel_wiki_page
 
-    st.header("Update Pick Information")
+        else:
+            print("No user found with the given email")
 
-    with st.form("Registration"):
-        try:
-            sel_name = st.session_state["reg_name"]
-            sel_wiki_page = st.session_state["reg_wiki_page"]
-        except:
-            sel_name = ""
-            sel_wiki_page = ""
+st.header("Update Pick Information")
 
-        sub_name = st.text_input(
-            "First Name:",
-            sel_name,
-            256,
-            key="_reg_name",
+with st.form("Registration"):
+    try:
+        sel_name = st.session_state["reg_name"]
+        sel_wiki_page = st.session_state["reg_wiki_page"]
+    except:
+        sel_name = ""
+        sel_wiki_page = ""
+
+    sub_name = st.text_input(
+        "First Name:",
+        sel_name,
+        256,
+        key="_reg_name",
+    )
+    sub_wiki_page = st.text_input(
+        "Last Name:", sel_wiki_page, 256, key="_reg_wiki_page"
+    )
+
+    submitted = st.form_submit_button("Submit")
+    if submitted:
+        write_query = (
+            "UPDATE picks SET wiki_page = :1 WHERE name = :2 AND year = 2024"
         )
-        sub_wiki_page = st.text_input(
-            "Last Name:", sel_wiki_page, 256, key="_reg_wiki_page"
-        )
 
-        submitted = st.form_submit_button("Submit")
-        if submitted:
-            write_query = (
-                "UPDATE picks SET wiki_page = :1 WHERE name = :2 AND year = 2024"
-            )
+        # # Execute the query with parameters
+        conn.cursor().execute(write_query,(sub_wiki_page, sub_name))
 
-            # # Execute the query with parameters
-            conn.cursor().execute(
-                write_query,
-                (sub_wiki_page, sub_name),
-            )
-
-            st.write(write_query)
-            st.write(sub_name)
-            st.write(sub_wiki_page)
+        st.write(write_query)
+        st.write(sub_name)
+        st.write(sub_wiki_page)

@@ -19,120 +19,123 @@ try:
 except:
     st.write("Please login again")
 
-if email != "broepke@gmail.com":
-    st.write("Not authorized")
-else:
-    st.title("User Maintenance Tools")
+# if email != "broepke@gmail.com":
+#     st.write("Not authorized")
+# else:
 
-    # Initialize important varibles
-    sel_first_name = ""
-    sel_last_name = ""
-    sel_email = ""
-    sel_sms = ""
-    sel_opt_in = True
+st.title("User Maintenance Tools")
 
-    # Initialize connection.
-    conn = st.connection("snowflake")
+# Initialize important varibles
+sel_first_name = ""
+sel_last_name = ""
+sel_email = ""
+sel_sms = ""
+sel_opt_in = True
 
-    # Get a list off all curent players
-    @st.cache_data
-    def load_picks_table():
-        session_picks = conn.session()
-        return session_picks.table("players").to_pandas()
+# Initialize connection.
+conn = st.connection("snowflake")
 
-    df_players = load_picks_table()
-    df_players_list = df_players["EMAIL"].to_list()
+# Get a list off all curent players
+@st.cache_data
+def load_picks_table():
+    session_picks = conn.session()
+    return session_picks.table("players").to_pandas()
 
-    st.header("Player Selection")
+df_players = load_picks_table()
+df_players_list = df_players["EMAIL"].to_list()
 
-    # Load all the players into a drop down for easy selection
-    with st.form("Player to Update"):
-        sel_player = st.selectbox(
-            "Select a Player", df_players_list, key="sel_selected_player"
-        )
-        submitted = st.form_submit_button("Choose Player")
+st.header("Player Selection")
 
-        if submitted:
-            filtered_df = df_players[df_players["EMAIL"] == sel_player]
+# Load all the players into a drop down for easy selection
+with st.form("Player to Update"):
+    sel_player = st.selectbox(
+        "Select a Player", df_players_list, key="sel_selected_player"
+    )
+    submitted = st.form_submit_button("Choose Player")
 
-            if not filtered_df.empty:
-                sel_first_name = filtered_df.iloc[0]["FIRST_NAME"]
-                sel_last_name = filtered_df.iloc[0]["LAST_NAME"]
-                sel_email = filtered_df.iloc[0]["EMAIL"]
-                sel_sms = filtered_df.iloc[0]["SMS"]
-                sel_opt_in = filtered_df.iloc[0]["OPT_IN"]
+    if submitted:
+        filtered_df = df_players[df_players["EMAIL"] == sel_player]
 
-                st.session_state["reg_first_name"] = sel_first_name
-                st.session_state["reg_last_name"] = sel_last_name
-                st.session_state["reg_email"] = sel_email
-                st.session_state["reg_sms"] = sel_sms
-                st.session_state["reg_opt_in"] = sel_opt_in
-                st.session_state["reg_player"] = sel_email
+        if not filtered_df.empty:
+            sel_first_name = filtered_df.iloc[0]["FIRST_NAME"]
+            sel_last_name = filtered_df.iloc[0]["LAST_NAME"]
+            sel_email = filtered_df.iloc[0]["EMAIL"]
+            sel_sms = filtered_df.iloc[0]["SMS"]
+            sel_opt_in = filtered_df.iloc[0]["OPT_IN"]
 
-            else:
-                print("No user found with the given email")
+            st.session_state["reg_first_name"] = sel_first_name
+            st.session_state["reg_last_name"] = sel_last_name
+            st.session_state["reg_email"] = sel_email
+            st.session_state["reg_sms"] = sel_sms
+            st.session_state["reg_opt_in"] = sel_opt_in
+            st.session_state["reg_player"] = sel_email
 
-    st.header("Update Player Information")
+        else:
+            print("No user found with the given email")
 
-    with st.form("Registration"):
+st.header("Update Player Information")
+
+with st.form("Registration"):
+    
+    try:
+        sel_first_name = st.session_state["reg_first_name"]
+        sel_last_name = st.session_state["reg_last_name"]
+        sel_email = st.session_state["reg_email"]
+        sel_opt_in = st.session_state["reg_opt_in"]
+        sel_sms = st.session_state["reg_sms"]
+        sub_player = st.session_state["reg_player"]
+    except:
+        sel_first_name = ""
+        sel_last_name = ""
+        sel_email = ""
+        sel_opt_in = ""
+        sel_sms = ""
+        sub_player = ""
+
+    
+    sub_first_name = st.text_input(
+        "First Name:",
+        sel_first_name,
+        256,
+        key="_reg_first_name",
+    )
+    sub_last_name = st.text_input(
+        "Last Name:", sel_last_name, 256, key="_reg_last_name"
+    )
+    sub_email = st.text_input("Email:", sel_email, 256, key="_reg_email")
+    sub_sms = st.text_input("Mobile Number:", sel_sms, 256, key="_reg_sms")
+    sub_opt_in = st.checkbox("Opt-In", sel_opt_in, key="_reg_opt_in")
+
+    submitted = st.form_submit_button("Submit")
+    if submitted:
         
-        try:
-            sel_first_name = st.session_state["reg_first_name"]
-            sel_last_name = st.session_state["reg_last_name"]
-            sel_email = st.session_state["reg_email"]
-            sel_opt_in = st.session_state["reg_opt_in"]
-            sel_sms = st.session_state["reg_sms"]
-            sub_player = st.session_state["reg_player"]
-        except:
-            sel_first_name = ""
-            sel_last_name = ""
-            sel_email = ""
-            sel_opt_in = ""
-            sel_sms = ""
-            sub_player = ""
+        if sel_opt_in == 1:
+            sel_opt_in = True
+        else:
+            sub_opt_in = False
+    
 
-        
-        sub_first_name = st.text_input(
-            "First Name:",
-            sel_first_name,
-            256,
-            key="_reg_first_name",
+        write_query = "UPDATE players SET first_name = :1, last_name = :2, email = :3, opt_in = :4, sms = :5 WHERE email = :6"
+
+        # # Execute the query with parameters
+        conn.cursor().execute(
+            write_query,
+            (
+                sub_first_name,
+                sub_last_name,
+                sub_email,
+                sub_opt_in,
+                sub_sms,
+                sub_player,
+            ),
         )
-        sub_last_name = st.text_input(
-            "Last Name:", sel_last_name, 256, key="_reg_last_name"
-        )
-        sub_email = st.text_input("Email:", sel_email, 256, key="_reg_email")
-        sub_sms = st.text_input("Mobile Number:", sel_sms, 256, key="_reg_sms")
-        sub_opt_in = st.checkbox("Opt-In", sel_opt_in, key="_reg_opt_in")
-
-        submitted = st.form_submit_button("Submit")
-        if submitted:
-            
-            if sel_opt_in == 1:
-                sel_opt_in = True
-            else:
-                sub_opt_in = False
         
+        # TODO: Add code here to update the picks table if the email address was updated
 
-            write_query = "UPDATE players SET first_name = :1, last_name = :2, email = :3, opt_in = :4, sms = :5 WHERE email = :6"
-
-            # # Execute the query with parameters
-            conn.cursor().execute(
-                write_query,
-                (
-                    sub_first_name,
-                    sub_last_name,
-                    sub_email,
-                    sub_opt_in,
-                    sub_sms,
-                    sub_player,
-                ),
-            )
-
-            st.write(write_query)
-            st.write(sub_first_name)
-            st.write(sub_last_name)
-            st.write(sub_email)
-            st.write(sub_opt_in)
-            st.write(sub_sms)
-            st.write(sub_player)
+        st.write(write_query)
+        st.write(sub_first_name)
+        st.write(sub_last_name)
+        st.write(sub_email)
+        st.write(sub_opt_in)
+        st.write(sub_sms)
+        st.write(sub_player)
