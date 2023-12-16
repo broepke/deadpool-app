@@ -1,5 +1,5 @@
 import streamlit as st
-from Deadpool import check_password
+from Home import check_password
 
 
 def save_value(key):
@@ -77,7 +77,6 @@ else:
     with st.form("Registration"):
         
         try:
-            sel_first_name = st.session_state["reg_first_name"]
             sel_first_name = st.session_state["reg_first_name"]
             sel_last_name = st.session_state["reg_last_name"]
             sel_email = st.session_state["reg_email"]

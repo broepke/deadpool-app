@@ -1,6 +1,6 @@
 import streamlit as st
 from fuzzywuzzy import fuzz
-from Deadpool import check_password
+from Home import check_password
 
 if not check_password():
     st.stop()  # Do not continue if check_password is not True.
