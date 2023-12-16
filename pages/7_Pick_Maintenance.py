@@ -28,7 +28,6 @@ else:
     sel_name = ""
     sel_wiki_page = ""
 
-
     # Initialize connection.
     conn = st.connection("snowflake")
 
@@ -39,18 +38,16 @@ else:
         return session_picks.table("picks").to_pandas()
 
     df_picks = load_picks_table()
-    
-    df_picks_2024 = df_picks[df_picks['YEAR'] == 2024]
-    
+
+    df_picks_2024 = df_picks[df_picks["YEAR"] == 2024]
+
     df_picks_list = df_picks_2024["NAME"].to_list()
 
     st.header("Pick Selection")
 
     # Load all the picks into a drop down for easy selection
     with st.form("Pick to Update"):
-        sel_pick = st.selectbox(
-            "Select a pick", df_picks_list, key="sel_selected_pick"
-        )
+        sel_pick = st.selectbox("Select a pick", df_picks_list, key="sel_selected_pick")
         submitted = st.form_submit_button("Choose pick")
 
         if submitted:
@@ -60,10 +57,8 @@ else:
                 sel_name = filtered_df.iloc[0]["NAME"]
                 sel_wiki_page = filtered_df.iloc[0]["WIKI_PAGE"]
 
-
                 st.session_state["reg_name"] = sel_name
                 st.session_state["reg_wiki_page"] = sel_wiki_page
-
 
             else:
                 print("No user found with the given email")
@@ -71,17 +66,13 @@ else:
     st.header("Update Pick Information")
 
     with st.form("Registration"):
-        
         try:
             sel_name = st.session_state["reg_name"]
             sel_wiki_page = st.session_state["reg_wiki_page"]
-
         except:
             sel_name = ""
             sel_wiki_page = ""
 
-
-        
         sub_name = st.text_input(
             "First Name:",
             sel_name,
@@ -92,21 +83,16 @@ else:
             "Last Name:", sel_wiki_page, 256, key="_reg_wiki_page"
         )
 
-
         submitted = st.form_submit_button("Submit")
         if submitted:
-
-    
-            write_query = "UPDATE picks SET wiki_page = :1 WHERE name = :2 AND year = 2024"
+            write_query = (
+                "UPDATE picks SET wiki_page = :1 WHERE name = :2 AND year = 2024"
+            )
 
             # # Execute the query with parameters
             conn.cursor().execute(
                 write_query,
-                (
-                    sub_name,
-                    sub_wiki_page
-
-                ),
+                (sub_wiki_page, sub_name),
             )
 
             st.write(write_query)
