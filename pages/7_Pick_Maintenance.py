@@ -39,12 +39,11 @@ sel_wiki_page = ""
 conn = st.connection("snowflake")
 
 # Get a list off all curent picks
-@st.cache_data
-def load_picks_table():
+def load_picks_table(table):
     session_picks = conn.session()
-    return session_picks.table("picks").to_pandas()
+    return session_picks.table(table).to_pandas()
 
-df_picks = load_picks_table()
+df_picks = load_picks_table("picks")
 
 df_picks_2024 = df_picks[df_picks["YEAR"] == 2024]
 

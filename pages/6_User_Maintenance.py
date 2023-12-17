@@ -44,12 +44,11 @@ sel_opt_in = True
 conn = st.connection("snowflake")
 
 # Get a list off all curent players
-@st.cache_data
-def load_picks_table():
+def load_picks_table(table):
     session_picks = conn.session()
-    return session_picks.table("players").to_pandas()
+    return session_picks.table(table).to_pandas()
 
-df_players = load_picks_table()
+df_players = load_picks_table("players")
 df_players_list = df_players["EMAIL"].to_list()
 
 st.header("Player Selection")
