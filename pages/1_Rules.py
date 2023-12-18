@@ -22,7 +22,7 @@ st.markdown("""
 3. **Selection Criteria**:
     - Only public figures (celebrities, politicians, athletes, etc.) may be selected.
     - At least 50% of the players must know each selection.
-4. **Points and Betting System**:
+4. **Points System**:
     - 100 Points are awarded based on each correct prediction.
     - The total points of the death will be calculated as `50 + (100-AGE)`.
     - E.g., the death of a person who's 90 years old will be 60 points.
@@ -39,5 +39,5 @@ st.markdown("""
     - Participant information must be kept confidential.
     - Lists of predictions should not be publicized or shared outside the pool.
 8. **Dispute Resolution**:
-    - The judge's decision is final in case of disputes.
+    - The Arbiter's decision is final in case of disputes.
 """)
