@@ -1,13 +1,5 @@
 import streamlit as st
-from Home import check_password
-
-
-def save_value(key):
-    st.session_state[key] = st.session_state["_" + key]
-
-
-def get_value(key):
-    st.session_state["_" + key] = st.session_state[key]
+from utilities import check_password, get_user_name
 
 
 if not check_password():
@@ -16,12 +8,10 @@ if not check_password():
 try:
     st.write(st.session_state["username"])
     email = st.session_state["username"]
+    user_name = get_user_name(email)
 except:
     st.write("Please login again")
 
-# if email != "broepke@gmail.com":
-#     st.write("Not authorized")
-# else:
 
 st.title("Pick Maintenance Tools")
 st.markdown(

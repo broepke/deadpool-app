@@ -1,6 +1,6 @@
 import streamlit as st
 from fuzzywuzzy import fuzz
-from Home import check_password
+from utilities import check_password, get_user_name
 from twilio.rest import Client
 
 if not check_password():
@@ -9,6 +9,7 @@ if not check_password():
 try:
     st.write(st.session_state["username"])
     email = st.session_state["username"]
+    user_name = get_user_name(email)
 except:
     st.write("Please login again")
 

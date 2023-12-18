@@ -1,8 +1,15 @@
 import streamlit as st
-from Home import check_password
+from utilities import check_password, get_user_name
 
 if not check_password():
     st.stop()  # Do not continue if check_password is not True.
+    
+try:
+    st.write(st.session_state["username"])
+    email = st.session_state["username"]
+    user_name = get_user_name(email)
+except:
+    st.write("Please login again")
 
 conn = st.connection("snowflake")
 
