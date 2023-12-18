@@ -24,3 +24,5 @@ with st.form("Ask the Arbiter"):
         )
 
         st.write(output["text"])
+
+st.write("Please note the Arbiter is still being tuned.  Provide any feedback into the group DM.")
