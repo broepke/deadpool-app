@@ -21,16 +21,17 @@ df_order = load_picks_table("draft_selection")
 
 # Scale the data and add columns
 scaler = MinMaxScaler()
-df_order['SCALED_ORDER'] = scaler.fit_transform(df_order[['PRIOR_DRAFT']]).round(3)
-df_order['SCALED_SCORE'] = scaler.fit_transform(df_order[['SCORE']]).round(3)
-df_order['TOTAL'] = df_order['SCALED_ORDER'] + df_order['SCALED_SCORE'] * -1
-df_sorted = df_order.sort_values(by='TOTAL', ascending=False)
+df_order["SCALED_ORDER"] = scaler.fit_transform(df_order[["PRIOR_DRAFT"]]).round(3)
+df_order["SCALED_SCORE"] = scaler.fit_transform(df_order[["SCORE"]]).round(3)
+df_order["TOTAL"] = df_order["SCALED_ORDER"] + df_order["SCALED_SCORE"] * -1
+df_sorted = df_order.sort_values(by="TOTAL", ascending=False)
 
 
 st.title("Rules for Online Dead Pool 2024")
 
 
-st.markdown("""
+st.markdown(
+    """
 1. **Purpose and Scope**:
     - This dead pool is intended for entertainment purposes.
 2. **Entry and Participation**:
@@ -54,14 +55,17 @@ st.markdown("""
     - If any celebrity dies during the draft process, it's allowed if the draft was already recorded.
 7. **Draft Order**:
     - Draft order has been computed to wegh the prior year's draft order along with the number of points scored by the player.  The high draft order, and higher scores peanalized your spot in the new order.
-    - The formula used is `X_std = (X - X.min) / (X.max - X.min)
+    - Formula: `X_std = (X - X.min) / (X.max - X.min)
 X_scaled = X_std * (max - min) + min`.
 8. **Privacy and Confidentiality**:
     - Participant information must be kept confidential.
     - Lists of predictions should not be publicized or shared outside the pool.
 9. **Dispute Resolution**:
     - The Arbiter's decision is final in all case of disputes.
-""")
+"""
+)
+
+st.subheader("2024 Draft Order")
 
 st.dataframe(df_sorted, use_container_width=True)
 
