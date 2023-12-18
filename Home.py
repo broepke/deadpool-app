@@ -34,21 +34,21 @@ prompt = (
     + selected_tone
     + """ sentences about the user """
     + user_name
-    + """ and make it sassy. You can lightly insult them personally based on their"""
+    + """ and make it sassy. You can lightly insult them personally based on their """
     + selected_insult
     + """.  This is all in good fun done in the style of hummor of """
     + selected_humor
 )
 
-output = the_arbiter(
-    {
-        "question": prompt,
-    }
-)
+# output = the_arbiter(
+#     {
+#         "question": prompt,
+#     }
+# )
 
-st.markdown("**A message from The Arbiter:** " + output["text"])
+# st.markdown("**A message from The Arbiter:** " + output["text"])
 
-st.divider()
+# st.divider()
 
 st.markdown(
     """
