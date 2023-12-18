@@ -2,6 +2,9 @@
 Reusable components
 """
 import hmac
+import requests
+from fuzzywuzzy import fuzz
+from twilio.rest import Client
 import streamlit as st
 
 
@@ -63,3 +66,51 @@ def check_password():
     if "password_correct" in st.session_state:
         st.error("😕 User not known or password incorrect")
     return False
+
+
+def the_arbiter(prompt):
+    """Chatbot API call to LangChang LLM
+
+    Args:
+        payload (dict): output = the_arbiter(
+            {"question": input,}
+            )
+
+    Returns:
+        str: Text output from the LLM
+    """
+    API_URL = st.secrets["apify"]["api_url"]
+    response = requests.post(API_URL, json=prompt)
+    return response.json()
+
+
+def has_fuzzy_match(value, value_set, threshold=85):
+    """NLP based text maching
+
+    Args:
+        value (str): value to check
+        value_set (list, str): list of all values you want to compare against
+        threshold (int, optional): how much leway do you want to give the algoritm.
+        Defaults to 85.
+
+    Returns:
+        _type_: _description_
+    """
+    for item in value_set:
+        if fuzz.token_sort_ratio(value.lower(), item.lower()) >= threshold:
+            return True
+    return False
+
+
+def send_sms(message_text, distro_list):
+    account_sid = st.secrets["twilio"]["account_sid"]
+    auth_token = st.secrets["twilio"]["auth_token"]
+
+    client = Client(account_sid, auth_token)
+
+    for number in distro_list:
+        message = client.messages.create(
+            from_="+18449891781", body=message_text, to=number
+        )
+
+    return message.sid

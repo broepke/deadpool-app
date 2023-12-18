@@ -1,7 +1,6 @@
 import streamlit as st
-from fuzzywuzzy import fuzz
-from utilities import check_password, get_user_name
-from twilio.rest import Client
+from utilities import check_password, get_user_name, has_fuzzy_match, send_sms
+
 
 if not check_password():
     st.stop()  # Do not continue if check_password is not True.
@@ -12,27 +11,6 @@ try:
     user_name = get_user_name(email)
 except:
     st.write("Please login again")
-
-
-def has_fuzzy_match(value, value_set, threshold=85):
-    for item in value_set:
-        if fuzz.token_sort_ratio(value.lower(), item.lower()) >= threshold:
-            return True
-    return False
-
-
-def send_sms(message_text, distro_list):
-    account_sid = st.secrets["twilio"]["account_sid"]
-    auth_token = st.secrets["twilio"]["auth_token"]
-
-    client = Client(account_sid, auth_token)
-
-    for number in distro_list:
-        message = client.messages.create(
-            from_="+18449891781", body=message_text, to=number
-        )
-
-    return message.sid
 
 
 def draft_logic(email):
@@ -72,7 +50,6 @@ opted_in_numbers = df_opted["SMS"].tolist()
 if draft_logic(email):
     st.subheader("Draft Picks:")
     with st.form("Draft Picks"):
-        
         pick = st.text_input("Please choose your celebrity pick:", "")
 
         pick = pick.strip()
@@ -117,6 +94,8 @@ if draft_logic(email):
 
 st.subheader("Tip for better pick entry")
 
-st.markdown("""For the best results, use the same spelling of the person from their Wikipedia page. For example, Chris Burke was chosen in the past, his Wiki page's title is **"Chris Burke (actor)"** - if you enter this, it will speed up the disambiguation of the pick. Not critical but the arbiter will appreciate it.""")
+st.markdown(
+    """For the best results, use the same spelling of the person from their Wikipedia page. For example, Chris Burke was chosen in the past, his Wiki page's title is **"Chris Burke (actor)"** - if you enter this, it will speed up the disambiguation of the pick. Not critical but the arbiter will appreciate it."""
+)
 
 st.image("wiki.png", "Wikipedia Page Naming Convention")
