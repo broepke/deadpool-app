@@ -27,7 +27,7 @@ st.markdown("""
     - E.g., the death of a person who's 90 years old will be 60 points.
     - First Blood was awarded an additional **25 points**.
     - Last Blood awarded an additional **25 points**.
-    - At the end of each calendar quarter, the person in the lead will be awarded **5 points**.
+    - At the end of each calendar quarter, the person with the most points in that calendar quarter will be awarded **5 points**. 
 5. **Trade Days**:
     - Once per quarter, each participant may draft / trade **one** new celebrity in exchange for another.
 6. **Duration**:
