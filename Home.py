@@ -27,7 +27,7 @@ output = the_arbiter(
     }
 )
 
-st.write(output["text"])
+st.markdown("**A message from The Arbiter:** " + output["text"])
 
 st.divider()
 
