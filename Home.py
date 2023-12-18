@@ -1,6 +1,7 @@
 """
 Streamlit main app
 """
+import random
 import streamlit as st
 from utilities import check_password, get_user_name, the_arbiter
 
@@ -18,8 +19,17 @@ st.write(email)
 # Add some text
 st.title("Deadpool 2024 :skull_and_crossbones:")
 
-prompt = """Come up with 2-3 whitty sentences about the user """ + user_name + """ and make it sassy. You can light
-insult them personally if you'd like based on either their pick strategy, their points, or just make something up.  This is all in good fun so don't worry about it."""
+# Generate a little more randomness into the prompt
+tone = ["sarcastic", "dry humor", "playful"]
+insult = ["pick strategy", "their current"]
+humor = ["puns", "wordplay", "dad joke"]
+
+selected_tone = random.choice(tone)
+selected_insult = random.choice(insult)
+selected_humor = random.choice(humor)
+
+
+prompt = """Come up with 2-3 """ + selected_tone + """ sentences about the user """ + user_name + """ and make it sassy. You can light insult them personally if you'd like based on either their""" + selected_insult + """.  This is all in good fun done in the style of hummor of """ + selected_humor + """ so don't worry about it."""
 
 output = the_arbiter(
     {
