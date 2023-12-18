@@ -24,14 +24,16 @@ except:
 # else:
 
 st.title("User Maintenance Tools")
-st.markdown("""
+st.markdown(
+    """
             Use this form to adjust any personal information you need.  The email is the key information here, and if you so choose to opt in to SMS messaging you can do so below.  If you opt out, you will not receive pick or death alerts.  It is highly reccomended that you opt in!
             1. Select your name and click "Choose Player."
             2. Adjust any information as needed.
             3. Click "Submit".  
             
             If for any reason you see an error, please contact the Arbiter.
-            """)
+            """
+)
 
 # Initialize important varibles
 sel_first_name = ""
@@ -43,10 +45,12 @@ sel_opt_in = True
 # Initialize connection.
 conn = st.connection("snowflake")
 
+
 # Get a list off all curent players
 def load_picks_table(table):
     session_picks = conn.session()
     return session_picks.table(table).to_pandas()
+
 
 df_players = load_picks_table("players")
 df_players_list = df_players["EMAIL"].to_list()
@@ -83,7 +87,6 @@ with st.form("Player to Update"):
 st.header("Update Player Information")
 
 with st.form("Registration"):
-    
     try:
         sel_first_name = st.session_state["reg_first_name"]
         sel_last_name = st.session_state["reg_last_name"]
@@ -99,7 +102,6 @@ with st.form("Registration"):
         sel_sms = ""
         sub_player = ""
 
-    
     sub_first_name = st.text_input(
         "First Name:",
         sel_first_name,
@@ -115,12 +117,10 @@ with st.form("Registration"):
 
     submitted = st.form_submit_button("Submit")
     if submitted:
-        
         if sel_opt_in == 1:
             sel_opt_in = True
         else:
             sub_opt_in = False
-    
 
         write_query = "UPDATE players SET first_name = :1, last_name = :2, email = :3, opt_in = :4, sms = :5 WHERE email = :6"
 
@@ -136,7 +136,7 @@ with st.form("Registration"):
                 sub_player,
             ),
         )
-        
+
         # TODO: Add code here to update the picks table if the email address was updated
 
         st.write(write_query)

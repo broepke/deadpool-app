@@ -4,8 +4,10 @@ Streamlit main app
 import hmac
 import streamlit as st
 
+
 def save_value(key):
     st.session_state[key] = st.session_state["_" + key]
+
 
 # I'm not sure if this will be needed
 def get_value(key):
@@ -57,19 +59,10 @@ st.title("Deadpool 2024 :skull_and_crossbones:")
 
 st.write("Current User: " + st.session_state["username"])
 
-st.markdown("""
+st.markdown(
+    """
 Welcome to **Deadpool 2024**, the annual fantasy draft where every pick you make has you cheering for a famous person's death! Deadpool is not just a game; it's a journey into the degenerate behavior that you've been known for. Feel the excitement build as you assemble your dream (death) team, strategizing against rivals in a quest for glory. Here, every round is a spectacle; every decision echoes with the crowd's roar. **Deadpool 2024** is more than fantasy; it's where celebrity death enthusiasts become architects of their destiny. Get ready to experience the exhilaration of victory and the rush of competition like never before. Buckle up, and let the games begin!
-           """)
+           """
+)
 
 st.image("deadpool.png", "The Arbiter")
-
-st.header("App Considerations")
-st.markdown("""
-1. The application may experience bugs from time to time - please report them in the DM.
-2. When you click a navigation link in the side-bar, sometimes the page doesn't load with the new content.  Just click the page again and it will load properly.
-3. If you refresh the page utilizing your browser, it will ask you to log in again.  A better way to refresh is just simple click the link in the navigation bar again.
-4. This application works best on a desktop browser.  The Mobile does work, but is flakey.
-5. For the best results, use the same spelling of the person from their Wikipedia page.  For example, Chris Burke was chosen in the past, his Wiki page's title is "Chris Burke (actor)" - if you enter this, it will speed up the disambiguation of the pick.  Not critical but the arbiter will appreciate it.
-6. If you want a password or email change, please contact the arbiter.
-""")
-

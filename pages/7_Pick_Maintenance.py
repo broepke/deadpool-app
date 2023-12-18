@@ -24,12 +24,14 @@ except:
 # else:
 
 st.title("Pick Maintenance Tools")
-st.markdown("""
+st.markdown(
+    """
             Use this form to fix the Wikipedia links if they were not guessed properly by the code when loaded.  In some cases there are disambiguation data such as '(actor)' for common names or there can be other URL encoding for special characters in names.
             1. Select a name.
             2. Update the Wiki link only using the end of the URL such as '**Tina_Turner**' in https://en.wikipedia.org/wiki/Tina_Turner.
             3. Submit your adjustments.
-            """)
+            """
+)
 
 # Initialize important varibles
 sel_name = ""
@@ -38,10 +40,12 @@ sel_wiki_page = ""
 # Initialize connection.
 conn = st.connection("snowflake")
 
+
 # Get a list off all curent picks
 def load_picks_table(table):
     session_picks = conn.session()
     return session_picks.table(table).to_pandas()
+
 
 df_picks = load_picks_table("picks")
 
@@ -92,12 +96,10 @@ with st.form("Registration"):
 
     submitted = st.form_submit_button("Submit")
     if submitted:
-        write_query = (
-            "UPDATE picks SET wiki_page = :1 WHERE name = :2 AND year = 2024"
-        )
+        write_query = "UPDATE picks SET wiki_page = :1 WHERE name = :2 AND year = 2024"
 
         # # Execute the query with parameters
-        conn.cursor().execute(write_query,(sub_wiki_page, sub_name))
+        conn.cursor().execute(write_query, (sub_wiki_page, sub_name))
 
         st.write(write_query)
         st.write(sub_name)
