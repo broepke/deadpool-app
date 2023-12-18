@@ -66,9 +66,9 @@ st.image("deadpool.png", "The Arbiter")
 st.header("App Considerations")
 st.markdown("""
 1. The application may experience bugs from time to time - please report them in the DM.
-2. If you refresh the page utilizing your browser, it will ask you to log in again.  A better way to refresh is just simple click the link in the navigation bar again.
-3. For the best results, use the same spelling of the person from their Wikipedia page.  For example, Chris Burke was chosen in the past, his Wiki page's title is "Chris Burke (actor)" - if you enter this, it will speed up the disambiguation of the pick.  Not critical but the arbiter will appreciate it.
-4. If you want a password or email change, please contact the arbiter.
-5. Have fun!
+2. When you click a side link, sometimes the page doesn't load with the new content.  Just click the page again and it will load properly.
+3. If you refresh the page utilizing your browser, it will ask you to log in again.  A better way to refresh is just simple click the link in the navigation bar again.
+4. For the best results, use the same spelling of the person from their Wikipedia page.  For example, Chris Burke was chosen in the past, his Wiki page's title is "Chris Burke (actor)" - if you enter this, it will speed up the disambiguation of the pick.  Not critical but the arbiter will appreciate it.
+5. If you want a password or email change, please contact the arbiter.
 """)
 
