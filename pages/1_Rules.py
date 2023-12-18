@@ -36,7 +36,7 @@ st.markdown("""
     - If any celebrity dies during the draft process, it's allowed if the draft was already recorded.
 7. **Draft Order**:
     - Draft order has been computed to wegh the prior year's draft order along with the number of points scored by the player.  The high draft order, and higher scores peanalized your spot in the new order.
-    - The formula used is `X_std = (X - X.min(axis=0)) / (X.max(axis=0) - X.min(axis=0))
+    - The formula used is `X_std = (X - X.min) / (X.max - X.min)
 X_scaled = X_std * (max - min) + min`.
 8. **Privacy and Confidentiality**:
     - Participant information must be kept confidential.
