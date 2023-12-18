@@ -32,12 +32,12 @@ st.markdown("""
 5. **Trade Days**:
     - Once per quarter, each participant may draft / trade **one** new celebrity in exchange for another.
 6. **Duration**:
-    - The dead pool runs from January 1, 2024, to December 31, 2024.
+    - The dead pool runs from January 1, 2024 at Midnight, to December 31, 2024 at Midnight.
     - The draft will happen in January.
     - If any celebrity dies during the draft process, it's allowed if the draft was already recorded.
 7. **Privacy and Confidentiality**:
     - Participant information must be kept confidential.
     - Lists of predictions should not be publicized or shared outside the pool.
 8. **Dispute Resolution**:
-    - The Arbiter's decision is final in case of disputes.
+    - The Arbiter's decision is final in all case of disputes.
 """)
