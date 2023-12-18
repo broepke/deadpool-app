@@ -29,7 +29,16 @@ selected_insult = random.choice(insult)
 selected_humor = random.choice(humor)
 
 
-prompt = """Come up with 2-3 """ + selected_tone + """ sentences about the user """ + user_name + """ and make it sassy. You can light insult them personally if you'd like based on either their""" + selected_insult + """.  This is all in good fun done in the style of hummor of """ + selected_humor + """ so don't worry about it."""
+prompt = (
+    """Come up with 2-3 """
+    + selected_tone
+    + """ sentences about the user """
+    + user_name
+    + """ and make it sassy. You can lightly insult them personally based on their"""
+    + selected_insult
+    + """.  This is all in good fun done in the style of hummor of """
+    + selected_humor
+)
 
 output = the_arbiter(
     {
