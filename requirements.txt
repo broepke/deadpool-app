@@ -1,4 +1,5 @@
 fuzzywuzzy
 twilio
 streamlit
+scikit-learn
 snowflake-snowpark-python

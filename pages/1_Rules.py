@@ -2,11 +2,29 @@
 List of all scoring rules
 """
 import streamlit as st
+import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
 from Home import check_password
 
 if not check_password():
     st.stop()  # Do not continue if check_password is not True.
 
+conn = st.connection("snowflake")
+
+
+def load_picks_table(table):
+    session_picks = conn.session()
+    return session_picks.table(table).to_pandas()
+
+
+df_order = load_picks_table("draft_selection")
+
+# Scale the data and add columns
+scaler = MinMaxScaler()
+df_order['SCALED_ORDER'] = scaler.fit_transform(df_order[['PRIOR_DRAFT']]).round(3)
+df_order['SCALED_SCORE'] = scaler.fit_transform(df_order[['SCORE']]).round(3)
+df_order['TOTAL'] = df_order['SCALED_ORDER'] + df_order['SCALED_SCORE'] * -1
+df_sorted = df_order.sort_values(by='TOTAL', ascending=False)
 
 
 st.title("Rules for Online Dead Pool 2024")
@@ -45,17 +63,6 @@ X_scaled = X_std * (max - min) + min`.
     - The Arbiter's decision is final in all case of disputes.
 """)
 
-st.markdown("""
-|FIRST_NAME|LAST_NAME|2023_ORDER|SCORE|SCALED_ORDER|SCALED_SCORE|TOTAL |
-|----------|---------|----------|-----|------------|------------|------|
-|Andrew    |Frazier  |8         |0    |1.0         |0.0         |1.000 |
-|Brian     |Scanen   |6         |0    |0.714       |0.0         |0.714 |
-|John      |Wholihan |4         |0    |0.429       |0.0         |0.429 |
-|Chris     |Vienneau |7         |67   |0.857       |0.519       |0.337 |
-|Will      |Cokeley  |2         |0    |0.143       |0.0         |0.143 |
-|Brian     |Roepke   |5         |129  |0.571       |1.0         |-0.429|
-|Alexander |O'Brien  |3         |105  |0.286       |0.814       |-0.528|
-|Chrissy   |Roepke   |1         |86   |0.0         |0.667       |-0.667|
-""")
+st.dataframe(df_sorted, use_container_width=True)
 
 st.write("I have Spoken!  Signed the Arbiter")
