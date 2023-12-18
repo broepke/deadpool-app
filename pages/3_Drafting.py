@@ -72,7 +72,13 @@ if draft_logic(email):
     st.subheader("Draft Picks:")
     with st.form("Draft Picks"):
         
-        st.markdown("""For the best results, use the same spelling of the person from their Wikipedia page. For example, Chris Burke was chosen in the past, his Wiki page's title is **"Chris Burke (actor)"** - if you enter this, it will speed up the disambiguation of the pick. Not critical but the arbiter will appreciate it.""")
+        st.markdown("""For the best results, use the same spelling of the person from their Wikipedia page. For example, Chris Burke was chosen in the past, his Wiki page's title is **"Chris Burke (actor)"** - if you enter this, it will speed up the disambiguation of the pick. Not critical but the arbiter will appreciate it.
+                    
+        [https://en.wikipedia.org/wiki/Chris_Burke_(actor)](https://en.wikipedia.org/wiki/Chris_Burke_(actor))
+                    
+        """)
+        
+        st.image("wiki.png", "Wikipedia Page Naming")
         
         pick = st.text_input("Please choose your celebrity pick:", "")
 
