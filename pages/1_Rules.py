@@ -52,7 +52,7 @@ st.markdown(
 6. **Duration**:
     - The dead pool runs from January 1, 2024 at Midnight, to December 31, 2024 at Midnight.
     - The draft will happen in January.
-    - Given the new system, we shall try to close the draft no later than Jan 31st at Midnight.  The Arbiter will have final say.
+    - Given the new system, we shall try to close the draft no later than January 31 at Midnight.  The Arbiter will have final say.
     - If any celebrity dies during the draft process, it's allowed if the draft was already recorded.
 7. **Draft Order**:
     - Draft order has been computed to wegh the prior year's draft order along with the number of points scored by the player.  The high draft order, and higher scores peanalized your spot in the new order.
