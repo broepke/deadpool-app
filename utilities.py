@@ -4,13 +4,15 @@ Reusable components
 import hmac
 import streamlit as st
 
+
 def save_value(key):
     st.session_state[key] = st.session_state["_" + key]
 
+
 def get_user_name(email):
     conn = st.connection("snowflake")
-    user_name = ""
 
+    @st.cache_data
     def load_score_table(table):
         session_score = conn.session()
         return session_score.table(table).to_pandas()
@@ -19,9 +21,9 @@ def get_user_name(email):
     filtered_df = df_players[df_players["EMAIL"] == email]
     first_name = filtered_df.iloc[0]["FIRST_NAME"]
     last_name = filtered_df.iloc[0]["LAST_NAME"]
-    
+
     users_full_name = first_name + " " + last_name
-    
+
     st.session_state.users_full_name = users_full_name
 
     return users_full_name
