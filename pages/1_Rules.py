@@ -34,9 +34,27 @@ st.markdown("""
     - The dead pool runs from January 1, 2024 at Midnight, to December 31, 2024 at Midnight.
     - The draft will happen in January.
     - If any celebrity dies during the draft process, it's allowed if the draft was already recorded.
-7. **Privacy and Confidentiality**:
+7. **Draft Order**:
+    - Draft order has been computed to wegh the prior year's draft order along with the number of points scored by the player.  The high draft order, and higher scores peanalized your spot in the new order.
+    - The formula used is `X_std = (X - X.min(axis=0)) / (X.max(axis=0) - X.min(axis=0))
+X_scaled = X_std * (max - min) + min`.
+8. **Privacy and Confidentiality**:
     - Participant information must be kept confidential.
     - Lists of predictions should not be publicized or shared outside the pool.
-8. **Dispute Resolution**:
+9. **Dispute Resolution**:
     - The Arbiter's decision is final in all case of disputes.
+""")
+
+st.markdown("""
+|FIRST_NAME|LAST_NAME|2023_ORDER|SCORE|PICK_STDDEV|PICK_SCALED|SCORE_STDDEV|SCORE_SCALED|TOTAL_SCORE|
+|----------|---------|----------|-----|-----------|-----------|------------|------------|-----------|
+|Andrew    |Frazier  |8         |0    |7.857      |62.857     |0.143       |1.143       |64.000     |
+|Brian     |Scanen   |6         |0    |5.857      |35.143     |0.143       |0.857       |36.000     |
+|John      |Wholihan |4         |0    |3.857      |15.429     |0.143       |0.571       |16.000     |
+|Will      |Cokeley  |2         |0    |1.857      |3.714      |0.143       |0.286       |4.000      |
+|Chrissy   |Roepke   |1         |86   |0.857      |0.857      |-85.857     |-85.857     |-85.000    |
+|Alexander |O'Brien  |3         |105  |2.857      |8.571      |-104.857    |-314.571    |-306.000   |
+|Chris     |Vienneau |7         |67   |6.857      |48.000     |-66.857     |-468.000    |-420.000   |
+|Brian     |Roepke   |5         |129  |4.857      |24.286     |-128.857    |-644.286    |-620.000   |
+       
 """)
