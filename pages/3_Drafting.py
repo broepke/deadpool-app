@@ -114,7 +114,7 @@ if draft_logic(email):
                 st.rerun()
 
 
-st.header("Tip for better pick entry")
+st.subheader("Tip for better pick entry")
 
 st.markdown("""For the best results, use the same spelling of the person from their Wikipedia page. For example, Chris Burke was chosen in the past, his Wiki page's title is **"Chris Burke (actor)"** - if you enter this, it will speed up the disambiguation of the pick. Not critical but the arbiter will appreciate it.""")
 
