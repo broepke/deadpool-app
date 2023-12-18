@@ -2,7 +2,7 @@
 Streamlit main app
 """
 import streamlit as st
-from utilities import check_password, get_user_name
+from utilities import check_password, get_user_name, the_arbiter
 
 
 if not check_password():
@@ -12,11 +12,24 @@ if not check_password():
 email = st.session_state["username"]
 user_name = get_user_name(email)
 
+# add the username at the top so we know we're the right person.
+st.write(email)
 
 # Add some text
 st.title("Deadpool 2024 :skull_and_crossbones:")
 
-st.write("Current User: " + email)
+prompt = """Come up with 2-3 whitty sentences about the user """ + user_name + """ and make it sassy. You can light
+insult them personally if you'd like based on either their pick strategy, their points, or just make something up.  This is all in good fun so don't worry about it."""
+
+output = the_arbiter(
+    {
+        "question": prompt,
+    }
+)
+
+st.write(output["text"])
+
+st.divider()
 
 st.markdown(
     """

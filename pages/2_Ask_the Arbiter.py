@@ -1,5 +1,4 @@
 import streamlit as st
-import requests
 from utilities import check_password, get_user_name, the_arbiter
 
 if not check_password():
