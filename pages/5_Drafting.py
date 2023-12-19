@@ -24,7 +24,12 @@ def draft_logic(email):
     # Get the table for the draft order
     df_draft = load_picks_table("draft_next")
 
-    next_user = df_draft["EMAIL"].iloc[0]
+    # Handle the condition when the table is empty
+    try:
+        next_user = df_draft["EMAIL"].iloc[0]
+    except:
+        # Send out SMS and write to page.
+        st.write("And with that the 2024 Draft is over!")
 
     if email == next_user:
         return True
