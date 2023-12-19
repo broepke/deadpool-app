@@ -84,25 +84,24 @@ if draft_logic(email):
 
                 df_next_sms = load_picks_table("draft_next")
 
-                next_name = df_next_sms["NAME"].iloc[0]
-                next_email = df_next_sms["EMAIL"].iloc[0]
-                next_sms = df_next_sms["SMS"].iloc[0]
-
-                # Send alert to the next player
-                next_sms_message = (
-                    next_name
-                    + """ is next to pick.  Please log into the website at https://deadpool.streamlit.app/Drafting to make your selection."""
-                )
-                send_sms(next_sms_message, [next_sms])
-
+                # Try to fetch a user, if the table is empty it will error
                 try:
-                    df_next_sms = load_picks_table("draft_next")
                     next_name = df_next_sms["NAME"].iloc[0]
+                    next_email = df_next_sms["EMAIL"].iloc[0]
+                    next_sms = df_next_sms["SMS"].iloc[0]
+
+                    # Send alert to the next player
+                    next_sms_message = (
+                        next_name
+                        + """ is next to pick.  Please log into the website at https://deadpool.streamlit.app/Drafting to make your selection."""
+                    )
+                    send_sms(next_sms_message, [next_sms])
+
+                    st.rerun()
+                # Send the end of game message
                 except:
                     next_sms_message = """ And with that final pick, the 2024 Deadpool Draft has come to a close!"""
                     send_sms(next_sms_message, [opted_in_numbers])
-
-                st.rerun()
 
 
 st.divider()
