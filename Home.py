@@ -52,7 +52,7 @@ try:
 
     st.divider()
 except:
-    st.write("Welcome Back" + user_name)
+    st.write("Welcome Back, " + user_name)
 
 st.markdown(
     """
