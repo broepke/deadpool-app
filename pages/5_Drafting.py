@@ -15,6 +15,11 @@ except:
     st.write("Please login again")
 
 
+def load_picks_table(table):
+    session_picks = conn.session()
+    return session_picks.table(table).to_pandas()
+
+
 def draft_logic(email):
     # Get the table for the draft order
     df_draft = load_picks_table("draft_next")
@@ -29,12 +34,6 @@ def draft_logic(email):
 
 
 conn = st.connection("snowflake")
-
-
-def load_picks_table(table):
-    session_picks = conn.session()
-    return session_picks.table(table).to_pandas()
-
 
 df_picks = load_picks_table("picks")
 # Filter for just this year
@@ -76,7 +75,9 @@ if draft_logic(email):
                 write_query = "INSERT INTO picks (name, picked_by, wiki_page, year, timestamp) VALUES (:1, :2, :3, :4, :5)"
 
                 # Execute the query with parameters
-                conn.cursor().execute(write_query, (pick, email, wiki_page, draft_year, timestamp))
+                conn.cursor().execute(
+                    write_query, (pick, email, wiki_page, draft_year, timestamp)
+                )
 
                 sms_message = user_name + " has picked " + pick
                 send_sms(sms_message, opted_in_numbers)
@@ -86,19 +87,20 @@ if draft_logic(email):
                 next_name = df_next_sms["NAME"].iloc[0]
                 next_email = df_next_sms["EMAIL"].iloc[0]
                 next_sms = df_next_sms["SMS"].iloc[0]
-                
-                if next_name:
-                    # Send alert to the next player
-                    next_sms_message = (
-                        next_name
-                        + """ is next to pick.  Please log into the website at https://deadpool.streamlit.app/Drafting to make your selection."""
-                    )
-                    send_sms(next_sms_message, [next_sms])
-                else:
-                    next_sms_message = (
-                        """ And with that final pick, the 2024 Deadpool Draft has come to a close!"""
-                    )
-                    send_sms(next_sms_message, [opted_in_numbers])                 
+
+                # Send alert to the next player
+                next_sms_message = (
+                    next_name
+                    + """ is next to pick.  Please log into the website at https://deadpool.streamlit.app/Drafting to make your selection."""
+                )
+                send_sms(next_sms_message, [next_sms])
+
+                try:
+                    df_next_sms = load_picks_table("draft_next")
+                    next_name = df_next_sms["NAME"].iloc[0]
+                except:
+                    next_sms_message = """ And with that final pick, the 2024 Deadpool Draft has come to a close!"""
+                    send_sms(next_sms_message, [opted_in_numbers])
 
                 st.rerun()
 
