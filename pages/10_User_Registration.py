@@ -26,9 +26,6 @@ df = load_snowflake_table(conn, "players")
 # get a list of all emails for checking for duplicates
 all_emails = df["EMAIL"].tolist()
 
-# get last year's max draft value - to increment
-max_value = df["YEAR_ONE"].max()
-
 st.title("New User Registration")
 with st.form("Registration"):
     first_name = st.text_input(
@@ -50,9 +47,7 @@ with st.form("Registration"):
 
     submitted = st.form_submit_button("Submit")
     if submitted:
-        year_one = int(max_value) + 1
-
-        # random_num = round(random_number_from_email(email), 3)
+        year_one = 0
 
         st.write(first_name)
         st.write(last_name)
