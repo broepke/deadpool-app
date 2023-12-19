@@ -1,4 +1,6 @@
 import streamlit as st
+import random
+from hashlib import hash
 from utilities import check_password, get_user_name
 
 if not check_password():
