@@ -44,8 +44,10 @@ st.markdown(
     - If any celebrity dies during the draft process, it's allowed if the draft was already recorded.
 7. **Draft Order**:
     - Draft order has been computed to wegh the prior year's draft order along with the number of points scored by the player.  The high draft order, and higher scores peanalized your spot in the new order.
-    - Formula: `X_std = (X - X.min) / (X.max - X.min)
-X_scaled = X_std * (max - min) + min`.
+    - Additionally, for those that came later in the process, a random number has been applied that helps shuffle users who didn't play last year a little bit.
+    - Formula for MinMax Scaling: 
+        - `X_std = (X - X.min) / (X.max - X.min) X_scaled = X_std * (max - min) + min`.
+    - Finally the calculation is: `ORDER + RANDOM + (SCORE * -1)`.
 8. **Privacy and Confidentiality**:
     - Participant information must be kept confidential.
     - Lists of predictions should not be publicized or shared outside the pool.
