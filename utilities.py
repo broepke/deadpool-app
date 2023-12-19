@@ -2,15 +2,16 @@
 Reusable components
 """
 import hmac
-import requests
 import random
 import hashlib
+import requests
 from fuzzywuzzy import fuzz
 from twilio.rest import Client
 import streamlit as st
 
 
 def save_value(key):
+    """Simple methods for setting temp and permanent session state keys"""
     st.session_state[key] = st.session_state["_" + key]
 
 def load_snowflake_table(conn, table):
@@ -27,6 +28,7 @@ def load_snowflake_table(conn, table):
     return session_picks.table(table).to_pandas()
 
 def get_user_name(email):
+    """Get a user's full name (first + last)"""
     conn = st.connection("snowflake")
 
     df_players = load_snowflake_table(conn, "players")
@@ -88,8 +90,8 @@ def the_arbiter(prompt):
     Returns:
         str: Text output from the LLM
     """
-    API_URL = st.secrets["apify"]["api_url"]
-    response = requests.post(API_URL, json=prompt)
+    apify_api_url = st.secrets["apify"]["api_url"]
+    response = requests.post(apify_api_url, json=prompt, timeout=5)
     return response.json()
 
 
@@ -112,6 +114,16 @@ def has_fuzzy_match(value, value_set, threshold=85):
 
 
 def send_sms(message_text, distro_list):
+    """Send Twilio SMS Message
+
+    Args:
+        message_text (str): The body of the message
+        distro_list (list): a list of strings of phone numbers in the format
+                            +15552229999
+
+    Returns:
+        twilio object: information about the message status after sending.
+    """
     account_sid = st.secrets["twilio"]["account_sid"]
     auth_token = st.secrets["twilio"]["auth_token"]
 
