@@ -27,15 +27,14 @@ def draft_logic(email):
     # Handle the condition when the table is empty
     try:
         next_user = df_draft["EMAIL"].iloc[0]
+        if email == next_user:
+            return True
+        else:
+            st.write("It is not your turn. Please come back when it is.")
+            return False
     except:
         # Send out SMS and write to page.
         st.write("And with that the 2024 Draft is over!")
-
-    if email == next_user:
-        return True
-    else:
-        st.write("It is not your turn. Please come back when it is.")
-        return False
 
 
 conn = st.connection("snowflake")
