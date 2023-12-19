@@ -85,7 +85,7 @@ if draft_logic(email):
 
                 next_sms_message = (
                     next_email
-                    + """ is next to pick.  Please log into the website at https://deadpool.streamlit.app and go to the Drafting page to make your selection."""
+                    + """ is next to pick.  Please log into the website at https://deadpool.streamlit.app/Drafting to make your selection."""
                 )
                 send_sms(next_sms_message, [next_sms])
 
