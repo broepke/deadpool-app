@@ -1,4 +1,5 @@
 import streamlit as st
+from datetime import datetime
 from utilities import check_password, get_user_name, has_fuzzy_match, send_sms
 
 
@@ -69,11 +70,12 @@ if draft_logic(email):
                 # Set up a coupld of variables for the query
                 wiki_page = pick.replace(" ", "_")
                 draft_year = 2024
+                timestamp = datetime.utcnow()
 
-                write_query = "INSERT INTO picks (name, picked_by, wiki_page, year) VALUES (:1, :2, :3, :4)"
+                write_query = "INSERT INTO picks (name, picked_by, wiki_page, year, timestamp) VALUES (:1, :2, :3, :4, :5)"
 
                 # Execute the query with parameters
-                conn.cursor().execute(write_query, (pick, email, wiki_page, draft_year))
+                conn.cursor().execute(write_query, (pick, email, wiki_page, draft_year, timestamp))
 
                 sms_message = email + " has picked " + pick
                 send_sms(sms_message, opted_in_numbers)
