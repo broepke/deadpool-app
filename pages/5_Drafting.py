@@ -86,7 +86,7 @@ if draft_logic(email):
                 next_sms = df_next_sms["SMS"].iloc[0]
 
                 next_sms_message = (
-                    next_email
+                    user_name
                     + """ is next to pick.  Please log into the website at https://deadpool.streamlit.app/Drafting to make your selection."""
                 )
                 send_sms(next_sms_message, [next_sms])
