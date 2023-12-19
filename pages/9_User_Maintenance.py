@@ -1,6 +1,6 @@
 import streamlit as st
 from utilities import check_password
-from utilities import check_password, get_user_name
+from utilities import check_password, get_user_name, load_picks_table
 
 st.set_page_config(page_title="User Maintenance", page_icon=":skull_and_crossbones:")
 
@@ -38,13 +38,7 @@ sel_opt_in = True
 conn = st.connection("snowflake")
 
 
-# Get a list off all curent players
-def load_picks_table(table):
-    session_picks = conn.session()
-    return session_picks.table(table).to_pandas()
-
-
-df_players = load_picks_table("players")
+df_players = load_picks_table(conn, "players")
 df_players_list = df_players["EMAIL"].to_list()
 
 st.header("Player Selection")

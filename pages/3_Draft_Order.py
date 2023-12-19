@@ -3,7 +3,7 @@ List of all scoring rules
 """
 import streamlit as st
 from sklearn.preprocessing import MinMaxScaler
-from utilities import check_password, get_user_name
+from utilities import check_password, get_user_name, load_picks_table
 
 st.set_page_config(page_title="Draft Order", page_icon=":skull_and_crossbones:")
 
@@ -20,19 +20,16 @@ except:
 conn = st.connection("snowflake")
 
 
-def load_picks_table(table):
-    session_picks = conn.session()
-    return session_picks.table(table).to_pandas()
-
-
-df_order = load_picks_table("draft_selection")
+df_order = load_picks_table(conn, "draft_selection")
 
 # Scale the data and add columns
 scaler = MinMaxScaler()
 df_order["SCALED_ORDER"] = scaler.fit_transform(df_order[["PRIOR_DRAFT"]]).round(3)
 df_order["SCALED_SCORE"] = scaler.fit_transform(df_order[["SCORE"]]).round(3)
 df_order["SCALED_RANDOM"] = scaler.fit_transform(df_order[["RANDOM_NUMBER"]]).round(3)
-df_order["TOTAL"] = df_order["SCALED_ORDER"] + df_order["SCALED_RANDOM"] + df_order["SCALED_SCORE"] * -1
+df_order["TOTAL"] = (
+    df_order["SCALED_ORDER"] + df_order["SCALED_RANDOM"] + df_order["SCALED_SCORE"] * -1
+)
 df_sorted = df_order.sort_values(by="TOTAL", ascending=False)
 
 st.subheader("2024 Draft Order")

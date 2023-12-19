@@ -1,7 +1,9 @@
 import streamlit as st
-from utilities import check_password, get_user_name
+from utilities import check_password, get_user_name, load_picks_table
 
-st.set_page_config(page_title="Draft Pick Maintenance", page_icon=":skull_and_crossbones:")
+st.set_page_config(
+    page_title="Draft Pick Maintenance", page_icon=":skull_and_crossbones:"
+)
 
 if not check_password():
     st.stop()  # Do not continue if check_password is not True.
@@ -32,13 +34,7 @@ sel_wiki_page = ""
 conn = st.connection("snowflake")
 
 
-# Get a list off all curent picks
-def load_picks_table(table):
-    session_picks = conn.session()
-    return session_picks.table(table).to_pandas()
-
-
-df_picks = load_picks_table("picks")
+df_picks = load_picks_table(conn, "picks")
 
 df_picks_2024 = df_picks[df_picks["YEAR"] == 2024]
 

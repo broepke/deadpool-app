@@ -13,6 +13,18 @@ import streamlit as st
 def save_value(key):
     st.session_state[key] = st.session_state["_" + key]
 
+def load_picks_table(conn, table):
+    """Loads a specific Snowflake table
+
+    Args:
+        conn (conn): st.connection
+        table (str): table or view - no DB or schema needed
+
+    Returns:
+        DataFrame: dataframe of the entire table.
+    """
+    session_picks = conn.session()
+    return session_picks.table(table).to_pandas()
 
 def get_user_name(email):
     conn = st.connection("snowflake")
