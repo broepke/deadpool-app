@@ -2,6 +2,7 @@ import streamlit as st
 from datetime import datetime
 from utilities import check_password, get_user_name, has_fuzzy_match, send_sms
 
+st.set_page_config(page_title="Drafting", page_icon=":skull_and_crossbones:")
 
 if not check_password():
     st.stop()  # Do not continue if check_password is not True.

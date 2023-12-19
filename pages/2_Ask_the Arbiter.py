@@ -1,6 +1,8 @@
 import streamlit as st
 from utilities import check_password, get_user_name, the_arbiter
 
+st.set_page_config(page_title="Ask the Arbiter", page_icon=":skull_and_crossbones:")
+
 if not check_password():
     st.stop()  # Do not continue if check_password is not True.
 

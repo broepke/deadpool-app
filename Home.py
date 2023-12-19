@@ -5,6 +5,7 @@ import random
 import streamlit as st
 from utilities import check_password, get_user_name, the_arbiter
 
+st.set_page_config(page_title="Deadpool", page_icon=":skull_and_crossbones:")
 
 if not check_password():
     st.stop()
