@@ -85,12 +85,19 @@ if draft_logic(email):
 
                 next_email = df_next_sms["EMAIL"].iloc[0]
                 next_sms = df_next_sms["SMS"].iloc[0]
-
-                next_sms_message = (
-                    user_name
-                    + """ is next to pick.  Please log into the website at https://deadpool.streamlit.app/Drafting to make your selection."""
-                )
-                send_sms(next_sms_message, [next_sms])
+                
+                if next_email:
+                    # Send alert to the next player
+                    next_sms_message = (
+                        user_name
+                        + """ is next to pick.  Please log into the website at https://deadpool.streamlit.app/Drafting to make your selection."""
+                    )
+                    send_sms(next_sms_message, [next_sms])
+                else:
+                    next_sms_message = (
+                        """ And with that final pick, the 2024 Deadpool Draft has come to a close!"""
+                    )
+                    send_sms(next_sms_message, [next_sms])                 
 
                 st.rerun()
 
