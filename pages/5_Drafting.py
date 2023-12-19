@@ -77,7 +77,7 @@ if draft_logic(email):
                 # Execute the query with parameters
                 conn.cursor().execute(write_query, (pick, email, wiki_page, draft_year, timestamp))
 
-                sms_message = email + " has picked " + pick
+                sms_message = user_name + " has picked " + pick
                 send_sms(sms_message, opted_in_numbers)
 
                 df_next_sms = load_picks_table("draft_next")
@@ -93,6 +93,8 @@ if draft_logic(email):
 
                 st.rerun()
 
+
+st.divider()
 
 st.subheader("Tip for better pick entry")
 
