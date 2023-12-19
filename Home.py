@@ -40,15 +40,18 @@ prompt = (
     + selected_humor
 )
 
-# output = the_arbiter(
-#     {
-#         "question": prompt,
-#     }
-# )
+try:
+    output = the_arbiter(
+        {
+            "question": prompt,
+        }
+    )
 
-# st.markdown("**A message from The Arbiter:** " + output["text"])
+    st.markdown("**A message from The Arbiter:** " + output["text"])
 
-# st.divider()
+    st.divider()
+except:
+    st.write("Welcome Back" + user_name)
 
 st.markdown(
     """
