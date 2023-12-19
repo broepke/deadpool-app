@@ -37,6 +37,7 @@ st.markdown(
     - First Blood was awarded an additional **25 points**.
     - Last Blood awarded an additional **25 points**.
     - At the end of each calendar quarter, the person with the most points in that calendar quarter will be awarded **5 points**. 
+    - If you pick a dead person which will be checked automaticaly after the draft finishes, you will lose that pick.
 5. **Trade Days**:
     - Once per quarter, each participant may draft / trade **one** new celebrity in exchange for another.
 6. **Duration**:
