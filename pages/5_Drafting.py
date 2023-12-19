@@ -97,7 +97,7 @@ if draft_logic(email):
                     next_sms_message = (
                         """ And with that final pick, the 2024 Deadpool Draft has come to a close!"""
                     )
-                    send_sms(next_sms_message, [next_sms])                 
+                    send_sms(next_sms_message, [opted_in_numbers])                 
 
                 st.rerun()
 
