@@ -1,7 +1,6 @@
 import streamlit as st
-import random
 from hashlib import hash
-from utilities import check_password, get_user_name
+from utilities import check_password, get_user_name, random_number_from_email
 
 if not check_password():
     st.stop()  # Do not continue if check_password is not True.
@@ -46,6 +45,8 @@ with st.form("Registration"):
     submitted = st.form_submit_button("Submit")
     if submitted:
         year_one = int(max_value) + 1
+        
+        random_num = round(random_number_from_email(email), 3)
 
         st.write(first_name)
         st.write(last_name)
@@ -56,11 +57,11 @@ with st.form("Registration"):
 
         if email not in all_emails:
             # Write the new user into the database
-            write_query = "INSERT INTO players (first_name, last_name, email, year_one, sms, opt_in) VALUES (:1, :2, :3, :4, :5, :6)"
+            write_query = "INSERT INTO players (first_name, last_name, email, year_one, sms, opt_in, random_number) VALUES (:1, :2, :3, :4, :5, :6, :7)"
 
             # Execute the query with parameters
             conn.cursor().execute(
-                write_query, (first_name, last_name, email, year_one, sms, opt_in)
+                write_query, (first_name, last_name, email, year_one, sms, opt_in, random_num)
             )
         else:
             st.write("User is already in the database.")
