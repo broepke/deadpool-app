@@ -1,5 +1,5 @@
 import streamlit as st
-from utilities import check_password, get_user_name
+from utilities import check_password, get_user_name, load_snowflake_table
 
 st.set_page_config(page_title="Leaderboard", page_icon=":skull_and_crossbones:")
 
@@ -17,14 +17,8 @@ except:
 conn = st.connection("snowflake")
 
 
-@st.cache_data
-def load_score_table(table):
-    session_score = conn.session()
-    return session_score.table(table).to_pandas()
-
-
-df_score_2024 = load_score_table("score_two")
-df_score_2023 = load_score_table("score_one")
+df_score_2024 = load_snowflake_table(conn, "score_two")
+df_score_2023 = load_snowflake_table(conn, "score_one")
 
 
 st.title("2024 Leaderboard:")

@@ -3,7 +3,7 @@ List of all scoring rules
 """
 import streamlit as st
 from sklearn.preprocessing import MinMaxScaler
-from utilities import check_password, get_user_name, load_picks_table
+from utilities import check_password, get_user_name, load_snowflake_table
 
 st.set_page_config(page_title="Draft Order", page_icon=":skull_and_crossbones:")
 
@@ -20,7 +20,7 @@ except:
 conn = st.connection("snowflake")
 
 
-df_order = load_picks_table(conn, "draft_selection")
+df_order = load_snowflake_table(conn, "draft_selection")
 
 # Scale the data and add columns
 scaler = MinMaxScaler()

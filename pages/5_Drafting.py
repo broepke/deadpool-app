@@ -5,7 +5,7 @@ from utilities import (
     get_user_name,
     has_fuzzy_match,
     send_sms,
-    load_picks_table,
+    load_snowflake_table,
 )
 
 st.set_page_config(page_title="Drafting", page_icon=":skull_and_crossbones:")
@@ -23,7 +23,7 @@ except:
 
 def draft_logic(email):
     # Get the table for the draft order
-    df_draft = load_picks_table(conn, "draft_next")
+    df_draft = load_snowflake_table(conn, "draft_next")
 
     # Handle the condition when the table is empty
     try:
@@ -40,14 +40,14 @@ def draft_logic(email):
 
 conn = st.connection("snowflake")
 
-df_picks = load_picks_table(conn, "picks")
+df_picks = load_snowflake_table(conn, "picks")
 # Filter for just this year
 df_2024 = df_picks[df_picks["YEAR"] == 2024]
 # Convert into a list for fuzzy matching
 current_drafts = df_2024["NAME"].tolist()
 
 # Get a list of the people that opted into alerts
-df_opted = load_picks_table(conn, "draft_opted_in")
+df_opted = load_snowflake_table(conn, "draft_opted_in")
 # Filter for just this year
 # Convert into a list for fuzzy matching
 opted_in_numbers = df_opted["SMS"].tolist()
@@ -87,7 +87,7 @@ if draft_logic(email):
                 sms_message = user_name + " has picked " + pick
                 send_sms(sms_message, opted_in_numbers)
 
-                df_next_sms = load_picks_table(conn, "draft_next")
+                df_next_sms = load_snowflake_table(conn, "draft_next")
 
                 try:
                     next_name = df_next_sms["NAME"].iloc[0]

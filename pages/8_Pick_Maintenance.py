@@ -1,5 +1,5 @@
 import streamlit as st
-from utilities import check_password, get_user_name, load_picks_table
+from utilities import check_password, get_user_name, load_snowflake_table
 
 st.set_page_config(
     page_title="Draft Pick Maintenance", page_icon=":skull_and_crossbones:"
@@ -34,7 +34,7 @@ sel_wiki_page = ""
 conn = st.connection("snowflake")
 
 
-df_picks = load_picks_table(conn, "picks")
+df_picks = load_snowflake_table(conn, "picks")
 
 df_picks_2024 = df_picks[df_picks["YEAR"] == 2024]
 

@@ -13,7 +13,7 @@ import streamlit as st
 def save_value(key):
     st.session_state[key] = st.session_state["_" + key]
 
-def load_picks_table(conn, table):
+def load_snowflake_table(conn, table):
     """Loads a specific Snowflake table
 
     Args:
@@ -29,12 +29,7 @@ def load_picks_table(conn, table):
 def get_user_name(email):
     conn = st.connection("snowflake")
 
-    @st.cache_data
-    def load_score_table(table):
-        session_score = conn.session()
-        return session_score.table(table).to_pandas()
-
-    df_players = load_score_table("players")
+    df_players = load_snowflake_table(conn, "players")
     filtered_df = df_players[df_players["EMAIL"] == email]
     first_name = filtered_df.iloc[0]["FIRST_NAME"]
     last_name = filtered_df.iloc[0]["LAST_NAME"]

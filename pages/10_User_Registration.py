@@ -3,7 +3,7 @@ from utilities import (
     check_password,
     get_user_name,
     random_number_from_email,
-    load_picks_table,
+    load_snowflake_table,
 )
 
 st.set_page_config(page_title="User Registration", page_icon=":skull_and_crossbones:")
@@ -21,7 +21,7 @@ except:
 conn = st.connection("snowflake")
 
 
-df = load_picks_table(conn, "players")
+df = load_snowflake_table(conn, "players")
 
 # get a list of all emails for checking for duplicates
 all_emails = df["EMAIL"].tolist()
