@@ -2,8 +2,6 @@
 Reusable components
 """
 import hmac
-import random
-import hashlib
 import requests
 from fuzzywuzzy import fuzz
 from twilio.rest import Client
