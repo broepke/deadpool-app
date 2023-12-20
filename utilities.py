@@ -92,7 +92,7 @@ def the_arbiter(prompt):
     """
     apify_api_url = st.secrets["apify"]["api_url"]
     try:
-        response = requests.post(apify_api_url, json=prompt, timeout=5)
+        response = requests.post(apify_api_url, json=prompt, timeout=40)
         return response.json()
     except:
         return {"text": "The Aribiter is sleeping.",}
