@@ -13,7 +13,7 @@ try:
     st.write(st.session_state["username"])
     email = st.session_state["username"]
     user_name = get_user_name(email)
-except:
+except KeyError:
     st.write("Please login again")
 
 
@@ -56,7 +56,7 @@ st.markdown(
     - Lists of predictions should not be publicized or shared outside the pool.
 9. **Dispute Resolution**:
     - The Arbiter's decision is final in all cases of disputes.
-"""
+""" # pylint: disable=line-too-long
 )
 
 st.write("I have Spoken!  Signed the Arbiter")

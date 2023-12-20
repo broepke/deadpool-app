@@ -13,7 +13,7 @@ try:
     st.write(st.session_state["username"])
     email = st.session_state["username"]
     user_name = get_user_name(email)
-except:
+except KeyError:
     st.write("Please login again")
 
 # Initialize connection.
