@@ -1,4 +1,5 @@
 fuzzywuzzy
+python-Levenshtein
 twilio
 streamlit
 scikit-learn
