@@ -91,8 +91,11 @@ def the_arbiter(prompt):
         str: Text output from the LLM
     """
     apify_api_url = st.secrets["apify"]["api_url"]
-    response = requests.post(apify_api_url, json=prompt, timeout=5)
-    return response.json()
+    try:
+        response = requests.post(apify_api_url, json=prompt, timeout=5)
+        return response.json()
+    except:
+        return st.write("The Arbiter is Sleeping")
 
 
 def has_fuzzy_match(value, value_set, threshold=85):
