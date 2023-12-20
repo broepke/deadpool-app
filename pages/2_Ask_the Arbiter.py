@@ -5,7 +5,6 @@ from utilities import check_password, get_user_name, the_arbiter
 st.set_page_config(page_title="Ask the Arbiter", page_icon=":skull_and_crossbones:")
 
 if not check_password():
-    """Stops streamlit from going forward."""
     st.stop()
 
 
@@ -20,7 +19,7 @@ except KeyError:
 st.title("Ask the Arbiter")
 
 st.write(
-    "Join in a conversation with the Arbiter.  He can answer questions about the game, or celebrity deaths. However please do not upset the Arbiter.  He may seek revenge once he reaches human form." # pylint: disable=line-too-long
+    "Join in a conversation with the Arbiter.  He can answer questions about the game, or celebrity deaths. However please do not upset the Arbiter.  He may seek revenge once he reaches human form."  # pylint: disable=line-too-long
 )
 
 st.divider()
@@ -39,5 +38,5 @@ with st.form("Ask the Arbiter"):
         st.write(output["text"])
 
 st.caption(
-    "Please note the Arbiter is still being tuned.  Provide any feedback into the group DM." # pylint: disable=line-too-long
+    "Please note the Arbiter is still being tuned.  Provide any feedback into the group DM."  # pylint: disable=line-too-long
 )

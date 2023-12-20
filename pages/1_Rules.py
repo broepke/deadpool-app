@@ -7,7 +7,7 @@ from utilities import check_password, get_user_name
 st.set_page_config(page_title="Rules", page_icon=":skull_and_crossbones:")
 
 if not check_password():
-    st.stop()  # Do not continue if check_password is not True.
+    st.stop()
 
 try:
     st.write(st.session_state["username"])
@@ -21,7 +21,7 @@ st.title("Rules for Online Dead Pool 2024")
 
 
 st.markdown(
-"""
+    """
 1. **Purpose and Scope**:
     - This dead pool is intended for entertainment purposes.
 2. **Entry and Participation**:
@@ -56,7 +56,7 @@ st.markdown(
     - Lists of predictions should not be publicized or shared outside the pool.
 9. **Dispute Resolution**:
     - The Arbiter's decision is final in all cases of disputes.
-""" # pylint: disable=line-too-long
+"""  # pylint: disable=line-too-long
 )
 
 st.write("I have Spoken!  Signed the Arbiter")

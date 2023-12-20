@@ -1,5 +1,8 @@
-import streamlit as st
+"""
+Main page for Drafting new picks
+"""
 from datetime import datetime
+import streamlit as st
 from utilities import (
     check_password,
     get_user_name,
@@ -11,7 +14,7 @@ from utilities import (
 st.set_page_config(page_title="Drafting", page_icon=":skull_and_crossbones:")
 
 if not check_password():
-    st.stop()  # Do not continue if check_password is not True.
+    st.stop()
 
 try:
     st.write(st.session_state["username"])
@@ -21,21 +24,30 @@ except KeyError:
     st.write("Please login again")
 
 
-def draft_logic(email):
+def draft_logic(current_email):
+    """Check to see if the current user is the person who's supposed to draft next
+
+    Args:
+        email (str): email of the current logged in person
+
+    Returns:
+        bool: If the person should draft or not
+    """
     # Get the table for the draft order
     df_draft = load_snowflake_table(conn, "draft_next")
 
     # Handle the condition when the table is empty
     try:
         next_user = df_draft["EMAIL"].iloc[0]
-        if email == next_user:
+        if current_email == next_user:
             return True
-        else:
-            st.write("It is not your turn. Please come back when it is.")
-            return False
-    except:
+
+        st.write("It is not your turn. Please come back when it is.")
+        return False
+    except IndexError:
         # Send out SMS and write to page.
         st.write("And with that the 2024 Draft is over!")
+        return False
 
 
 conn = st.connection("snowflake")
@@ -64,24 +76,24 @@ if draft_logic(email):
         if submitted:
             st.write("Draft Pick:", pick)
 
-            match = has_fuzzy_match(pick, current_drafts)
+            MATCH = has_fuzzy_match(pick, current_drafts)
 
-            if match:
+            if MATCH:
                 st.write(
-                    """That pick has already been taken, please try again. Please review the "All Picks" page for more information."""
+                    """That pick has already been taken, please try again. Please review the "All Picks" page for more information."""  # pylint: disable=line-too-long
                 )
 
             else:
                 # Set up a coupld of variables for the query
                 wiki_page = pick.replace(" ", "_")
-                draft_year = 2024
+                DRAFT_YEAR = 2024
                 timestamp = datetime.utcnow()
 
-                write_query = "INSERT INTO picks (name, picked_by, wiki_page, year, timestamp) VALUES (:1, :2, :3, :4, :5)"
+                WRITE_QUERY = "INSERT INTO picks (name, picked_by, wiki_page, year, timestamp) VALUES (:1, :2, :3, :4, :5)"  # pylint: disable=line-too-long
 
                 # Execute the query with parameters
                 conn.cursor().execute(
-                    write_query, (pick, email, wiki_page, draft_year, timestamp)
+                    WRITE_QUERY, (pick, email, wiki_page, DRAFT_YEAR, timestamp)
                 )
 
                 sms_message = user_name + " has picked " + pick
@@ -97,10 +109,10 @@ if draft_logic(email):
                     # Send alert to the next player
                     next_sms_message = (
                         next_name
-                        + """ is next to pick.  Please log into the website at https://deadpool.streamlit.app/Drafting to make your selection."""
+                        + """ is next to pick.  Please log into the website at https://deadpool.streamlit.app/Drafting to make your selection."""  # pylint: disable=line-too-long
                     )
                     send_sms(next_sms_message, [next_sms])
-                except:
+                except IndexError:
                     st.write("No additional names")
 
                 st.rerun()
@@ -108,8 +120,10 @@ if draft_logic(email):
 
 st.divider()
 
-st.markdown("""
+st.markdown(
+    """
 **Notes**: 
 - The system checks for duplicate entries and has built-in fuzzy matching of names entered.  If it's a slight misspelling, the duplicate will be caught.  If it's way off, the Arbiter must duplicate and resolve it after draft day.  The person with the earlier timestamp on the pick will keep the pick.  The other person will get to submit an additional pick.
 - Please do not pick a dead person.  If you do, you will lose that pick and receive 0 points.
-""")
+"""  # pylint: disable=line-too-long
+)

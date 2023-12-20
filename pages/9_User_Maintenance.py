@@ -1,11 +1,13 @@
+"""
+User maintenance tools
+"""
 import streamlit as st
-from utilities import check_password
 from utilities import check_password, get_user_name, load_snowflake_table
 
 st.set_page_config(page_title="User Maintenance", page_icon=":skull_and_crossbones:")
 
 if not check_password():
-    st.stop()  # Do not continue if check_password is not True.
+    st.stop()
 
 try:
     st.write(st.session_state["username"])
@@ -18,21 +20,21 @@ except KeyError:
 st.title("User Maintenance Tools")
 st.markdown(
     """
-            Use this form to adjust any personal information you need.  The email is the key information here, and if you so choose to opt in to SMS messaging you can do so below.  If you opt out, you will not receive pick or death alerts.  It is highly reccomended that you opt in!
-            1. Select your name and click "Choose Player."
-            2. Adjust any information as needed.
-            3. Click "Submit".  
-            
-            If for any reason you see an error, please contact the Arbiter.
-            """
+Use this form to adjust any personal information you need.  The email is the key information here, and if you so choose to opt in to SMS messaging you can do so below.  If you opt out, you will not receive pick or death alerts.  It is highly reccomended that you opt in!
+1. Select your name and click "Choose Player."
+2. Adjust any information as needed.
+3. Click "Submit".  
+
+If for any reason you see an error, please contact the Arbiter.
+"""  # pylint: disable=line-too-long
 )
 
 # Initialize important varibles
-sel_first_name = ""
-sel_last_name = ""
-sel_email = ""
-sel_sms = ""
-sel_opt_in = True
+SEL_FIRST_NAME = ""
+SEL_LAST_NAME = ""
+SEL_EMAIL = ""
+SEL_SMS = ""
+SEL_OPT_IN = True
 
 # Initialize connection.
 conn = st.connection("snowflake")
@@ -54,81 +56,81 @@ with st.form("Player to Update"):
         filtered_df = df_players[df_players["EMAIL"] == sel_player]
 
         if not filtered_df.empty:
-            sel_first_name = filtered_df.iloc[0]["FIRST_NAME"]
-            sel_last_name = filtered_df.iloc[0]["LAST_NAME"]
-            sel_email = filtered_df.iloc[0]["EMAIL"]
-            sel_sms = filtered_df.iloc[0]["SMS"]
-            sel_opt_in = filtered_df.iloc[0]["OPT_IN"]
+            SEL_FIRST_NAME = filtered_df.iloc[0]["FIRST_NAME"]
+            SEL_LAST_NAME = filtered_df.iloc[0]["LAST_NAME"]
+            SEL_EMAIL = filtered_df.iloc[0]["EMAIL"]
+            SEL_SMS = filtered_df.iloc[0]["SMS"]
+            SEL_OPT_IN = filtered_df.iloc[0]["OPT_IN"]
 
-            st.session_state["reg_first_name"] = sel_first_name
-            st.session_state["reg_last_name"] = sel_last_name
-            st.session_state["reg_email"] = sel_email
-            st.session_state["reg_sms"] = sel_sms
-            st.session_state["reg_opt_in"] = sel_opt_in
-            st.session_state["reg_player"] = sel_email
+            st.session_state["reg_first_name"] = SEL_FIRST_NAME
+            st.session_state["reg_last_name"] = SEL_LAST_NAME
+            st.session_state["reg_email"] = SEL_EMAIL
+            st.session_state["reg_sms"] = SEL_SMS
+            st.session_state["reg_opt_in"] = SEL_OPT_IN
+            st.session_state["reg_player"] = SEL_EMAIL
 
         else:
             print("No user found with the given email")
 
 st.header("Update Player Information")
+st.write("Note: Your cannot update the email address.  Please contact The Aribiter")
 
 with st.form("Registration"):
     try:
-        sel_first_name = st.session_state["reg_first_name"]
-        sel_last_name = st.session_state["reg_last_name"]
-        sel_email = st.session_state["reg_email"]
-        sel_opt_in = st.session_state["reg_opt_in"]
-        sel_sms = st.session_state["reg_sms"]
-        sub_player = st.session_state["reg_player"]
-    except:
-        sel_first_name = ""
-        sel_last_name = ""
-        sel_email = ""
-        sel_opt_in = ""
-        sel_sms = ""
-        sub_player = ""
+        SEL_FIRST_NAME = st.session_state["reg_first_name"]
+        SEL_LAST_NAME = st.session_state["reg_last_name"]
+        SEL_EMAIL = st.session_state["reg_email"]
+        SEL_OPT_IN = st.session_state["reg_opt_in"]
+        SEL_SMS = st.session_state["reg_sms"]
+        SUB_PLAYER = st.session_state["reg_player"]
+    except KeyError:
+        SEL_FIRST_NAME = ""
+        SEL_LAST_NAME = ""
+        SEL_EMAIL = ""
+        SEL_OPT_IN = ""
+        SEL_SMS = ""
+        SUB_PLAYER = ""
 
-    sub_first_name = st.text_input(
+    SUB_FIRST_NAME = st.text_input(
         "First Name:",
-        sel_first_name,
+        SEL_FIRST_NAME,
         256,
         key="_reg_first_name",
     )
-    sub_last_name = st.text_input(
-        "Last Name:", sel_last_name, 256, key="_reg_last_name"
+    SUB_LAST_NAME = st.text_input(
+        "Last Name:", SEL_LAST_NAME, 256, key="_reg_last_name"
     )
-    sub_email = st.text_input("Email:", sel_email, 256, key="_reg_email")
-    sub_sms = st.text_input("Mobile Number:", sel_sms, 256, key="_reg_sms")
-    sub_opt_in = st.checkbox("Opt-In", sel_opt_in, key="_reg_opt_in")
+    SUB_EMAIL = st.text_input("Email:", SEL_EMAIL, 256, key="_reg_email")
+    SUB_SMS = st.text_input(
+        "Mobile Number (+12224446666):", SEL_SMS, 256, key="_reg_sms"
+    )
+    SUB_OPT_IN = st.checkbox("Opt-In", SEL_OPT_IN, key="_reg_opt_in")
 
     submitted = st.form_submit_button("Submit")
     if submitted:
-        if sel_opt_in == 1:
-            sel_opt_in = True
+        if SEL_OPT_IN == 1:
+            SEL_OPT_IN = True
         else:
-            sub_opt_in = False
+            SUB_OPT_IN = False
 
-        write_query = "UPDATE players SET first_name = :1, last_name = :2, email = :3, opt_in = :4, sms = :5 WHERE email = :6"
+        WRITE_QUERY = "UPDATE players SET first_name = :1, last_name = :2, opt_in = :3, sms = :4 WHERE email = :5"  # pylint: disable=line-too-long
 
-        # # Execute the query with parameters
+        # Execute the query with parameters
         conn.cursor().execute(
-            write_query,
+            WRITE_QUERY,
             (
-                sub_first_name,
-                sub_last_name,
-                sub_email,
-                sub_opt_in,
-                sub_sms,
-                sub_player,
+                SUB_FIRST_NAME,
+                SUB_LAST_NAME,
+                SUB_OPT_IN,
+                SUB_SMS,
+                SUB_PLAYER,
             ),
         )
 
-        # TODO: Add code here to update the picks table if the email address was updated
-
-        st.write(write_query)
-        st.write(sub_first_name)
-        st.write(sub_last_name)
-        st.write(sub_email)
-        st.write(sub_opt_in)
-        st.write(sub_sms)
-        st.write(sub_player)
+        st.write("Query:", WRITE_QUERY)
+        st.write("First Name:", SUB_FIRST_NAME)
+        st.write("Last Name:", SUB_LAST_NAME)
+        st.write("E-Mail:", SUB_EMAIL)
+        st.write("Opt In:", SUB_OPT_IN)
+        st.write("SMS:", SUB_SMS)
+        st.write("Player:", SUB_PLAYER)

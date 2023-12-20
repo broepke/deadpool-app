@@ -1,10 +1,13 @@
+"""
+Display leaderboards and other stats for the games
+"""
 import streamlit as st
 from utilities import check_password, get_user_name, load_snowflake_table
 
 st.set_page_config(page_title="Leaderboard", page_icon=":skull_and_crossbones:")
 
 if not check_password():
-    st.stop()  # Do not continue if check_password is not True.
+    st.stop()
 
 try:
     st.write(st.session_state["username"])

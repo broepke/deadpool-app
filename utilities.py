@@ -135,13 +135,3 @@ def send_sms(message_text, distro_list):
         )
 
     return message.sid
-
-
-def random_number_from_email(email):
-    """Hashes an email address using SHA-256."""
-
-    email_hash = int(hashlib.sha256(email.encode()).hexdigest(), 16)
-    # Set the seed
-    random.seed(email_hash)
-
-    return random.random()

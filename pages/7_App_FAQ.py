@@ -1,11 +1,14 @@
+"""
+General Q&A information for the app
+"""
 import streamlit as st
 from utilities import check_password, get_user_name
 
 st.set_page_config(page_title="Application FAQ", page_icon=":skull_and_crossbones:")
 
 if not check_password():
-    st.stop()  # Do not continue if check_password is not True.
-    
+    st.stop()
+
 try:
     st.write(st.session_state["username"])
     email = st.session_state["username"]
@@ -22,5 +25,5 @@ st.markdown(
 4. This application works best on a desktop browser.  The Mobile does work, but is flakey.
 5. For the best results, use the same spelling of the person from their Wikipedia page.  For example, Chris Burke was chosen in the past, his Wiki page's title is "Chris Burke (actor)" - if you enter this, it will speed up the disambiguation of the pick.  Not critical but the arbiter will appreciate it.
 6. If you want a password or email change, please contact the arbiter.
-"""
+"""  # pylint: disable=line-too-long
 )

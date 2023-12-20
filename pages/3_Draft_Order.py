@@ -8,7 +8,7 @@ from utilities import check_password, get_user_name, load_snowflake_table
 st.set_page_config(page_title="Draft Order", page_icon=":skull_and_crossbones:")
 
 if not check_password():
-    st.stop()  # Do not continue if check_password is not True.
+    st.stop()
 
 try:
     st.write(st.session_state["username"])
@@ -42,7 +42,7 @@ st.markdown(
 - Additionally, a random number has been applied for those who came later, which helps shuffle users who didn't play a little last year.
 - All numbers are normalized between 0 and 1.
 - Finally the calculation is: `ORDER + RANDOM + (SCORE * -1)`.
-"""
+"""  # pylint: disable=line-too-long
 )
 
 st.dataframe(df_sorted, use_container_width=True)

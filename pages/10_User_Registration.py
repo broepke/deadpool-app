@@ -1,15 +1,17 @@
+"""
+New User Registration
+"""
 import streamlit as st
 from utilities import (
     check_password,
     get_user_name,
-    random_number_from_email,
     load_snowflake_table,
 )
 
 st.set_page_config(page_title="User Registration", page_icon=":skull_and_crossbones:")
 
 if not check_password():
-    st.stop()  # Do not continue if check_password is not True.
+    st.stop()
 
 try:
     st.write(st.session_state["username"])
@@ -47,23 +49,23 @@ with st.form("Registration"):
 
     submitted = st.form_submit_button("Submit")
     if submitted:
-        year_one = 0
+        YEAR_ONE = 0
 
         st.write(first_name)
         st.write(last_name)
         st.write(email)
-        st.write(year_one)
+        st.write(YEAR_ONE)
         st.write(sms)
         st.write(opt_in)
 
         if email not in all_emails:
             # Write the new user into the database
-            write_query = "INSERT INTO players (first_name, last_name, email, year_one, sms, opt_in) VALUES (:1, :2, :3, :4, :5, :6)"
+            WRITE_QUERY = "INSERT INTO players (first_name, last_name, email, YEAR_ONE, sms, opt_in) VALUES (:1, :2, :3, :4, :5, :6)" # pylint: disable=line-too-long
 
             # Execute the query with parameters
             conn.cursor().execute(
-                write_query,
-                (first_name, last_name, email, year_one, sms, opt_in),
+                WRITE_QUERY,
+                (first_name, last_name, email, YEAR_ONE, sms, opt_in),
             )
         else:
             st.write("User is already in the database.")
