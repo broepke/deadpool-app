@@ -95,7 +95,7 @@ def the_arbiter(prompt):
         response = requests.post(apify_api_url, json=prompt, timeout=5)
         return response.json()
     except:
-        return st.write("The Arbiter is Sleeping")
+        return {"text": "The Aribiter is sleeping.",}
 
 
 def has_fuzzy_match(value, value_set, threshold=85):
