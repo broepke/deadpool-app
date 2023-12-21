@@ -63,7 +63,7 @@ def check_password():
         ):
             st.session_state["password_correct"] = True
             save_value("username")
-            del st.session_state["_password"]  # Don't store the username or password.
+            del st.session_state["_password"]
             del st.session_state["_username"]
         else:
             st.session_state["password_correct"] = False
@@ -106,11 +106,11 @@ def has_fuzzy_match(value, value_set, threshold=85):
     Args:
         value (str): value to check
         value_set (list, str): list of all values you want to compare against
-        threshold (int, optional): how much leway do you want to give the algoritm.
-        Defaults to 85.
+        threshold (int, optional): how much leway do you want to give the
+        algoritm. Defaults to 85.
 
     Returns:
-        _type_: _description_
+        bool: if there is a match or not
     """
     for item in value_set:
         if fuzz.token_sort_ratio(value.lower(), item.lower()) >= threshold:

@@ -35,7 +35,7 @@ prompt = (
     + selected_tone
     + """ sentences about the user """
     + user_name
-    + """ and make it sassy. You can lightly insult them personally based on their """
+    + """ and make it sassy. You can lightly insult them based on their """
     + selected_insult
     + """.  This is all in good fun done in the style of hummor of """
     + selected_humor
