@@ -29,6 +29,7 @@ style = ["Eminem", "Shakespear", "Rodney Dangerfield", "American"]
 selected_tone = random.choice(tone)
 selected_insult = random.choice(insult)
 selected_humor = random.choice(humor)
+select_style = random.choice(style)
 
 
 prompt = (
@@ -41,8 +42,7 @@ prompt = (
     + ".  This is all in good fun done in the style of hummor of "
     + selected_humor
     + "in the talking style of "
-    + style
-    
+    + select_style
 )
 
 try:
