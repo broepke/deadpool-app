@@ -34,16 +34,12 @@ selected_style = random.choice(style)
 
 
 prompt = (
-    "Output the text as if "
-    + selected_style
-    + " were writing this. Come up with 2-3 "
+    "Come up with 2-3 in the tone of "
     + selected_tone
     + " sentences about the user "
     + user_name
-    + " and make it sassy. You can insult them based on their "
-    + selected_insult
-    + ".  Done in the style of hummor of "
-    + selected_humor
+    + " in the voice of "
+    + selected_style
 )
 
 st.write(prompt)
