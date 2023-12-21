@@ -29,12 +29,12 @@ style = ["Eminem", "Shakespear", "Rodney Dangerfield", "American"]
 selected_tone = random.choice(tone)
 selected_insult = random.choice(insult)
 selected_humor = random.choice(humor)
-select_style = random.choice(style)
+selected_style = random.choice(style)
 
 
 prompt = (
-    "In the voice of "
-    + selected_tone
+    "In the lyrical style of "
+    + selected_style
     + " come up with 2-3 "
     + selected_tone
     + " sentences about the user "
