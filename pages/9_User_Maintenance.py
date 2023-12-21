@@ -26,7 +26,7 @@ Use this form to adjust any personal information you need.  The email is the key
 3. Click "Submit".  
 
 If for any reason you see an error, please contact the Arbiter.
-"""  # pylint: disable=line-too-long
+"""  # noqa: E501
 )
 
 # Initialize important varibles
@@ -113,7 +113,7 @@ with st.form("Registration"):
         else:
             SUB_OPT_IN = False
 
-        WRITE_QUERY = "UPDATE players SET first_name = :1, last_name = :2, opt_in = :3, sms = :4 WHERE email = :5"  # pylint: disable=line-too-long
+        WRITE_QUERY = "UPDATE players SET first_name = :1, last_name = :2, opt_in = :3, sms = :4 WHERE email = :5"  # noqa: E501
 
         # Execute the query with parameters
         conn.cursor().execute(

@@ -60,7 +60,7 @@ with st.form("Registration"):
 
         if email not in all_emails:
             # Write the new user into the database
-            WRITE_QUERY = "INSERT INTO players (first_name, last_name, email, YEAR_ONE, sms, opt_in) VALUES (:1, :2, :3, :4, :5, :6)" # pylint: disable=line-too-long
+            WRITE_QUERY = "INSERT INTO players (first_name, last_name, email, YEAR_ONE, sms, opt_in) VALUES (:1, :2, :3, :4, :5, :6)" # noqa: E501
 
             # Execute the query with parameters
             conn.cursor().execute(

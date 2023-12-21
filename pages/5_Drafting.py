@@ -80,7 +80,7 @@ if draft_logic(email):
 
             if MATCH:
                 st.write(
-                    """That pick has already been taken, please try again. Please review the "All Picks" page for more information."""  # pylint: disable=line-too-long
+                    """That pick has already been taken, please try again. Please review the "All Picks" page for more information."""  # noqa: E501
                 )
 
             else:
@@ -89,7 +89,7 @@ if draft_logic(email):
                 DRAFT_YEAR = 2024
                 timestamp = datetime.utcnow()
 
-                WRITE_QUERY = "INSERT INTO picks (name, picked_by, wiki_page, year, timestamp) VALUES (:1, :2, :3, :4, :5)"  # pylint: disable=line-too-long
+                WRITE_QUERY = "INSERT INTO picks (name, picked_by, wiki_page, year, timestamp) VALUES (:1, :2, :3, :4, :5)"  # noqa: E501
 
                 # Execute the query with parameters
                 conn.cursor().execute(
@@ -109,7 +109,7 @@ if draft_logic(email):
                     # Send alert to the next player
                     next_sms_message = (
                         next_name
-                        + """ is next to pick.  Please log into the website at https://deadpool.streamlit.app/Drafting to make your selection."""  # pylint: disable=line-too-long
+                        + """ is next to pick.  Please log into the website at https://deadpool.streamlit.app/Drafting to make your selection."""  # noqa: E501
                     )
                     send_sms(next_sms_message, [next_sms])
                 except IndexError:
@@ -125,5 +125,5 @@ st.markdown(
 **Notes**: 
 - The system checks for duplicate entries and has built-in fuzzy matching of names entered.  If it's a slight misspelling, the duplicate will be caught.  If it's way off, the Arbiter must duplicate and resolve it after draft day.  The person with the earlier timestamp on the pick will keep the pick.  The other person will get to submit an additional pick.
 - Please do not pick a dead person.  If you do, you will lose that pick and receive 0 points.
-"""  # pylint: disable=line-too-long
+"""  # noqa: E501
 )

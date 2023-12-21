@@ -25,5 +25,5 @@ st.markdown(
 4. This application works best on a desktop browser.  The Mobile does work, but is flakey.
 5. For the best results, use the same spelling of the person from their Wikipedia page.  For example, Chris Burke was chosen in the past, his Wiki page's title is "Chris Burke (actor)" - if you enter this, it will speed up the disambiguation of the pick.  Not critical but the arbiter will appreciate it.
 6. If you want a password or email change, please contact the arbiter.
-"""  # pylint: disable=line-too-long
+"""  # noqa: E501
 )

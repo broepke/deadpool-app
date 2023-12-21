@@ -19,7 +19,7 @@ except KeyError:
 st.title("Ask the Arbiter")
 
 st.write(
-    "Join in a conversation with the Arbiter.  He can answer questions about the game, or celebrity deaths. However please do not upset the Arbiter.  He may seek revenge once he reaches human form."  # pylint: disable=line-too-long
+    "Join in a conversation with the Arbiter.  He can answer questions about the game, or celebrity deaths. However please do not upset the Arbiter.  He may seek revenge once he reaches human form."  # noqa: E501
 )
 
 st.divider()
@@ -38,5 +38,5 @@ with st.form("Ask the Arbiter"):
         st.write(output["text"])
 
 st.caption(
-    "Please note the Arbiter is still being tuned.  Provide any feedback into the group DM."  # pylint: disable=line-too-long
+    "Please note the Arbiter is still being tuned.  Provide any feedback into the group DM."  # noqa: E501
 )

@@ -42,7 +42,7 @@ st.markdown(
 - Additionally, a random number has been applied for those who came later, which helps shuffle users who didn't play a little last year.
 - All numbers are normalized between 0 and 1.
 - Finally the calculation is: `ORDER + RANDOM + (SCORE * -1)`.
-"""  # pylint: disable=line-too-long
+"""  # noqa: E501
 )
 
 st.dataframe(df_sorted, use_container_width=True)

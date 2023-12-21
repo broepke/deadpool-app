@@ -56,7 +56,7 @@ st.markdown(
     - Lists of predictions should not be publicized or shared outside the pool.
 9. **Dispute Resolution**:
     - The Arbiter's decision is final in all cases of disputes.
-"""  # pylint: disable=line-too-long
+"""  # noqa: E501
 )
 
 st.write("I have Spoken!  Signed the Arbiter")

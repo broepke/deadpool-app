@@ -26,7 +26,7 @@ Use this form to fix the Wikipedia links if they were not guessed properly by th
 1. Select a name.
 2. Update the Wiki link only using the end of the URL such as '**Tina_Turner**' in https://en.wikipedia.org/wiki/Tina_Turner.
 3. Submit your adjustments.
-""" # pylint: disable=line-too-long
+""" # noqa: E501
 )
 
 # Initialize important varibles
