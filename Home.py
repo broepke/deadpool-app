@@ -24,6 +24,7 @@ st.title("Deadpool 2024 :skull_and_crossbones:")
 tone = ["sarcastic", "dry humor", "playful"]
 insult = ["pick strategy", "their current"]
 humor = ["puns", "wordplay", "dad joke"]
+style = ["Eminem", "Shakespear", "Rodney Dangerfield", "American"]
 
 selected_tone = random.choice(tone)
 selected_insult = random.choice(insult)
@@ -31,14 +32,17 @@ selected_humor = random.choice(humor)
 
 
 prompt = (
-    """Come up with 2-3 """
+    "Come up with 2-3 "
     + selected_tone
-    + """ sentences about the user """
+    + " sentences about the user "
     + user_name
-    + """ and make it sassy. You can lightly insult them based on their """
+    + " and make it sassy. You can lightly insult them based on their "
     + selected_insult
-    + """.  This is all in good fun done in the style of hummor of """
+    + ".  This is all in good fun done in the style of hummor of "
     + selected_humor
+    + "in the talking style of "
+    + style
+    
 )
 
 try:
