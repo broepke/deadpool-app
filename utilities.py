@@ -94,9 +94,9 @@ def the_arbiter(prompt):
     try:
         response = requests.post(apify_api_url, json=prompt, timeout=40)
         return response.json()
-    except:
+    except Exception as e:
         return {
-            "text": "The Aribiter is sleeping.",
+            "text": e,
         }
 
 
