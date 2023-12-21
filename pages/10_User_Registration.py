@@ -8,7 +8,8 @@ from utilities import (
     load_snowflake_table,
 )
 
-st.set_page_config(page_title="User Registration", page_icon=":skull_and_crossbones:")
+st.set_page_config(page_title="User Registration",
+                   page_icon=":skull_and_crossbones:")
 
 if not check_password():
     st.stop()
@@ -30,20 +31,25 @@ all_emails = df["EMAIL"].tolist()
 
 st.title("New User Registration")
 with st.form("Registration"):
-    first_name = st.text_input(
-        "Please Enter Your First Name:", "", 256, key="reg_first_name"
-    )
-    last_name = st.text_input(
-        "Please Enter Your Last Name:", "", 256, key="reg_last_name"
-    )
-    email = st.text_input("Please Enter Your Personal Email:", "", 256, key="reg_email")
-    sms = st.text_input(
-        "Please Enter Your Mobile Number Like This +12224446666:",
-        "",
-        256,
-        key="reg_sms",
-    )
-    opt_in = st.checkbox("Opt-In to Receive SMS Alerts", True, key="reg_opt_in")
+    first_name = st.text_input("Please Enter Your First Name:",
+                               "",
+                               256,
+                               key="reg_first_name")
+    last_name = st.text_input("Please Enter Your Last Name:",
+                              "",
+                              256,
+                              key="reg_last_name")
+    email = st.text_input("Please Enter Your Personal Email:",
+                          "",
+                          256,
+                          key="reg_email")
+    sms = st.text_input("Please Enter Your Mobile Number:",
+                        "",
+                        256,
+                        key="reg_sms")
+    opt_in = st.checkbox("Opt-In to Receive SMS Alerts",
+                         True,
+                         key="reg_opt_in")
 
     email = email.lower()
 
@@ -60,7 +66,7 @@ with st.form("Registration"):
 
         if email not in all_emails:
             # Write the new user into the database
-            WRITE_QUERY = "INSERT INTO players (first_name, last_name, email, YEAR_ONE, sms, opt_in) VALUES (:1, :2, :3, :4, :5, :6)" # noqa: E501
+            WRITE_QUERY = "INSERT INTO players (first_name, last_name, email, YEAR_ONE, sms, opt_in) VALUES (:1, :2, :3, :4, :5, :6)"  # noqa: E501
 
             # Execute the query with parameters
             conn.cursor().execute(

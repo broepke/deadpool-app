@@ -4,7 +4,8 @@ General Q&A information for the app
 import streamlit as st
 from utilities import check_password, get_user_name
 
-st.set_page_config(page_title="Application FAQ", page_icon=":skull_and_crossbones:")
+st.set_page_config(page_title="Application FAQ",
+                   page_icon=":skull_and_crossbones:")
 
 if not check_password():
     st.stop()

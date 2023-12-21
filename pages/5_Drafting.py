@@ -11,7 +11,8 @@ from utilities import (
     load_snowflake_table,
 )
 
-st.set_page_config(page_title="Drafting", page_icon=":skull_and_crossbones:")
+st.set_page_config(page_title="Drafting",
+                   page_icon=":skull_and_crossbones:")
 
 if not check_password():
     st.stop()
@@ -25,7 +26,7 @@ except KeyError:
 
 
 def draft_logic(current_email):
-    """Check to see if the current user is the person who's supposed to draft next
+    """Check to see if the current user is the person who will draft next
 
     Args:
         email (str): email of the current logged in person
@@ -93,7 +94,11 @@ if draft_logic(email):
 
                 # Execute the query with parameters
                 conn.cursor().execute(
-                    WRITE_QUERY, (pick, email, wiki_page, DRAFT_YEAR, timestamp)
+                    WRITE_QUERY, (pick,
+                                  email,
+                                  wiki_page,
+                                  DRAFT_YEAR,
+                                  timestamp)
                 )
 
                 sms_message = user_name + " has picked " + pick
@@ -122,7 +127,7 @@ st.divider()
 
 st.markdown(
     """
-**Notes**: 
+**Notes**:
 - The system checks for duplicate entries and has built-in fuzzy matching of names entered.  If it's a slight misspelling, the duplicate will be caught.  If it's way off, the Arbiter must duplicate and resolve it after draft day.  The person with the earlier timestamp on the pick will keep the pick.  The other person will get to submit an additional pick.
 - Please do not pick a dead person.  If you do, you will lose that pick and receive 0 points.
 """  # noqa: E501

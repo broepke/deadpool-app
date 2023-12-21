@@ -4,7 +4,8 @@ User maintenance tools
 import streamlit as st
 from utilities import check_password, get_user_name, load_snowflake_table
 
-st.set_page_config(page_title="User Maintenance", page_icon=":skull_and_crossbones:")
+st.set_page_config(page_title="User Maintenance",
+                   page_icon=":skull_and_crossbones:")
 
 if not check_password():
     st.stop()
@@ -23,7 +24,7 @@ st.markdown(
 Use this form to adjust any personal information you need.  The email is the key information here, and if you so choose to opt in to SMS messaging you can do so below.  If you opt out, you will not receive pick or death alerts.  It is highly reccomended that you opt in!
 1. Select your name and click "Choose Player."
 2. Adjust any information as needed.
-3. Click "Submit".  
+3. Click "Submit".
 
 If for any reason you see an error, please contact the Arbiter.
 """  # noqa: E501
@@ -73,7 +74,8 @@ with st.form("Player to Update"):
             print("No user found with the given email")
 
 st.header("Update Player Information")
-st.write("Note: Your cannot update the email address.  Please contact The Aribiter")
+st.write("Note: Your cannot update the email address.  "
+         "Please contact The Aribiter")
 
 with st.form("Registration"):
     try:
@@ -113,7 +115,11 @@ with st.form("Registration"):
         else:
             SUB_OPT_IN = False
 
-        WRITE_QUERY = "UPDATE players SET first_name = :1, last_name = :2, opt_in = :3, sms = :4 WHERE email = :5"  # noqa: E501
+        WRITE_QUERY = ("UPDATE players "
+                       "SET first_name = :1, last_name = :2, "
+                       "opt_in = :3, sms = :4 "
+                       "WHERE email = :5"
+                       )
 
         # Execute the query with parameters
         conn.cursor().execute(

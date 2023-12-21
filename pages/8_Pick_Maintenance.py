@@ -4,9 +4,8 @@ Tools to modify pick information mostly the wiki page
 import streamlit as st
 from utilities import check_password, get_user_name, load_snowflake_table
 
-st.set_page_config(
-    page_title="Draft Pick Maintenance", page_icon=":skull_and_crossbones:"
-)
+st.set_page_config(page_title="Draft Pick Maintenance",
+                   page_icon=":skull_and_crossbones:")
 
 if not check_password():
     st.stop()
@@ -21,12 +20,12 @@ except KeyError:
 
 st.title("Pick Maintenance Tools")
 st.markdown(
-"""
+    """
 Use this form to fix the Wikipedia links if they were not guessed properly by the code when loaded.  In some cases there are disambiguation data such as '(actor)' for common names or there can be other URL encoding for special characters in names.
 1. Select a name.
 2. Update the Wiki link only using the end of the URL such as '**Tina_Turner**' in https://en.wikipedia.org/wiki/Tina_Turner.
 3. Submit your adjustments.
-""" # noqa: E501
+"""  # noqa: E501
 )
 
 # Initialize important varibles
@@ -48,7 +47,10 @@ st.header("Pick Selection")
 
 # Load all the picks into a drop down for easy selection
 with st.form("Pick to Update"):
-    sel_pick = st.selectbox("Select a pick", df_picks_list, key="sel_selected_pick")
+    sel_pick = st.selectbox("Select a pick",
+                            df_picks_list,
+                            key="sel_selected_pick")
+
     submitted = st.form_submit_button("Choose pick")
 
     if submitted:
@@ -86,9 +88,12 @@ with st.form("Registration"):
 
     submitted = st.form_submit_button("Submit")
     if submitted:
-        WRITE_QUERY = "UPDATE picks SET wiki_page = :1 WHERE name = :2 AND year = 2024"
+        WRITE_QUERY = (
+            "UPDATE picks SET wiki_page = :1 "
+            "WHERE name = :2 AND year = 2024"
+        )
 
-        # # Execute the query with parameters
+        # Execute the query with parameters
         conn.cursor().execute(WRITE_QUERY, (sub_wiki_page, sub_name))
 
         st.write(WRITE_QUERY)

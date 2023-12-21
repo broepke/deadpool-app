@@ -4,7 +4,8 @@ List of all scoring rules
 import streamlit as st
 from utilities import check_password, get_user_name
 
-st.set_page_config(page_title="Rules", page_icon=":skull_and_crossbones:")
+st.set_page_config(page_title="Rules",
+                   page_icon=":skull_and_crossbones:")
 
 if not check_password():
     st.stop()
@@ -36,7 +37,7 @@ st.markdown(
     - E.g., the death of a person who's 90 years old will be 60 points.
     - First Blood will be awarded an additional **25 points**.
     - Last Blood will be awarded an additional **25 points**.
-    - At the end of each calendar quarter, the person with the most points in that calendar quarter will be awarded **5 points**. 
+    - At the end of each calendar quarter, the person with the most points in that calendar quarter will be awarded **5 points**.
     - If you pick a dead person, which will be checked automatically after the draft finishes, you will lose that pick.
 5. **Trade Days**:
     - Once per quarter, each participant may draft / trade **one** new celebrity in exchange for another.
@@ -48,7 +49,7 @@ st.markdown(
 7. **Draft Order**:
     - Draft order has been computed to weigh the prior year's draft order and the number of points scored by the player.  The high draft order and higher scores penalized your spot in the new order.
     - Additionally, a random number has been applied for those who came later, which helps shuffle users who didn't play a little last year.
-    - Formula for MinMax Scaling: 
+    - Formula for MinMax Scaling:
         - `X_std = (X - X.min) / (X.max - X.min) X_scaled = X_std * (max - min) + min`.
     - Finally the calculation is: `ORDER + RANDOM + (SCORE * -1)`.
 8. **Privacy and Confidentiality**:
