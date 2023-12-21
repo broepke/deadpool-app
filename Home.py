@@ -50,7 +50,6 @@ try:
 
     st.markdown("**A message from The Arbiter:** " + output["text"])
 
-    st.divider()
 except Exception as e:
     st.write(e)
     st.write("Welcome Back, " + user_name)
