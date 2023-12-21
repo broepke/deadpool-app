@@ -45,6 +45,8 @@ prompt = (
     + selected_humor
 )
 
+st.write(prompt)
+
 try:
     output = the_arbiter(
         {
