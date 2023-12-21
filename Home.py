@@ -24,7 +24,8 @@ st.title("Deadpool 2024 :skull_and_crossbones:")
 tone = ["sarcastic", "dry humor", "playful"]
 insult = ["pick strategy", "their current"]
 humor = ["puns", "wordplay", "dad joke"]
-style = ["Eminem", "shakespeare", "Seinfeld", "hemmingway", "f. scott fitzgerlald"]
+style = ["Eminem", "shakespeare", "Seinfeld", "hemmingway",
+         "f. scott fitzgerlald"]
 
 selected_tone = random.choice(tone)
 selected_insult = random.choice(insult)
@@ -33,9 +34,9 @@ selected_style = random.choice(style)
 
 
 prompt = (
-    "In the lyrical style of "
+    "Output the text as if "
     + selected_style
-    + " come up with 2-3 "
+    + " were writing this. Come up with 2-3 "
     + selected_tone
     + " sentences about the user "
     + user_name
