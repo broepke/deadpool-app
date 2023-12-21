@@ -96,7 +96,7 @@ def the_arbiter(prompt):
         return response.json()
     except Exception as e:
         return {
-            "text": "The Arbiter is sleeping: " + e,
+            "text": "The Arbiter is sleeping: " + str(e),
         }
 
 
