@@ -12,6 +12,7 @@ def save_value(key):
     """Simple methods for setting temp and permanent session state keys"""
     st.session_state[key] = st.session_state["_" + key]
 
+
 def load_snowflake_table(conn, table):
     """Loads a specific Snowflake table
 
@@ -24,6 +25,7 @@ def load_snowflake_table(conn, table):
     """
     session_picks = conn.session()
     return session_picks.table(table).to_pandas()
+
 
 def get_user_name(email):
     """Get a user's full name (first + last)"""
@@ -93,7 +95,9 @@ def the_arbiter(prompt):
         response = requests.post(apify_api_url, json=prompt, timeout=40)
         return response.json()
     except:
-        return {"text": "The Aribiter is sleeping.",}
+        return {
+            "text": "The Aribiter is sleeping.",
+        }
 
 
 def has_fuzzy_match(value, value_set, threshold=85):
