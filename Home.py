@@ -42,8 +42,6 @@ prompt = (
     + selected_style
 )
 
-st.write(prompt)
-
 try:
     output = the_arbiter(
         {
@@ -58,3 +56,5 @@ except Exception as e:
     st.write("Welcome Back, " + user_name)
 
 st.image("deadpool.png", "The Arbiter")
+
+st.write(prompt)
