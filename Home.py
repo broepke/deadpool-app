@@ -33,7 +33,9 @@ select_style = random.choice(style)
 
 
 prompt = (
-    "Come up with 2-3 "
+    "In the voice of "
+    + selected_tone
+    + " come up with 2-3 "
     + selected_tone
     + " sentences about the user "
     + user_name
@@ -41,8 +43,6 @@ prompt = (
     + selected_insult
     + ".  This is all in good fun done in the style of hummor of "
     + selected_humor
-    + "in the talking style of "
-    + select_style
 )
 
 try:
