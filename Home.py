@@ -28,7 +28,8 @@ style = ["an Eminem rap song?",
          "Shakeare had written it?",
          "an Jerry Seinfeld stand up bit?",
          "Hemmingway had written it?",
-         "an F. Scott Fitzgerlald novel?"]
+         "an F. Scott Fitzgerlald novel?",
+         "Huter S. Thompson had written it?"]
 
 selected_tone = random.choice(tone)
 selected_insult = random.choice(insult)
@@ -53,4 +54,4 @@ except Exception as e:
 
 st.image("deadpool.png", "The Arbiter")
 
-st.write(prompt)
+st.caption(prompt)
