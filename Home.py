@@ -42,7 +42,7 @@ prompt = (
     + " but can you make it like "
     + selected_style
     + " "
-    + random.random
+    + str(random.random)
 )
 
 try:
