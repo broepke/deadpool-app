@@ -29,7 +29,8 @@ style = ["an Eminem rap song?",
          "an Jerry Seinfeld stand up bit?",
          "Hemmingway had written it?",
          "an F. Scott Fitzgerlald novel?",
-         "Huter S. Thompson had written it?"]
+         "Huter S. Thompson had written it?",
+         "Captain Jack Sparrow from Pirates of the Carribean?"]
 
 selected_tone = random.choice(tone)
 selected_insult = random.choice(insult)
