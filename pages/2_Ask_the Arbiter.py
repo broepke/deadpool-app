@@ -30,13 +30,10 @@ with st.form("Ask the Arbiter"):
     submitted = st.form_submit_button("Submit")
 
     if submitted:
-        output = the_arbiter(
-            {
-                "question": input,
-            }
-        )
+        output = the_arbiter(input)
 
-        st.write(output["text"])
+        st.write(input)
+        st.write(output)
 
 st.caption(
     "Please note the Arbiter is still being tuned.  Provide any feedback into the group DM."  # noqa: E501

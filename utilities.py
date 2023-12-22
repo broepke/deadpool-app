@@ -83,21 +83,21 @@ def the_arbiter(prompt):
     """Chatbot API call to LangChang LLM
 
     Args:
-        payload (dict): output = the_arbiter(
-            {"question": input,}
-            )
+        prompt (str): the prompt
 
     Returns:
         str: Text output from the LLM
     """
     apify_api_url = st.secrets["apify"]["api_url"]
+
+    payload = {"question": prompt, }
+
     try:
-        response = requests.post(apify_api_url, json=prompt, timeout=40)
-        return response.json()
+        response = requests.post(apify_api_url, json=payload, timeout=60)
+        output = response.json()
+        return output["text"]
     except Exception as e:
-        return {
-            "text": "The Arbiter is sleeping: " + str(e),
-        }
+        return "The Arbiter is sleeping: " + str(e)
 
 
 def has_fuzzy_match(value, value_set, threshold=85):

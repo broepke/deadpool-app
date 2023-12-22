@@ -43,13 +43,9 @@ prompt = (
 )
 
 try:
-    output = the_arbiter(
-        {
-            "question": prompt,
-        }
-    )
+    output = the_arbiter(prompt)
 
-    st.markdown("**A message from The Arbiter:** " + output["text"])
+    st.markdown("**A message from The Arbiter:** " + output)
 
 except Exception as e:
     st.write(e)
