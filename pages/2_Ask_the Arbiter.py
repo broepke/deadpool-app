@@ -31,8 +31,6 @@ with st.form("Ask the Arbiter"):
 
     if submitted:
         output = the_arbiter(input)
-
-        st.write(input)
         st.write(output)
 
 st.caption(
