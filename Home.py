@@ -41,6 +41,8 @@ prompt = (
     + user_name
     + " but can you make it like "
     + selected_style
+    + " "
+    + random.random
 )
 
 try:
