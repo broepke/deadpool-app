@@ -24,21 +24,21 @@ st.title("Deadpool 2024 :skull_and_crossbones:")
 tone = ["sarcastic", "dry humor", "playful"]
 insult = ["pick strategy", "their current"]
 humor = ["puns", "wordplay", "dad joke", "haiku"]
-style = ["Eminem", "shakespeare", "Seinfeld", "hemmingway",
-         "f. scott fitzgerlald"]
+style = ["an Eminem rap song?",
+         "Shakeare had written it?",
+         "an Jerry Seinfeld stand up bit?",
+         "Hemmingway had written it?",
+         "an F. Scott Fitzgerlald novel?"]
 
 selected_tone = random.choice(tone)
 selected_insult = random.choice(insult)
 selected_humor = random.choice(humor)
 selected_style = random.choice(style)
 
-
 prompt = (
-    "Come up with 2-3 in the tone of "
-    + selected_tone
-    + " sentences about the user "
+    "I want you to create a creative insult for the user "
     + user_name
-    + " in the voice of "
+    + " but can you make it like "
     + selected_style
 )
 
