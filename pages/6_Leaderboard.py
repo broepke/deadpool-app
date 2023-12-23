@@ -24,6 +24,9 @@ conn = st.connection("snowflake")
 df_score_2024 = load_snowflake_table(conn, "SCORE_TWENTY_FOUR")
 df_score_2023 = load_snowflake_table(conn, "SCORE_TWENTY_THREE")
 
+df_score_2024.drop(columns="EMAIL", inplace=True)
+df_score_2023.drop(columns="EMAIL", inplace=True)
+
 
 st.title("2024 Leaderboard:")
 
