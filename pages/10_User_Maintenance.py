@@ -126,8 +126,8 @@ with st.form("Registration"):
 
         WRITE_QUERY = ("UPDATE players "
                        "SET first_name = :1, last_name = :2, "
-                       "opt_in = :3, sms = :4 "
-                       "WHERE id = :5"
+                       "email = :3, opt_in = :4, sms = :5 "
+                       "WHERE id = :6"
                        )
 
         # Execute the query with parameters
@@ -136,6 +136,7 @@ with st.form("Registration"):
             (
                 SUB_FIRST_NAME,
                 SUB_LAST_NAME,
+                SUB_EMAIL,
                 SUB_OPT_IN,
                 SUB_SMS,
                 SUB_ID,

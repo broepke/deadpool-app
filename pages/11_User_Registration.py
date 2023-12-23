@@ -1,6 +1,7 @@
 """
 New User Registration
 """
+from uuid import uuid4
 import streamlit as st
 from utilities import (
     check_password,
@@ -55,8 +56,10 @@ with st.form("Registration"):
 
     submitted = st.form_submit_button("Submit")
     if submitted:
+        ID = str(uuid4())
         YEAR_ONE = 0
 
+        st.write(ID)
         st.write(first_name)
         st.write(last_name)
         st.write(email)
@@ -66,12 +69,12 @@ with st.form("Registration"):
 
         if email not in all_emails:
             # Write the new user into the database
-            WRITE_QUERY = "INSERT INTO players (first_name, last_name, email, YEAR_ONE, sms, opt_in) VALUES (:1, :2, :3, :4, :5, :6)"  # noqa: E501
+            WRITE_QUERY = "INSERT INTO players (FIRST_NAME, LAST_NAME, EMAIL, YEAR_ONE, SMS, OPT_IN, ID) VALUES (:1, :2, :3, :4, :5, :6, :7)"  # noqa: E501
 
             # Execute the query with parameters
             conn.cursor().execute(
                 WRITE_QUERY,
-                (first_name, last_name, email, YEAR_ONE, sms, opt_in),
+                (first_name, last_name, email, YEAR_ONE, sms, opt_in, ID),
             )
         else:
             st.write("User is already in the database.")
