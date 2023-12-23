@@ -44,6 +44,7 @@ conn = st.connection("snowflake")
 
 df_players = load_snowflake_table(conn, "players")
 df_players_list = df_players["EMAIL"].to_list()
+df_players_list.sort()
 
 st.header("Player Selection")
 
@@ -58,12 +59,14 @@ with st.form("Player to Update"):
         filtered_df = df_players[df_players["EMAIL"] == sel_player]
 
         if not filtered_df.empty:
+            SEL_ID = filtered_df.iloc[0]["ID"]
             SEL_FIRST_NAME = filtered_df.iloc[0]["FIRST_NAME"]
             SEL_LAST_NAME = filtered_df.iloc[0]["LAST_NAME"]
             SEL_EMAIL = filtered_df.iloc[0]["EMAIL"]
             SEL_SMS = filtered_df.iloc[0]["SMS"]
             SEL_OPT_IN = filtered_df.iloc[0]["OPT_IN"]
 
+            st.session_state["reg_id"] = SEL_ID
             st.session_state["reg_first_name"] = SEL_FIRST_NAME
             st.session_state["reg_last_name"] = SEL_LAST_NAME
             st.session_state["reg_email"] = SEL_EMAIL
@@ -75,25 +78,30 @@ with st.form("Player to Update"):
             print("No user found with the given email")
 
 st.header("Update Player Information")
-st.write("Note: Your cannot update the email address.  "
-         "Please contact The Aribiter")
 
 with st.form("Registration"):
     try:
+        SEL_ID = st.session_state["reg_id"]
         SEL_FIRST_NAME = st.session_state["reg_first_name"]
         SEL_LAST_NAME = st.session_state["reg_last_name"]
         SEL_EMAIL = st.session_state["reg_email"]
         SEL_OPT_IN = st.session_state["reg_opt_in"]
         SEL_SMS = st.session_state["reg_sms"]
-        SUB_PLAYER = st.session_state["reg_player"]
     except KeyError:
+        SEL_ID = ""
         SEL_FIRST_NAME = ""
         SEL_LAST_NAME = ""
         SEL_EMAIL = ""
         SEL_OPT_IN = ""
         SEL_SMS = ""
-        SUB_PLAYER = ""
 
+    SUB_ID = st.text_input(
+        "ID:",
+        SEL_ID,
+        256,
+        disabled=True,
+        key="_reg_id",
+    )
     SUB_FIRST_NAME = st.text_input(
         "First Name:",
         SEL_FIRST_NAME,
@@ -119,7 +127,7 @@ with st.form("Registration"):
         WRITE_QUERY = ("UPDATE players "
                        "SET first_name = :1, last_name = :2, "
                        "opt_in = :3, sms = :4 "
-                       "WHERE email = :5"
+                       "WHERE id = :5"
                        )
 
         # Execute the query with parameters
@@ -130,14 +138,14 @@ with st.form("Registration"):
                 SUB_LAST_NAME,
                 SUB_OPT_IN,
                 SUB_SMS,
-                SUB_PLAYER,
+                SUB_ID,
             ),
         )
 
         st.write("Query:", WRITE_QUERY)
+        st.write("ID:", SUB_ID)
         st.write("First Name:", SUB_FIRST_NAME)
         st.write("Last Name:", SUB_LAST_NAME)
         st.write("E-Mail:", SUB_EMAIL)
         st.write("Opt In:", SUB_OPT_IN)
         st.write("SMS:", SUB_SMS)
-        st.write("Player:", SUB_PLAYER)
