@@ -23,8 +23,6 @@ st.write(
     "Join in a conversation with the Arbiter.  He can answer questions about the game, or celebrity deaths. However please do not upset the Arbiter.  He may seek revenge once he reaches human form."  # noqa: E501
 )
 
-st.divider()
-
 with st.form("Ask the Arbiter"):
     input = st.text_input("What would you like to ask The Arbiter", "")
     submitted = st.form_submit_button("Submit")
