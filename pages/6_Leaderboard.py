@@ -21,8 +21,8 @@ except KeyError:
 conn = st.connection("snowflake")
 
 
-df_score_2024 = load_snowflake_table(conn, "score_twenty_four")
-df_score_2023 = load_snowflake_table(conn, "score_twenty_three")
+df_score_2024 = load_snowflake_table(conn, "SCORE_TWENTY_FOUR")
+df_score_2023 = load_snowflake_table(conn, "SCORE_TWENTY_THREE")
 
 
 st.title("2024 Leaderboard:")
