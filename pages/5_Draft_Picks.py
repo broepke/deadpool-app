@@ -21,10 +21,8 @@ except KeyError:
 conn = st.connection("snowflake")
 
 
-df_picks = load_snowflake_table(conn, "picks")
-
-df_2024 = df_picks[df_picks["YEAR"] == 2024]
-df_2023 = df_picks[df_picks["YEAR"] == 2023]
+df_2024 = load_snowflake_table(conn, "picks_twenty_four")
+df_2023 = load_snowflake_table(conn, "picks_twenty_three")
 
 st.title("2024 Draft Picks:")
 st.dataframe(df_2024)

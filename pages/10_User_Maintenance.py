@@ -31,6 +31,7 @@ If for any reason you see an error, please contact the Arbiter.
 )
 
 # Initialize important varibles
+SEL_ID = ""
 SEL_FIRST_NAME = ""
 SEL_LAST_NAME = ""
 SEL_EMAIL = ""
