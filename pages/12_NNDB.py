@@ -63,11 +63,12 @@ c = (
 st.altair_chart(c, use_container_width=True)
 
 st.write(
-    "Let's now look at summary statistics for people " 
-    "in the database that are dead."
+    "Let's now look at summary statistics for people "
+    + "in the database that are dead."
 )
-
-st.write(df_nndb["AGE"].describe())
+st.dataframe(df_nndb["OCCUPATION"].value_counts(),
+             use_container_width=True)
+st.dataframe(df_nndb["AGE"].describe(), use_container_width=True)
 
 df_nndb_occupation = df_nndb.dropna(subset=["OCCUPATION"])
 
@@ -115,6 +116,7 @@ limit 15
 df = run_query(conn, occupation_ratio)
 df["RATIO"] = df["RATIO"].astype(float)
 
-st.write(df.sort_values(by="RATIO", ascending=False))
+st.dataframe(df.sort_values(by="RATIO", ascending=False),
+             use_container_width=True)
 
 st.bar_chart(data=df, x="OCCUPATION", y="RATIO", color="#F28749")
