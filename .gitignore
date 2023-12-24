@@ -153,3 +153,5 @@ cython_debug/
 
 # Streamlit
 secrets.toml
+
+.DS_Store

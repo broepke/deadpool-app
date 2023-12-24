@@ -46,11 +46,13 @@ def parse_linked_page(soup):
     race = race_tag.next_sibling.strip() if race_tag else "N/A"
 
     occupation_tag = soup.find("b", string="Occupation:")
-    occupation = occupation_tag.next_sibling.strip() if occupation_tag else "N/A"
+    occupation = (occupation_tag.next_sibling.strip()
+                  if occupation_tag else "N/A")
 
     # Extracting nationality
     nationality_tag = soup.find("b", string="Nationality:")
-    nationality = nationality_tag.next_sibling.strip() if nationality_tag else "N/A"
+    nationality = (nationality_tag.next_sibling.strip()
+                   if nationality_tag else "N/A")
 
     # Extracting executive summary
     exec_summary_tag = soup.find("b", string="Executive summary:")
@@ -80,7 +82,8 @@ def parse_linked_page(soup):
 
     cause_of_death_tag = soup.find("b", string="Cause of death:")
     cause_of_death = (
-        cause_of_death_tag.next_sibling.strip() if cause_of_death_tag else "N/A"
+        cause_of_death_tag.next_sibling.strip()
+        if cause_of_death_tag else "N/A"
     )
 
     return (
@@ -125,8 +128,6 @@ def scrape_website(base_url):
         return data
 
     soup = BeautifulSoup(response.content, "html.parser")
-
-    COUNTER = 0
 
     # Find all links that contain '/people/' in their href attribute
     for link in soup.find_all("a", href=True):
@@ -205,7 +206,37 @@ def scrape_website(base_url):
     return data
 
 
-scraped_data = scrape_website("https://www.nndb.com/lists/495/000063306/")
-csv_file_name = "scraped_data_b.csv"
-scraped_data.to_csv(csv_file_name, index=False)
-print(f"Data saved to {csv_file_name}")
+urls = {
+    "a": "http://www.nndb.com/lists/493/000063304/",
+    "b": "http://www.nndb.com/lists/494/000063305/",
+    "c": "http://www.nndb.com/lists/495/000063306/",
+    "d": "http://www.nndb.com/lists/496/000063307/",
+    "e": "http://www.nndb.com/lists/497/000063308/",
+    "f": "http://www.nndb.com/lists/498/000063309/",
+    "g": "http://www.nndb.com/lists/499/000063310/",
+    "h": "http://www.nndb.com/lists/500/000063311/",
+    "i": "http://www.nndb.com/lists/501/000063312/",
+    "j": "http://www.nndb.com/lists/502/000063313/",
+    "k": "http://www.nndb.com/lists/503/000063314/",
+    "l": "http://www.nndb.com/lists/504/000063315/",
+    "m": "http://www.nndb.com/lists/505/000063316/",
+    "n": "http://www.nndb.com/lists/506/000063317/",
+    "o": "http://www.nndb.com/lists/507/000063318/",
+    "p": "http://www.nndb.com/lists/508/000063319/",
+    "q": "http://www.nndb.com/lists/509/000063320/",
+    "r": "http://www.nndb.com/lists/510/000063321/",
+    "s": "http://www.nndb.com/lists/511/000063322/",
+    "t": "http://www.nndb.com/lists/512/000063323/",
+    "u": "http://www.nndb.com/lists/513/000063324/",
+    "v": "http://www.nndb.com/lists/514/000063325/",
+    "w": "http://www.nndb.com/lists/515/000063326/",
+    "x": "http://www.nndb.com/lists/516/000063327/",
+    "y": "http://www.nndb.com/lists/517/000063328/",
+    "z": "http://www.nndb.com/lists/518/000063329/",
+}
+
+for key, value in urls.items():
+    scraped_data = scrape_website(value)
+    csv_file_name = "scraped_data_" + key + ".csv"
+    scraped_data.to_csv(csv_file_name, index=False)
+    print(f"Data saved to {csv_file_name}")
