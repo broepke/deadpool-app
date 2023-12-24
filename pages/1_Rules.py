@@ -30,6 +30,7 @@ st.markdown(
 2. **Selection Criteria**:
     - Only public figures (celebrities, politicians, athletes, etc.) may be selected.
     - At least 50% of the players must know each selection, or be easily validated from Wikipedia.
+    - You cannot pick Willie Nelson.  He is the new Betty White.
 3. **Points System**:
     - The total points of the death will be calculated as **50 + (100-AGE)**.
     - E.g., the death of a person who's 90 years old will be 60 points.
