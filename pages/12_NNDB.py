@@ -37,70 +37,29 @@ df_nndb["IS_DECEASED"] = df_nndb["DIED"].notnull()
 
 df_nndb_dead = df_nndb[df_nndb["IS_DECEASED"]]
 
+st.subheader("Count of People Who are Dead by Age")
 st.write(
     "Data from the Notable Names Database.  The following charts "
     "represent statistics on celebrities."
 )
 
-# c = (
-#     alt.Chart(df_nndb).mark_bar().encode(
-#         alt.X("AGE", bin=alt.Bin(maxbins=50)),
-#         y='count()',
-#     )
-# )
-
-# st.altair_chart(c, use_container_width=True)
-
-c = (
+age_line_chart = (
     alt.Chart(df_nndb_dead)
     .mark_line()
-    .encode(
-        alt.X("AGE"),
-        y="count()",
-    )
+    .encode(alt.X("AGE"), y="count()", color=alt.value("#F28749"))
 )
 
-st.altair_chart(c, use_container_width=True)
+st.altair_chart(age_line_chart, use_container_width=True)
 
-st.write(
-    "Let's now look at summary statistics for people "
-    + "in the database that are dead."
-)
-st.dataframe(df_nndb["OCCUPATION"].value_counts(),
-             use_container_width=True)
-st.dataframe(df_nndb["AGE"].describe(), use_container_width=True)
+###########################
+# DESCRIPTIVE STATISTICS
+###########################
+st.subheader("Descriptive Statistics on Age")
+st.dataframe(df_nndb_dead["AGE"].describe(), use_container_width=True)
 
-df_nndb_occupation = df_nndb.dropna(subset=["OCCUPATION"])
-
-# Count the number of alive and deceased individuals for each occupation
-counts = (
-    df_nndb_occupation.groupby("OCCUPATION")
-    .agg({"IS_ALIVE": "sum", "IS_DECEASED": "sum"})
-    .reset_index()
-)
-
-top_15_alive = counts.sort_values(by="IS_DECEASED", ascending=False).head(10)
-
-# Melt the DataFrame to long format
-long_format = top_15_alive.melt(
-    id_vars="OCCUPATION",
-    value_vars=["IS_ALIVE", "IS_DECEASED"],
-    var_name="Status",
-    value_name="Count",
-)
-
-# Create a side-by-side bar chart
-chart = (
-    alt.Chart(long_format)
-    .mark_bar()
-    .encode(
-        x=alt.X("OCCUPATION", axis=alt.Axis(title="OCCUPATION")),
-        y=alt.Y("Count", axis=alt.Axis(title="Count")),
-        color="Status",
-        column="Status",
-    )
-)
-
+###########################
+# OCCUPATION DATA
+###########################
 occupation_ratio = """
 SELECT
     OCCUPATION,
@@ -113,10 +72,37 @@ GROUP BY 1
 ORDER by 2 desc
 limit 15
 """
-df = run_query(conn, occupation_ratio)
-df["RATIO"] = df["RATIO"].astype(float)
+df_occupation = run_query(conn, occupation_ratio)
+df_occupation["RATIO"] = df_occupation["RATIO"].astype(float)
+df_occupation = df_occupation.sort_values(by="RATIO", ascending=False)
 
-st.dataframe(df.sort_values(by="RATIO", ascending=False),
-             use_container_width=True)
+st.subheader("Occupations: Most Alive/Dead Ratio in the DB")
+occupation_chart = (
+    alt.Chart(df_occupation)
+    .mark_bar()
+    .encode(
+        x="RATIO:Q",
+        y=alt.Y("OCCUPATION:N", sort=None),
+        color=alt.value("#F28749"),
+    )
+)
 
-st.bar_chart(data=df, x="OCCUPATION", y="RATIO", color="#F28749")
+st.altair_chart(occupation_chart, use_container_width=True)
+
+###########################
+# RISK FACTORS
+###########################
+risk_factors = """
+select name, risk_factors, age
+from deadpool.prod.nndb
+where risk_factors is not null
+and died is null
+and age is not null
+and age < 101
+group by 1, 2, 3
+order by 3 desc
+limit 50
+"""
+df_risk = run_query(conn, risk_factors)
+st.subheader("High Risk People by Age")
+st.dataframe(df_risk)
