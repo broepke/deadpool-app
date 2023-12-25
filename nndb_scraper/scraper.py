@@ -46,13 +46,11 @@ def parse_linked_page(soup):
     race = race_tag.next_sibling.strip() if race_tag else "N/A"
 
     occupation_tag = soup.find("b", string="Occupation:")
-    occupation = (occupation_tag.next_sibling.strip()
-                  if occupation_tag else "N/A")
+    occupation = occupation_tag.next_sibling.strip() if occupation_tag else "N/A"
 
     # Extracting nationality
     nationality_tag = soup.find("b", string="Nationality:")
-    nationality = (nationality_tag.next_sibling.strip()
-                   if nationality_tag else "N/A")
+    nationality = nationality_tag.next_sibling.strip() if nationality_tag else "N/A"
 
     # Extracting executive summary
     exec_summary_tag = soup.find("b", string="Executive summary:")
@@ -82,9 +80,22 @@ def parse_linked_page(soup):
 
     cause_of_death_tag = soup.find("b", string="Cause of death:")
     cause_of_death = (
-        cause_of_death_tag.next_sibling.strip()
-        if cause_of_death_tag else "N/A"
+        cause_of_death_tag.next_sibling.strip() if cause_of_death_tag else "N/A"
     )
+
+    risk_factors = []
+
+    risk_factors_elements = soup.find_all(string=lambda text: "Risk Factors:" in text)
+    risk_factors_label = risk_factors_elements[0] if risk_factors_elements else None
+
+    if risk_factors_label:
+        for sibling in risk_factors_label.next_siblings:
+            if sibling.name == "a":  # Check if the sibling is an 'a' tag
+                risk_factors.append(sibling.text.strip())
+            elif sibling.name == "br":  # Break loop when reaching a 'br' tag
+                break
+
+    risk_factors_string = "; ".join(risk_factors)
 
     return (
         name,
@@ -99,6 +110,7 @@ def parse_linked_page(soup):
         died,
         location_of_death,
         cause_of_death,
+        risk_factors_string,
     )
 
 
@@ -119,6 +131,7 @@ def scrape_website(base_url):
             "Died",
             "Location of Death",
             "Cause of Death",
+            "Risk Factors",
         ]
     )
 
@@ -157,6 +170,7 @@ def scrape_website(base_url):
                     died,
                     location_of_death,
                     cause_of_death,
+                    risk_factors_string,
                 ) = parse_linked_page(linked_page_soup)
 
                 # Append the data to the DataFrame
@@ -179,6 +193,7 @@ def scrape_website(base_url):
                                     "Died": died,
                                     "Location of Death": location_of_death,
                                     "Cause of Death": cause_of_death,
+                                    "Risk Factors": risk_factors_string,
                                 }
                             ]
                         ),
@@ -198,6 +213,7 @@ def scrape_website(base_url):
                 print("Died:", died)
                 print("Location of Death:", location_of_death)
                 print("Cause of Death:", cause_of_death)
+                print("Risk Factors:", risk_factors_string)
 
                 print(f"Content from {link_url} scraped successfully")
             else:
