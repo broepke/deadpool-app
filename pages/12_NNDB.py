@@ -106,3 +106,16 @@ limit 50
 df_risk = run_query(conn, risk_factors)
 st.subheader("High Risk People by Age")
 st.dataframe(df_risk)
+
+###########################
+# PREDICTION MODEL
+###########################
+df_nndb_preds = load_snowflake_table(conn, "nndb_predictions")
+
+st.subheader("Prediction Model Built Off NNDB")
+st.caption(
+    "Note: This database is out of date. "
+    "There are many people marked alive that are dead"
+)
+df_nndb_preds.drop(columns=['IS_DECEASED'], inplace=True)
+st.dataframe(df_nndb_preds, use_container_width=True)
