@@ -46,11 +46,15 @@ def parse_linked_page(soup):
     race = race_tag.next_sibling.strip() if race_tag else "N/A"
 
     occupation_tag = soup.find("b", string="Occupation:")
-    occupation = occupation_tag.next_sibling.strip() if occupation_tag else "N/A"
+    occupation = (occupation_tag.next_sibling.strip()
+                  if occupation_tag
+                  else "N/A")
 
     # Extracting nationality
     nationality_tag = soup.find("b", string="Nationality:")
-    nationality = nationality_tag.next_sibling.strip() if nationality_tag else "N/A"
+    nationality = (nationality_tag.next_sibling.strip()
+                   if nationality_tag
+                   else "N/A")
 
     # Extracting executive summary
     exec_summary_tag = soup.find("b", string="Executive summary:")
@@ -80,13 +84,18 @@ def parse_linked_page(soup):
 
     cause_of_death_tag = soup.find("b", string="Cause of death:")
     cause_of_death = (
-        cause_of_death_tag.next_sibling.strip() if cause_of_death_tag else "N/A"
+        cause_of_death_tag.next_sibling.strip()
+        if cause_of_death_tag
+        else "N/A"
     )
 
     risk_factors = []
 
-    risk_factors_elements = soup.find_all(string=lambda text: "Risk Factors:" in text)
-    risk_factors_label = risk_factors_elements[0] if risk_factors_elements else None
+    risk_factors_elements = soup.find_all(string=lambda text: "Risk Factors:"
+                                          in text)
+    risk_factors_label = (risk_factors_elements[0]
+                          if risk_factors_elements
+                          else None)
 
     if risk_factors_label:
         for sibling in risk_factors_label.next_siblings:
