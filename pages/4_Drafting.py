@@ -103,8 +103,6 @@ if is_next:
                                   DRAFT_YEAR,
                                   timestamp)
                 )
-                
-                st.write(next_user_id)
 
                 sms_message = user_name + " has picked " + pick
                 send_sms(sms_message, opted_in_numbers)
