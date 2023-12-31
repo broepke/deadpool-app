@@ -33,6 +33,7 @@ def draft_logic(current_email):
 
     Returns:
         bool: If the person should draft or not
+        str: Next user's ID
     """
     # Get the table for the draft order
     df_draft = load_snowflake_table(conn, "draft_next")
@@ -40,15 +41,16 @@ def draft_logic(current_email):
     # Handle the condition when the table is empty
     try:
         next_user = df_draft["EMAIL"].iloc[0]
+        next_user_id = df_draft["ID"].iloc[0]
         if current_email == next_user:
-            return True
+            return True, next_user_id
 
         st.write("It is not your turn. Please come back when it is.")
-        return False
+        return False, ""
     except IndexError:
         # Send out SMS and write to page.
         st.write("And with that the 2024 Draft is over!")
-        return False
+        return False, ""
 
 
 conn = st.connection("snowflake")
@@ -66,7 +68,8 @@ df_opted = load_snowflake_table(conn, "draft_opted_in")
 opted_in_numbers = df_opted["SMS"].tolist()
 
 # Only allow this to be show and run if not their turn.
-if draft_logic(email):
+is_next, next_user_id = draft_logic(email)
+if is_next:
     st.subheader("Draft Picks:")
     with st.form("Draft Picks"):
         pick = st.text_input("Please choose your celebrity pick:", "")
@@ -95,7 +98,7 @@ if draft_logic(email):
                 # Execute the query with parameters
                 conn.cursor().execute(
                     WRITE_QUERY, (pick,
-                                  email,
+                                  next_user_id,
                                   wiki_page,
                                   DRAFT_YEAR,
                                   timestamp)
