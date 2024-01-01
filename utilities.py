@@ -92,9 +92,12 @@ def the_arbiter(prompt, arbiter_version="main"):
     if arbiter_version == "main":
         apify_api_url = st.secrets["apify"]["main_api"]
         apify_bearer = st.secrets["apify"]["main_bearer"]
-    else:
+    elif arbiter_version == "base":
         apify_api_url = st.secrets["apify"]["base_api"]
         apify_bearer = st.secrets["apify"]["base_bearer"]
+    else:
+        apify_api_url = st.secrets["apify"]["main_api"]
+        apify_bearer = st.secrets["apify"]["main_bearer"]
 
     headers = {"Authorization": apify_bearer}
     payload = {
