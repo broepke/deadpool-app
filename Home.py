@@ -49,7 +49,7 @@ prompt = (
 
 try:
     start_time = time.time()
-    output = the_arbiter(prompt)
+    output = the_arbiter(prompt, arbiter_version="base")
 
     # Calculate the time taken and print it
     end_time = time.time()

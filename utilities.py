@@ -79,7 +79,7 @@ def check_password():
     return False
 
 
-def the_arbiter(prompt):
+def the_arbiter(prompt, arbiter_version="main"):
     """Chatbot API call to LangChang LLM
 
     Args:
@@ -89,8 +89,12 @@ def the_arbiter(prompt):
         str: Text output from the LLM
     """
 
-    apify_api_url = st.secrets["apify"]["api_url"]
-    apify_bearer = st.secrets["apify"]["bearer"]
+    if arbiter_version == "main":
+        apify_api_url = st.secrets["apify"]["main_api"]
+        apify_bearer = st.secrets["apify"]["main_bearer"]
+    else:
+        apify_api_url = st.secrets["apify"]["base_api"]
+        apify_bearer = st.secrets["apify"]["base_bearer"]
 
     headers = {"Authorization": apify_bearer}
     payload = {
