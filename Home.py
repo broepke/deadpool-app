@@ -65,4 +65,4 @@ except Exception as e:
 st.image("deadpool.png", "The Arbiter")
 
 st.caption(prompt)
-st.write(f"Time taken to load: {time_taken:.2f} seconds")
+st.caption(f"Time taken to load: {time_taken:.2f} seconds")

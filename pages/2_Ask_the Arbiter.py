@@ -1,9 +1,9 @@
 """The Arbiter LLM Based Chatbot"""
+import time
 import streamlit as st
 from utilities import check_password, get_user_name, the_arbiter
 
-st.set_page_config(page_title="Ask the Arbiter",
-                   page_icon=":skull_and_crossbones:")
+st.set_page_config(page_title="Ask the Arbiter", page_icon=":skull_and_crossbones:")
 
 if not check_password():
     st.stop()
@@ -28,9 +28,15 @@ with st.form("Ask the Arbiter"):
     submitted = st.form_submit_button("Submit")
 
     if submitted:
+        start_time = time.time()
         output = the_arbiter(input)
         st.write(output)
+        # Calculate the time taken and print it
+        end_time = time.time()
+        time_taken = end_time - start_time
 
 st.caption(
     "Please note the Arbiter is still being tuned.  Provide any feedback into the group DM."  # noqa: E501
 )
+
+st.caption(f"Time taken to load: {time_taken:.2f} seconds")
