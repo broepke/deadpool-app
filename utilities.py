@@ -88,12 +88,19 @@ def the_arbiter(prompt):
     Returns:
         str: Text output from the LLM
     """
-    apify_api_url = st.secrets["apify"]["api_url"]
 
-    payload = {"question": prompt, }
+    apify_api_url = st.secrets["apify"]["api_url"]
+    apify_bearer = st.secrets["apify"]["bearer"]
+
+    headers = {"Authorization": apify_bearer}
+    payload = {
+        "question": prompt,
+    }
 
     try:
-        response = requests.post(apify_api_url, json=payload, timeout=60)
+        response = requests.post(
+            apify_api_url, headers=headers, json=payload, timeout=60
+        )
         output = response.json()
         return output["text"]
     except Exception as e:

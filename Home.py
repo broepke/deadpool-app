@@ -24,13 +24,15 @@ st.title("Deadpool 2024 :skull_and_crossbones:")
 tone = ["sarcastic", "dry humor", "playful"]
 insult = ["pick strategy", "their current"]
 humor = ["puns", "wordplay", "dad joke", "haiku"]
-style = ["an Eminem rap song?",
-         "Shakeare had written it?",
-         "an Jerry Seinfeld stand up bit?",
-         "Hemmingway had written it?",
-         "an F. Scott Fitzgerlald novel?",
-         "Huter S. Thompson had written it?",
-         "Captain Jack Sparrow from Pirates of the Carribean?"]
+style = [
+    "an Eminem rap song?",
+    "Shakeare had written it?",
+    "an Jerry Seinfeld stand up bit?",
+    "Hemmingway had written it?",
+    "an F. Scott Fitzgerlald novel?",
+    "Huter S. Thompson had written it?",
+    "Captain Jack Sparrow from Pirates of the Carribean?",
+]
 
 selected_tone = random.choice(tone)
 selected_insult = random.choice(insult)
