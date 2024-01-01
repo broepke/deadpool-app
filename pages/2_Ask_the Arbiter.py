@@ -34,9 +34,10 @@ with st.form("Ask the Arbiter"):
         # Calculate the time taken and print it
         end_time = time.time()
         time_taken = end_time - start_time
+        st.caption(f"Time taken to load: {time_taken:.2f} seconds")
 
 st.caption(
     "Please note the Arbiter is still being tuned.  Provide any feedback into the group DM."  # noqa: E501
 )
 
-st.caption(f"Time taken to load: {time_taken:.2f} seconds")
+
