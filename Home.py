@@ -2,6 +2,7 @@
 Streamlit main app
 """
 import random
+import time
 import streamlit as st
 from utilities import check_password, get_user_name, the_arbiter
 
@@ -47,9 +48,15 @@ prompt = (
 )
 
 try:
+    start_time = time.time()
     output = the_arbiter(prompt)
 
     st.markdown("**A message from The Arbiter:** " + output)
+
+    # Calculate the time taken and print it
+    end_time = time.time()
+    time_taken = end_time - start_time
+
 
 except Exception as e:
     st.write(e)
@@ -58,3 +65,4 @@ except Exception as e:
 st.image("deadpool.png", "The Arbiter")
 
 st.caption(prompt)
+st.write(f"Time taken to load: {time_taken:.2f} seconds")
