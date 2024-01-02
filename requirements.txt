@@ -3,4 +3,5 @@ python-Levenshtein
 twilio
 streamlit
 scikit-learn
+openai
 snowflake-snowpark-python
