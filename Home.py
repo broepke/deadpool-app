@@ -43,7 +43,7 @@ selected_style = random.choice(style)
 prompt = (
     "I want you to create a creative insult for the user "
     + user_name
-    + " but can you make it like the style of"
+    + " but can you make it like the style of "
     + selected_humor
 )
 
