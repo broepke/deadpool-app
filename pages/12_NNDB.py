@@ -112,10 +112,12 @@ st.dataframe(df_risk)
 ###########################
 df_nndb_preds = load_snowflake_table(conn, "nndb_predictions")
 
-st.subheader("Prediction Model Built Off NNDB")
-st.caption(
-    "Note: This database is out of date. "
-    "There are many people marked alive that are dead"
+st.subheader("The Aribiter's Picks for 2024 are as follows.")
+
+df_nndb_preds.drop(columns=["ID", "IS_DECEASED"], inplace=True)
+df_nndb_preds = (
+    df_nndb_preds.sort_values("PREDICTION", ascending=False)
+    .head(20)
+    .reset_index(drop=True)
 )
-df_nndb_preds.drop(columns=['IS_DECEASED'], inplace=True)
 st.dataframe(df_nndb_preds, use_container_width=True)
