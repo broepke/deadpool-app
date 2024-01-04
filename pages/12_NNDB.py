@@ -65,12 +65,12 @@ SELECT
     OCCUPATION,
     COUNT(CASE WHEN DIED IS NOT NULL THEN 1 END) AS DECEASED_COUNT,
     COUNT(CASE WHEN DIED IS NOT NULL THEN 1 END) /
-    NULLIF(COUNT(CASE WHEN DIED IS NULL THEN 1 END), 0) as RATIO
-FROM deadpool.prod.nndb
-WHERE occupation is not null
+    NULLIF(COUNT(CASE WHEN DIED IS NULL THEN 1 END), 0) AS RATIO
+FROM DEADPOOL.PROD.NNDB
+WHERE OCCUPATION IS NOT NULL
 GROUP BY 1
-ORDER by 2 desc
-limit 15
+ORDER BY 2 DESC
+LIMIT 15
 """
 df_occupation = run_query(conn, occupation_ratio)
 df_occupation["RATIO"] = df_occupation["RATIO"].astype(float)
@@ -93,15 +93,15 @@ st.altair_chart(occupation_chart, use_container_width=True)
 # RISK FACTORS
 ###########################
 risk_factors = """
-select name, risk_factors, age
-from deadpool.prod.nndb
-where risk_factors is not null
-and died is null
-and age is not null
-and age < 101
-group by 1, 2, 3
-order by 3 desc
-limit 50
+SELECT NAME, RISK_FACTORS, AGE
+FROM DEADPOOL.PROD.NNDB
+WHERE RISK_FACTORS IS NOT NULL
+AND DIED IS NULL
+AND AGE IS NOT NULL
+AND AGE < 101
+GROUP BY 1, 2, 3
+ORDER BY 3 DESC
+LIMIT 50
 """
 df_risk = run_query(conn, risk_factors)
 st.subheader("High Risk People by Age")
