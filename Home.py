@@ -24,7 +24,7 @@ st.title("Deadpool 2024 :skull_and_crossbones:")
 # Generate a little more randomness into the prompt
 tone = ["sarcastic", "dry humor", "playful"]
 insult = ["pick strategy", "their current"]
-humor = ["puns", "wordplay", "dad joke", "haiku"]
+humor = ["puns", "wordplay", "dad joke", "haiku", "rap battle"]
 style = [
     "an Eminem rap song?",
     "Shakeare had written it?",
