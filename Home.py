@@ -65,3 +65,4 @@ st.image("deadpool.png", "The Arbiter")
 
 st.caption(prompt)
 st.caption(f"Time taken to load: {time_taken:.2f} seconds")
+st.write("Test")
