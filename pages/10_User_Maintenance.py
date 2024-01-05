@@ -35,6 +35,7 @@ SEL_ID = ""
 SEL_FIRST_NAME = ""
 SEL_LAST_NAME = ""
 SEL_EMAIL = ""
+SEL_YEAR_TWO = ""
 SEL_SMS = ""
 SEL_OPT_IN = True
 
@@ -64,6 +65,7 @@ with st.form("Player to Update"):
             SEL_LAST_NAME = filtered_df.iloc[0]["LAST_NAME"]
             SEL_EMAIL = filtered_df.iloc[0]["EMAIL"]
             SEL_SMS = filtered_df.iloc[0]["SMS"]
+            SEL_YEAR_TWO = filtered_df.iloc[0]["YEAR_TWO"]
             SEL_OPT_IN = filtered_df.iloc[0]["OPT_IN"]
 
             st.session_state["reg_id"] = SEL_ID
@@ -71,6 +73,7 @@ with st.form("Player to Update"):
             st.session_state["reg_last_name"] = SEL_LAST_NAME
             st.session_state["reg_email"] = SEL_EMAIL
             st.session_state["reg_sms"] = SEL_SMS
+            st.session_state["reg_year_two"] = SEL_YEAR_TWO
             st.session_state["reg_opt_in"] = SEL_OPT_IN
             st.session_state["reg_player"] = SEL_EMAIL
 
@@ -87,6 +90,7 @@ with st.form("Registration"):
         SEL_EMAIL = st.session_state["reg_email"]
         SEL_OPT_IN = st.session_state["reg_opt_in"]
         SEL_SMS = st.session_state["reg_sms"]
+        SEL_YEAR_TWO = st.session_state["reg_year_two"]
     except KeyError:
         SEL_ID = ""
         SEL_FIRST_NAME = ""
@@ -94,6 +98,7 @@ with st.form("Registration"):
         SEL_EMAIL = ""
         SEL_OPT_IN = ""
         SEL_SMS = ""
+        SEL_YEAR_TWO = ""
 
     SUB_ID = st.text_input(
         "ID:",
@@ -116,6 +121,9 @@ with st.form("Registration"):
         "Mobile Number (+12224446666):", SEL_SMS, 256, key="_reg_sms"
     )
     SUB_OPT_IN = st.checkbox("Opt-In", SEL_OPT_IN, key="_reg_opt_in")
+    SUB_YEAR_TWO = st.text_input(
+        "Draft Order:", SEL_YEAR_TWO, 256, key="_reg_year_two"
+    )
 
     submitted = st.form_submit_button("Submit")
     if submitted:
@@ -124,11 +132,12 @@ with st.form("Registration"):
         else:
             SUB_OPT_IN = False
 
-        WRITE_QUERY = ("UPDATE players "
-                       "SET first_name = :1, last_name = :2, "
-                       "email = :3, opt_in = :4, sms = :5 "
-                       "WHERE id = :6"
-                       )
+        WRITE_QUERY = (
+            "UPDATE players "
+            "SET first_name = :1, last_name = :2, "
+            "email = :3, opt_in = :4, sms = :5 , "
+            "year_two = :6 WHERE id = :7"
+        )
 
         # Execute the query with parameters
         conn.cursor().execute(
@@ -139,6 +148,7 @@ with st.form("Registration"):
                 SUB_EMAIL,
                 SUB_OPT_IN,
                 SUB_SMS,
+                SUB_YEAR_TWO,
                 SUB_ID,
             ),
         )
@@ -150,3 +160,4 @@ with st.form("Registration"):
         st.write("E-Mail:", SUB_EMAIL)
         st.write("Opt In:", SUB_OPT_IN)
         st.write("SMS:", SUB_SMS)
+        st.write("Pick Order:", SUB_YEAR_TWO)
