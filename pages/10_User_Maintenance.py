@@ -35,8 +35,8 @@ SEL_ID = ""
 SEL_FIRST_NAME = ""
 SEL_LAST_NAME = ""
 SEL_EMAIL = ""
-SEL_YEAR_TWO = ""
 SEL_SMS = ""
+SEL_YEAR_TWO = 100
 SEL_OPT_IN = True
 
 # Initialize connection.
@@ -98,7 +98,7 @@ with st.form("Registration"):
         SEL_EMAIL = ""
         SEL_OPT_IN = ""
         SEL_SMS = ""
-        SEL_YEAR_TWO = ""
+        SEL_YEAR_TWO = 100
 
     SUB_ID = st.text_input(
         "ID:",
@@ -122,7 +122,9 @@ with st.form("Registration"):
     )
     SUB_OPT_IN = st.checkbox("Opt-In", SEL_OPT_IN, key="_reg_opt_in")
     SUB_YEAR_TWO = st.text_input(
-        "Draft Order:", SEL_YEAR_TWO, 256, key="_reg_year_two"
+        label="Draft Order:",
+        value=SEL_YEAR_TWO,
+        key="_reg_year_two"
     )
 
     submitted = st.form_submit_button("Submit")
@@ -148,7 +150,7 @@ with st.form("Registration"):
                 SUB_EMAIL,
                 SUB_OPT_IN,
                 SUB_SMS,
-                SUB_YEAR_TWO,
+                int(SUB_YEAR_TWO),
                 SUB_ID,
             ),
         )
