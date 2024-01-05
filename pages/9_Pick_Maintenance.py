@@ -68,7 +68,7 @@ with st.form("Pick to Update"):
 
 st.header("Update Pick Information")
 
-with st.form("Registration"):
+with st.form("Pick Data"):
     try:
         SEL_NAME = st.session_state["reg_name"]
         SEL_WIKI_PAGE = st.session_state["reg_wiki_page"]
@@ -83,7 +83,7 @@ with st.form("Registration"):
         key="_reg_name",
     )
     sub_wiki_page = st.text_input(
-        "Last Name:", SEL_WIKI_PAGE, 256, key="_reg_wiki_page"
+        "Wiki Page:", SEL_WIKI_PAGE, 256, key="_reg_wiki_page"
     )
 
     submitted = st.form_submit_button("Submit")
