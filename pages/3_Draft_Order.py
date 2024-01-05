@@ -33,7 +33,8 @@ df_ord["TOTAL"] = (
     df_ord["SCALED_RANDOM"] +
     df_ord["SCALED_SCORE"] * -1
 )
-df_sorted = df_ord.sort_values(by="TOTAL", ascending=False)
+df_sorted = df_ord.sort_values(by="TOTAL",
+                               ascending=False).reset_index(drop=True)
 
 st.subheader("2024 Draft Order")
 
