@@ -38,5 +38,5 @@ with st.form("Ask the Arbiter"):
         st.caption(f"Time taken to load: {time_taken:.2f} seconds")
 
 st.caption(
-    "If you don't like a response please enter type: 'I would like to speak to a manager' along with your complaint"
+    "If you don't like a response please enter: 'I would like to speak to a manager' along with your complaint"
     )  # noqa: E501
