@@ -11,8 +11,7 @@ from utilities import (
     load_snowflake_table,
 )
 
-st.set_page_config(page_title="Drafting",
-                   page_icon=":skull_and_crossbones:")
+st.set_page_config(page_title="Drafting", page_icon=":skull_and_crossbones:")
 
 if not check_password():
     st.stop()
@@ -25,35 +24,10 @@ except KeyError:
     st.write("Please login again")
 
 
-def draft_logic(current_email):
-    """Check to see if the current user is the person who will draft next
-
-    Args:
-        email (str): email of the current logged in person
-
-    Returns:
-        bool: If the person should draft or not
-        str: Next user's ID
-    """
-    # Get the table for the draft order
-    df_draft = load_snowflake_table(conn, "draft_next")
-
-    # Handle the condition when the table is empty
-    try:
-        next_user = df_draft["EMAIL"].iloc[0]
-        next_user_id = df_draft["ID"].iloc[0]
-        if current_email == next_user:
-            return True, next_user_id
-
-        st.write("It is not your turn. Please come back when it is.")
-        return False, ""
-    except IndexError:
-        # Send out SMS and write to page.
-        st.write("And with that the 2024 Draft is over!")
-        return False, ""
-
-
 conn = st.connection("snowflake")
+
+df_players = load_snowflake_table(conn, "draft_next")
+df_player = df_players["EMAIL"].iloc[0]
 
 df_picks = load_snowflake_table(conn, "picks")
 # Filter for just this year
@@ -63,14 +37,17 @@ current_drafts = df_2024["NAME"].tolist()
 
 # Get a list of the people that opted into alerts
 df_opted = load_snowflake_table(conn, "draft_opted_in")
-# Filter for just this year
-# Convert into a list for fuzzy matching
+# Get a list of SMS number for sending out text
 opted_in_numbers = df_opted["SMS"].tolist()
 
-# Only allow this to be show and run if not their turn.
-is_next, next_user_id = draft_logic(email)
-if is_next:
+st.header("Auto Draft Utility")
+st.caption("Pick for the next player in the queue")
+
+if email == "broepke@gmail.com" or email == "christopherpvienneau@gmail.com":
+
+    st.write("Drafting for:", df_player)
     st.subheader("Draft Picks:")
+
     with st.form("Draft Picks"):
         pick = st.text_input("Please choose your celebrity pick:", "")
 
@@ -93,6 +70,11 @@ if is_next:
                 DRAFT_YEAR = 2024
                 timestamp = datetime.utcnow()
 
+                df_draft_next = load_snowflake_table(conn, "draft_next")
+                next_user = df_draft_next["EMAIL"].iloc[0]
+                next_user_name = df_draft_next["NAME"].iloc[0]
+                next_user_id = df_draft_next["ID"].iloc[0]
+
                 WRITE_QUERY = "INSERT INTO picks (name, picked_by, wiki_page, year, timestamp) VALUES (:1, :2, :3, :4, :5)"  # noqa: E501
 
                 # Execute the query with parameters
@@ -104,7 +86,7 @@ if is_next:
                                   timestamp)
                 )
 
-                sms_message = user_name + " has picked " + pick
+                sms_message = next_user_name + " has picked " + pick
                 send_sms(sms_message, opted_in_numbers)
 
                 df_next_sms = load_snowflake_table(conn, "draft_next")
@@ -124,14 +106,5 @@ if is_next:
                     st.write("No additional names")
 
                 st.rerun()
-
-
-st.divider()
-
-st.markdown(
-    """
-**Notes**:
-- The system checks for duplicate entries and has built-in fuzzy matching of names entered.  If it's a slight misspelling, the duplicate will be caught.  If it's way off, the Arbiter must de-duplicate and resolve it after draft day.  The person with the earlier timestamp on the pick will keep the pick.  The other person will get to submit an additional pick.
-- Please do not pick a dead person.  If you do, you will lose that pick and receive 0 points.
-"""  # noqa: E501
-)
+else:
+    st.write("You are not authorized to use this incredibly powerful tool.")
