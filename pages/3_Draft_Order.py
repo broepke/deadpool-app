@@ -50,3 +50,5 @@ st.markdown(
 )
 
 st.dataframe(df_sorted, use_container_width=True)
+
+st.caption("Note: There is a small adjustment.  Due to the fact that Luke is a whiny bitch, the Aribter has allowed the swapping of positions for Brian Roepke and Luke Marble.  The Arbiter” - who's “All judgements are final and binding. Peace out")
