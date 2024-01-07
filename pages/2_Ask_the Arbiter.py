@@ -37,8 +37,6 @@ with st.form("Ask the Arbiter"):
         time_taken = end_time - start_time
         st.caption(f"Time taken to load: {time_taken:.2f} seconds")
 
-st.caption("If you don't like a response please enter type: 'I would like to speak to a manager' along with your complaint")  # noqa: E501
-
 st.caption(
-    "Please note the Arbiter is still being tuned.  Provide any feedback into the group DM."  # noqa: E501
-)
+    "If you don't like a response please enter type: 'I would like to speak to a manager' along with your complaint"
+    )  # noqa: E501
