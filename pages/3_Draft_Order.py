@@ -5,8 +5,7 @@ import streamlit as st
 from sklearn.preprocessing import MinMaxScaler
 from utilities import check_password, get_user_name, load_snowflake_table
 
-st.set_page_config(page_title="Draft Order",
-                   page_icon=":skull_and_crossbones:")
+st.set_page_config(page_title="Draft Order", page_icon=":skull_and_crossbones:")
 
 if not check_password():
     st.stop()
@@ -29,12 +28,9 @@ df_ord["SCALED_ORDER"] = sc.fit_transform(df_ord[["PRIOR_DRAFT"]]).round(3)
 df_ord["SCALED_SCORE"] = sc.fit_transform(df_ord[["SCORE"]]).round(3)
 df_ord["SCALED_RANDOM"] = sc.fit_transform(df_ord[["RANDOM_NUMBER"]]).round(3)
 df_ord["TOTAL"] = (
-    df_ord["SCALED_ORDER"] +
-    df_ord["SCALED_RANDOM"] +
-    df_ord["SCALED_SCORE"] * -1
+    df_ord["SCALED_ORDER"] + df_ord["SCALED_RANDOM"] + df_ord["SCALED_SCORE"] * -1
 )
-df_sorted = df_ord.sort_values(by="TOTAL",
-                               ascending=False).reset_index(drop=True)
+df_sorted = df_ord.sort_values(by="TOTAL", ascending=False).reset_index(drop=True)
 
 st.subheader("2024 Draft Order")
 
@@ -51,4 +47,6 @@ st.markdown(
 
 st.dataframe(df_sorted, use_container_width=True)
 
-st.caption("Note: There is a small adjustment.  Due to the fact that Luke is a whiny bitch, the Aribter has allowed the swapping of positions for Brian Roepke and Luke Marble.  The Arbiter” - who's “All judgements are final and binding. Peace out")
+st.caption(
+    "Note: There is a small adjustment.  Due to the fact that Luke is a whiny bitch, the Aribter has allowed the swapping of positions for Brian Roepke and Luke Marble.  The Arbiter” - who's “All judgements are final and binding. Peace out"
+)
