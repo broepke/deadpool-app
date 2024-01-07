@@ -32,8 +32,8 @@ conn = st.connection("snowflake")
 df_nndb = load_snowflake_table(conn, "nndb")
 df_nndb = df_nndb[df_nndb["AGE"] < 100]
 
-df_nndb["IS_ALIVE"] = df_nndb["DIED"].isnull()
-df_nndb["IS_DECEASED"] = df_nndb["DIED"].notnull()
+df_nndb["IS_ALIVE"] = df_nndb["DEATH_DATE"].isnull()
+df_nndb["IS_DECEASED"] = df_nndb["DEATH_DATE"].notnull()
 
 df_nndb_dead = df_nndb[df_nndb["IS_DECEASED"]]
 
@@ -63,9 +63,9 @@ st.dataframe(df_nndb_dead["AGE"].describe(), use_container_width=True)
 occupation_ratio = """
 SELECT
     OCCUPATION,
-    COUNT(CASE WHEN DIED IS NOT NULL THEN 1 END) AS DECEASED_COUNT,
-    COUNT(CASE WHEN DIED IS NOT NULL THEN 1 END) /
-    NULLIF(COUNT(CASE WHEN DIED IS NULL THEN 1 END), 0) AS RATIO
+    COUNT(CASE WHEN DEATH_DATE IS NOT NULL THEN 1 END) AS DECEASED_COUNT,
+    COUNT(CASE WHEN DEATH_DATE IS NOT NULL THEN 1 END) /
+    NULLIF(COUNT(CASE WHEN DEATH_DATE IS NULL THEN 1 END), 0) AS RATIO
 FROM DEADPOOL.PROD.NNDB
 WHERE OCCUPATION IS NOT NULL
 GROUP BY 1
@@ -96,7 +96,7 @@ risk_factors = """
 SELECT NAME, RISK_FACTORS, AGE
 FROM DEADPOOL.PROD.NNDB
 WHERE RISK_FACTORS IS NOT NULL
-AND DIED IS NULL
+AND DEATH_DATE IS NULL
 AND AGE IS NOT NULL
 AND AGE < 101
 GROUP BY 1, 2, 3
