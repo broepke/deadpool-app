@@ -2,7 +2,6 @@
 List of all scoring rules
 """
 import streamlit as st
-from sklearn.preprocessing import MinMaxScaler
 from utilities import check_password, get_user_name, load_snowflake_table
 
 st.set_page_config(page_title="Draft Order", page_icon=":skull_and_crossbones:")
