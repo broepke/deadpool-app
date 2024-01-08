@@ -29,7 +29,7 @@ df_ord = load_snowflake_table(conn, "players")
 # df_ord["SCALED_RANDOM"] = sc.fit_transform(df_ord[["RANDOM_NUMBER"]]).round(3)
 # df_ord["TOTAL"] = (
 #     df_ord["SCALED_ORDER"] + df_ord["SCALED_RANDOM"] + df_ord["SCALED_SCORE"] * -1
-)
+
 df_sorted = df_ord.sort_values(by="YEAR_TWO").reset_index(drop=True)
 
 st.subheader("2024 Draft Order")
