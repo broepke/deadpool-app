@@ -67,6 +67,11 @@ df_opted = load_snowflake_table(conn, "draft_opted_in")
 # Convert into a list for fuzzy matching
 opted_in_numbers = df_opted["SMS"].tolist()
 
+# audio_file = open('nfl-draft-chime.mp3', 'rb')
+# audio_bytes = audio_file.read()
+
+# st.audio(audio_bytes, format='audio/mp3')
+
 # Only allow this to be show and run if not their turn.
 is_next, next_user_id = draft_logic(email)
 if is_next:
