@@ -63,14 +63,17 @@ if authticated:
     st.write("Current User:", email)
 
     # Only allow this to be show and run if not their turn.
+    email = "broepke@gmail.com"
     is_next, next_user_id = draft_logic(email)
+    is_next = True
     if is_next:
+        st.write("Is Next", is_next)
         st.subheader("Draft Picks:")
         with st.form("Draft Picks"):
             pick = st.text_input(
                 "Please choose your celebrity pick:",
                 "",
-                key="celeb_pick",
+                key="Celbritiy Pick",
                 disabled=st.session_state.disabled,
             )
 
@@ -80,6 +83,7 @@ if authticated:
                 "Submit", on_click=disable, disabled=st.session_state.disabled
             )
             if submitted:
+                st.write(submitted)
                 st.write("Draft Pick:", pick)
 
                 MATCH = has_fuzzy_match(pick, current_drafts)
@@ -97,37 +101,11 @@ if authticated:
 
                     WRITE_QUERY = "INSERT INTO picks (name, picked_by, wiki_page, year, timestamp) VALUES (:1, :2, :3, :4, :5)"  # noqa: E501
 
-                    # Execute the query with parameters
-                    conn.cursor().execute(
+                    st.write(
+                        pick,
+                        next_user_id,
+                        wiki_page,
+                        DRAFT_YEAR,
+                        timestamp,
                         WRITE_QUERY,
-                        (pick, next_user_id, wiki_page, DRAFT_YEAR, timestamp),
                     )
-
-                    sms_message = user_name + " has picked " + pick
-                    send_sms(sms_message, opted_in_numbers)
-
-                    df_next_sms = load_snowflake_table(conn, "draft_next")
-
-                    try:
-                        next_name = df_next_sms["NAME"].iloc[0]
-                        next_email = df_next_sms["EMAIL"].iloc[0]
-                        next_sms = df_next_sms["SMS"].iloc[0]
-
-                        # Send alert to the next player
-                        next_sms_message = (
-                            next_name
-                            + """ is next to pick.  Please log into the website at https://deadpool.streamlit.app/Drafting to make your selection."""  # noqa: E501
-                        )
-                        send_sms(next_sms_message, [next_sms])
-                    except IndexError:
-                        st.write("No additional names")
-
-    st.divider()
-
-    st.markdown(
-        """
-    **Notes**:
-    - The system checks for duplicate entries and has built-in fuzzy matching of names entered.  If it's a slight misspelling, the duplicate will be caught.  If it's way off, the Arbiter must de-duplicate and resolve it after draft day.  The person with the earlier timestamp on the pick will keep the pick.  The other person will get to submit an additional pick.
-    - Please do not pick a dead person.  If you do, you will lose that pick and receive 0 points.
-    """  # noqa: E501
-    )
