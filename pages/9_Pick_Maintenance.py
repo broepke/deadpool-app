@@ -76,7 +76,7 @@ if authticated:
         submitted = st.form_submit_button("Submit")
         if submitted:
             WRITE_QUERY = (
-                "UPDATE picks SET wiki_page = :1 " "WHERE name = :2 AND year = 2024"
+                "UPDATE picks SET wiki_page = :1 WHERE name = :2 AND year = 2024"
             )
 
             # Execute the query with parameters
