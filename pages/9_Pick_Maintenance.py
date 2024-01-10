@@ -36,7 +36,7 @@ if authticated:
 
     # Load all the picks into a drop down for easy selection
     with st.form("Pick to Update"):
-        sel_pick = st.selectbox("Select a pick", df_picks_list, key="sel_selected_pick")
+        sel_pick = st.selectbox("Select a pick", df_picks_list, key="sel_selected_pick")  # noqa: E501
 
         submitted = st.form_submit_button("Choose pick")
 
@@ -75,9 +75,7 @@ if authticated:
 
         submitted = st.form_submit_button("Submit")
         if submitted:
-            WRITE_QUERY = (
-                "UPDATE picks SET wiki_page = :1 WHERE name = :2 AND year = 2024"
-            )
+            WRITE_QUERY = "UPDATE picks SET wiki_page = :1 WHERE name = :2 AND year = 2024"  # noqa: E501
 
             # Execute the query with parameters
             conn.cursor().execute(WRITE_QUERY, (sub_wiki_page, sub_name))
@@ -85,5 +83,3 @@ if authticated:
             st.write(WRITE_QUERY)
             st.write(sub_name)
             st.write(sub_wiki_page)
-
-            st.rerun()
