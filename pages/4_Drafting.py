@@ -3,11 +3,7 @@ Main page for Drafting new picks
 """
 from datetime import datetime
 import streamlit as st
-from utilities import (
-    has_fuzzy_match,
-    send_sms,
-    load_snowflake_table,
-)
+from utilities import has_fuzzy_match, send_sms, load_snowflake_table
 import streamlit_authenticator as stauth
 import yaml
 from yaml.loader import SafeLoader
