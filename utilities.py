@@ -1,11 +1,54 @@
 """
 Reusable components
 """
-import hmac
 import requests
 from fuzzywuzzy import fuzz
 from twilio.rest import Client
 import streamlit as st
+import streamlit_authenticator as stauth
+import yaml
+from yaml.loader import SafeLoader
+
+
+def check_password():
+    """Implementes:
+    https://github.com/mkhorasani/Streamlit-Authenticator
+    
+    Returns:
+        str: email address of user
+        str: User's full name
+        bool: If they've successfully authenticated
+    """
+    # Get all credentials
+    with open('config.yaml') as file:
+        config = yaml.load(file, Loader=SafeLoader)
+
+    authenticator = stauth.Authenticate(
+        config['credentials'],
+        config['cookie']['name'],
+        config['cookie']['key'],
+        config['cookie']['expiry_days'],
+        config['preauthorized']
+    )
+
+    # --- Authentication Code
+    authenticator.login('Login', 'main')
+
+    if st.session_state["authentication_status"] is False:
+        st.error("Username/password is incorrect")
+        return "", "", False
+    elif st.session_state["authentication_status"] is None:
+        st.warning("Please enter your username and password")
+        return "", "", False
+    elif st.session_state["authentication_status"]:
+        authenticator.logout("Logout", "sidebar", key="unique_key")
+        user_name = st.session_state["name"]
+        email = st.session_state["username"]
+        st.sidebar.write(f"Welcome, {user_name}")
+        st.sidebar.write(f"Email: {email}")
+        
+        return email, user_name, True
+
 
 
 def save_value(key):
@@ -27,56 +70,7 @@ def load_snowflake_table(conn, table):
     return session_picks.table(table).to_pandas()
 
 
-def get_user_name(email):
-    """Get a user's full name (first + last)"""
-    conn = st.connection("snowflake")
 
-    df_players = load_snowflake_table(conn, "players")
-    filtered_df = df_players[df_players["EMAIL"] == email]
-    first_name = filtered_df.iloc[0]["FIRST_NAME"]
-    last_name = filtered_df.iloc[0]["LAST_NAME"]
-
-    users_full_name = first_name + " " + last_name
-
-    st.session_state.users_full_name = users_full_name
-
-    return users_full_name
-
-
-def check_password():
-    """Returns `True` if the user had a correct password."""
-
-    def login_form():
-        """Form with widgets to collect user information"""
-        with st.form("Credentials"):
-            st.text_input("Username", key="_username")
-            st.text_input("Password", type="password", key="_password")
-            st.form_submit_button("Log in", on_click=password_entered)
-
-    def password_entered():
-        """Checks whether a password entered by the user is correct."""
-        if st.session_state["_username"] in st.secrets[
-            "passwords"
-        ] and hmac.compare_digest(
-            st.session_state["_password"],
-            st.secrets.passwords[st.session_state["_username"]],
-        ):
-            st.session_state["password_correct"] = True
-            save_value("username")
-            del st.session_state["_password"]
-            del st.session_state["_username"]
-        else:
-            st.session_state["password_correct"] = False
-
-    # Return True if the username + password is validated.
-    if st.session_state.get("password_correct", False):
-        return True
-
-    # Show inputs for username + password.
-    login_form()
-    if "password_correct" in st.session_state:
-        st.error("😕 User not known or password incorrect")
-    return False
 
 
 def the_arbiter(prompt, arbiter_version="main"):

@@ -4,64 +4,57 @@ Streamlit main app
 import random
 import time
 import streamlit as st
-from utilities import check_password, get_user_name, the_arbiter
+from utilities import check_password, the_arbiter
 
-st.set_page_config(page_title="Deadpool", page_icon=":skull_and_crossbones:")
-
-if not check_password():
-    st.stop()
-
-# Get information about the user
-email = st.session_state["username"]
-user_name = get_user_name(email)
-
-# add the username at the top so we know we're the right person.
-st.write(email)
-
-# Add some text
-st.title("Deadpool 2024 :skull_and_crossbones:")
-
-# Generate a little more randomness into the prompt
-tone = ["sarcastic", "dry humor", "playful"]
-insult = ["pick strategy", "their current"]
-humor = ["puns", "wordplay", "dad joke", "haiku", "rap battle"]
-style = [
-    "an Eminem rap song?",
-    "Shakeare had written it?",
-    "an Jerry Seinfeld stand up bit?",
-    "Hemmingway had written it?",
-    "an F. Scott Fitzgerlald novel?",
-    "Huter S. Thompson had written it?",
-    "Captain Jack Sparrow from Pirates of the Carribean?",
-]
-
-selected_tone = random.choice(tone)
-selected_insult = random.choice(insult)
-selected_humor = random.choice(humor)
-selected_style = random.choice(style)
-
-prompt = (
-    "I want you to create a creative insult for the user "
-    + user_name
-    + " but can you make it like the style of "
-    + selected_humor
-)
-
-try:
-    start_time = time.time()
-    output = the_arbiter(prompt, arbiter_version="base")
-
-    # Calculate the time taken and print it
-    end_time = time.time()
-    time_taken = end_time - start_time
-    st.markdown("**A message from The Arbiter:** " + output)
+st.set_page_config(page_title="Deadpool", page_icon=":skull:")
 
 
-except Exception as e:
-    st.write(e)
-    st.write("Welcome Back, " + user_name)
+email, user_name, authticated = check_password()
+if authticated:
+    # --- Main Application Code
+    st.title("Deadpool 2024 :skull_and_crossbones:")
 
-st.image("deadpool.png", "The Arbiter")
+    # Generate a little more randomness into the prompt
+    tone = ["sarcastic", "dry humor", "playful"]
+    insult = ["pick strategy", "their current"]
+    humor = ["puns", "wordplay", "dad joke", "haiku", "rap battle"]
+    style = [
+        "an Eminem rap song?",
+        "Shakeare had written it?",
+        "an Jerry Seinfeld stand up bit?",
+        "Hemmingway had written it?",
+        "an F. Scott Fitzgerlald novel?",
+        "Huter S. Thompson had written it?",
+        "Captain Jack Sparrow from Pirates of the Carribean?",
+    ]
 
-st.caption(prompt)
-st.caption(f"Time taken to load: {time_taken:.2f} seconds")
+    selected_tone = random.choice(tone)
+    selected_insult = random.choice(insult)
+    selected_humor = random.choice(humor)
+    selected_style = random.choice(style)
+
+    prompt = (
+        "I want you to create a creative insult for the user "
+        + user_name
+        + " but can you make it like the style of "
+        + selected_humor
+    )
+
+    try:
+        start_time = time.time()
+        output = the_arbiter(prompt, arbiter_version="base")
+
+        # Calculate the time taken and print it
+        end_time = time.time()
+        time_taken = end_time - start_time
+        st.markdown("**A message from The Arbiter:** " + output)
+
+
+    except Exception as e:
+        st.write(e)
+        st.write("Welcome Back, " + user_name)
+
+    st.image("deadpool.png", "The Arbiter")
+
+    st.caption(prompt)
+    st.caption(f"Time taken to load: {time_taken:.2f} seconds")
