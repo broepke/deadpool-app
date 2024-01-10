@@ -4,64 +4,41 @@ Main page for Drafting new picks
 from datetime import datetime
 import streamlit as st
 from utilities import has_fuzzy_match, send_sms, load_snowflake_table
-import streamlit_authenticator as stauth
-import yaml
-from yaml.loader import SafeLoader
+from utilities import check_password
 
 st.set_page_config(page_title="Drafting", page_icon=":skull:")
 
-with open('config.yaml') as file:
-    config = yaml.load(file, Loader=SafeLoader)
 
-authenticator = stauth.Authenticate(
-    config['credentials'],
-    config['cookie']['name'],
-    config['cookie']['key'],
-    config['cookie']['expiry_days'],
-    config['preauthorized']
-)
+def draft_logic(current_email):
+    """Check to see if the current user is the person who will draft next
 
-# --- Authentication Code
-authenticator.login('Login', 'main')
+    Args:
+        email (str): email of the current logged in person
 
-if st.session_state["authentication_status"] is False:
-    st.error("Username/password is incorrect")
-elif st.session_state["authentication_status"] is None:
-    st.warning("Please enter your username and password")
-elif st.session_state["authentication_status"]:
-    authenticator.logout("Logout", "sidebar", key="unique_key")
-    user_name = st.session_state["name"]
-    email = st.session_state["username"]
-    st.sidebar.write(f"Welcome, {user_name}")
-    st.sidebar.write(f"Email: {email}")
+    Returns:
+        bool: If the person should draft or not
+        str: Next user's ID
+    """
+    # Get the table for the draft order
+    df_draft = load_snowflake_table(conn, "draft_next")
 
-    def draft_logic(current_email):
-        """Check to see if the current user is the person who will draft next
+    # Handle the condition when the table is empty
+    try:
+        next_user = df_draft["EMAIL"].iloc[0]
+        next_user_id = df_draft["ID"].iloc[0]
+        if current_email == next_user:
+            return True, next_user_id
 
-        Args:
-            email (str): email of the current logged in person
+        st.write("It is not your turn. Please come back when it is.")
+        return False, ""
+    except IndexError:
+        # Send out SMS and write to page.
+        st.write("And with that the 2024 Draft is over!")
+        return False, ""
 
-        Returns:
-            bool: If the person should draft or not
-            str: Next user's ID
-        """
-        # Get the table for the draft order
-        df_draft = load_snowflake_table(conn, "draft_next")
 
-        # Handle the condition when the table is empty
-        try:
-            next_user = df_draft["EMAIL"].iloc[0]
-            next_user_id = df_draft["ID"].iloc[0]
-            if current_email == next_user:
-                return True, next_user_id
-
-            st.write("It is not your turn. Please come back when it is.")
-            return False, ""
-        except IndexError:
-            # Send out SMS and write to page.
-            st.write("And with that the 2024 Draft is over!")
-            return False, ""
-
+email, user_name, authticated = check_password()
+if authticated:
     conn = st.connection("snowflake")
 
     df_picks = load_snowflake_table(conn, "picks")
