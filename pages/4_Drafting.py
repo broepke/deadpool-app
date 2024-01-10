@@ -4,7 +4,6 @@ Main page for Drafting new picks
 from datetime import datetime
 import streamlit as st
 from utilities import (
-    check_password,
     has_fuzzy_match,
     send_sms,
     load_snowflake_table,
