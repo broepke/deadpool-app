@@ -76,10 +76,7 @@ elif st.session_state["authentication_status"]:
     # Convert into a list for fuzzy matching
     opted_in_numbers = df_opted["SMS"].tolist()
 
-    # audio_file = open('nfl-draft-chime.mp3', 'rb')
-    # audio_bytes = audio_file.read()
-
-    # st.audio(audio_bytes, format='audio/mp3')
+    st.write("Current User:", email)
 
     # Only allow this to be show and run if not their turn.
     is_next, next_user_id = draft_logic(email)
