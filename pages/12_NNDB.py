@@ -89,7 +89,7 @@ if authticated:
     """
     df_risk = run_snowflake_query(conn, risk_factors)
     st.subheader("High Risk People by Age")
-    st.dataframe(df_risk)
+    st.dataframe(df_risk, use_container_width=True)
 
     ###########################
     # PREDICTION MODEL
