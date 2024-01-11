@@ -13,6 +13,14 @@ from utilities import (
 st.set_page_config(page_title="Drafting", page_icon=":skull_and_crossbones:")
 
 
+def submitted():
+    st.session_state.submitted = True
+
+
+def reset():
+    st.session_state.submitted = False
+
+
 email, user_name, authticated = check_password()
 if authticated:
     conn = st.connection("snowflake")
@@ -48,54 +56,77 @@ if authticated:
 
             pick = pick.strip()
 
-            submitted = st.form_submit_button("Submit")
-            if submitted:
-                st.write("Draft Pick:", pick)
+            st.form_submit_button("Submit", on_click=submitted)
 
-                MATCH = has_fuzzy_match(pick, current_drafts)
+# See: https://discuss.streamlit.io/t/submit-form-button-not-working/35059/2
+if "submitted" in st.session_state:
+    if st.session_state.submitted:
+        st.write("Draft Pick:", pick)
 
-                if MATCH:
-                    st.write(
-                        """That pick has already been taken, please try again. Please review the "Draft Picks" page for more information."""  # noqa: E501
-                    )
+        MATCH = has_fuzzy_match(pick, current_drafts)
 
-                else:
-                    # Set up a coupld of variables for the query
-                    wiki_page = pick.replace(" ", "_")
-                    DRAFT_YEAR = 2024
-                    timestamp = datetime.utcnow()
+        if MATCH:
+            st.write(
+                """That pick has already been taken, please try again. Please review the "Draft Picks" page for more information."""  # noqa: E501
+            )
 
-                    df_draft_next = load_snowflake_table(conn, "draft_next")
-                    next_user = df_draft_next["EMAIL"].iloc[0]
-                    next_user_name = df_draft_next["NAME"].iloc[0]
-                    next_user_id = df_draft_next["ID"].iloc[0]
+        else:
+            # Set up a coupld of variables for the query
+            wiki_page = pick.replace(" ", "_")
+            DRAFT_YEAR = 2024
+            timestamp = datetime.utcnow()
 
-                    WRITE_QUERY = "INSERT INTO picks (name, picked_by, wiki_page, year, timestamp) VALUES (:1, :2, :3, :4, :5)"  # noqa: E501
+            df_draft_next = load_snowflake_table(conn, "draft_next")
+            next_user = df_draft_next["EMAIL"].iloc[0]
+            next_user_name = df_draft_next["NAME"].iloc[0]
+            next_user_id = df_draft_next["ID"].iloc[0]
 
-                    # Execute the query with parameters
-                    conn.cursor().execute(
-                        WRITE_QUERY,
-                        (pick, next_user_id, wiki_page, DRAFT_YEAR, timestamp),
-                    )
+            WRITE_QUERY = "INSERT INTO picks (name, picked_by, wiki_page, year, timestamp) VALUES (:1, :2, :3, :4, :5)"  # noqa: E501
 
-                    sms_message = next_user_name + " has picked " + pick
-                    send_sms(sms_message, opted_in_numbers)
+            # Execute the query with parameters
+            conn.cursor().execute(
+                WRITE_QUERY,
+                (pick, next_user_id, wiki_page, DRAFT_YEAR, timestamp),
+            )
 
-                    df_next_sms = load_snowflake_table(conn, "draft_next")
+            st.caption("Datebase query executed")
+            st.caption(
+                pick
+                + ", "
+                + next_user_id
+                + ", "
+                + wiki_page
+                + ", "
+                + str(DRAFT_YEAR)
+                + ", "
+                + str(timestamp)
+            )
 
-                    try:
-                        next_name = df_next_sms["NAME"].iloc[0]
-                        next_email = df_next_sms["EMAIL"].iloc[0]
-                        next_sms = df_next_sms["SMS"].iloc[0]
+            sms_message = next_user_name + " has picked " + pick
+            send_sms(sms_message, opted_in_numbers)
 
-                        # Send alert to the next player
-                        next_sms_message = (
-                            next_name
-                            + """ is next to pick.  Please log into the website at https://deadpool.streamlit.app/Drafting to make your selection."""  # noqa: E501
-                        )
-                        send_sms(next_sms_message, [next_sms])
-                    except IndexError:
-                        st.write("No additional names")
+            df_next_sms = load_snowflake_table(conn, "draft_next")
+
+            try:
+                next_name = df_next_sms["NAME"].iloc[0]
+                next_email = df_next_sms["EMAIL"].iloc[0]
+                next_sms = df_next_sms["SMS"].iloc[0]
+
+                # Send alert to the next player
+                next_sms_message = (
+                    next_name
+                    + """ is next to pick.  Please log into the website at https://deadpool.streamlit.app/Drafting to make your selection."""  # noqa: E501
+                )
+                send_sms(next_sms_message, [next_sms])
+
+                st.caption("SMS messages sent")
+
+            except IndexError:
+                st.write("No additional names")
+
+        st.caption("Draft pick complete")
+
+        reset()
 
     else:
         st.write(
