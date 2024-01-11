@@ -17,11 +17,11 @@ if authticated:
     st.title("2024 Draft Picks:")
     st.dataframe(df_2024)
 
-    st.title("2024 Draft Picks by Person")
+    st.subheader("2024 Draft Picks by Person")
 
     query = """
     SELECT
-    CONCAT(FIRST_NAME || ' ' || LAST_NAME) AS NAME, 
+    CONCAT(FIRST_NAME || ' ' || LAST_NAME) AS NAME,
     COUNT(*) AS TOTAL_PICKS
     FROM DEADPOOL.PROD.PICKS PI
     JOIN DEADPOOL.PROD.PLAYERS PL
