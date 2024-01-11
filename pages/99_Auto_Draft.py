@@ -131,4 +131,3 @@ if "submitted" in st.session_state:
         st.caption("Draft pick complete")
 
         reset()
-
