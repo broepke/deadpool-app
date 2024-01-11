@@ -103,7 +103,17 @@ if "submitted" in st.session_state:
             )
 
             st.caption("Datebase query executed")
-            st.caption(pick, next_user_id, wiki_page, DRAFT_YEAR, timestamp)
+            st.caption(
+                pick
+                + ", "
+                + next_user_id
+                + ", "
+                + wiki_page
+                + ", "
+                + str(DRAFT_YEAR)
+                + ", "
+                + str(timestamp)
+            )
 
             sms_message = user_name + " has picked " + pick
             send_sms(sms_message, opted_in_numbers)

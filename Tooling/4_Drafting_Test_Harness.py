@@ -79,6 +79,7 @@ if authticated:
 
             st.form_submit_button("Submit", on_click=submitted)
 
+# See: https://discuss.streamlit.io/t/submit-form-button-not-working/35059/2
 if "submitted" in st.session_state:
     if st.session_state.submitted:
         st.write("Draft Pick:", pick)
@@ -98,12 +99,57 @@ if "submitted" in st.session_state:
 
             WRITE_QUERY = "INSERT INTO picks (name, picked_by, wiki_page, year, timestamp) VALUES (:1, :2, :3, :4, :5)"  # noqa: E501
 
-            st.write(
-                pick,
-                next_user_id,
-                wiki_page,
-                DRAFT_YEAR,
-                timestamp,
-                WRITE_QUERY,
+            # Execute the query with parameters
+            # conn.cursor().execute(
+            #     WRITE_QUERY,
+            #     (pick, next_user_id, wiki_page, DRAFT_YEAR, timestamp),
+            # )
+
+            st.caption("Datebase query executed")
+            st.caption(
+                pick
+                + ", "
+                + next_user_id
+                + ", "
+                + wiki_page
+                + ", "
+                + str(DRAFT_YEAR)
+                + ", "
+                + str(timestamp)
             )
+
+            sms_message = user_name + " has picked " + pick
+            # send_sms(sms_message, opted_in_numbers)
+
+            df_next_sms = load_snowflake_table(conn, "draft_next")
+
+            try:
+                next_name = df_next_sms["NAME"].iloc[0]
+                next_email = df_next_sms["EMAIL"].iloc[0]
+                next_sms = df_next_sms["SMS"].iloc[0]
+
+                # Send alert to the next player
+                next_sms_message = (
+                    next_name
+                    + """ is next to pick.  Please log into the website at https://deadpool.streamlit.app/Drafting to make your selection."""  # noqa: E501
+                )
+                # send_sms(next_sms_message, [next_sms])
+
+                st.caption("SMS messages sent")
+
+            except IndexError:
+                st.write("No additional names")
+
+        st.caption("Draft pick complete")
+
         reset()
+
+    st.divider()
+
+    st.markdown(
+        """
+    **Notes**:
+    - The system checks for duplicate entries and has built-in fuzzy matching of names entered.  If it's a slight misspelling, the duplicate will be caught.  If it's way off, the Arbiter must de-duplicate and resolve it after draft day.  The person with the earlier timestamp on the pick will keep the pick.  The other person will get to submit an additional pick.
+    - Please do not pick a dead person.  If you do, you will lose that pick and receive 0 points.
+    """  # noqa: E501
+    )
