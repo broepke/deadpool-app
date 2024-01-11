@@ -57,6 +57,10 @@ if authticated:
             pick = pick.strip()
 
             st.form_submit_button("Submit", on_click=submitted)
+    else:
+        st.write(
+            "You are not authorized to use this incredibly powerful tool."
+        )  # noqa: E501
 
 # See: https://discuss.streamlit.io/t/submit-form-button-not-working/35059/2
 if "submitted" in st.session_state:
@@ -128,7 +132,3 @@ if "submitted" in st.session_state:
 
         reset()
 
-    else:
-        st.write(
-            "You are not authorized to use this incredibly powerful tool."
-        )  # noqa: E501
