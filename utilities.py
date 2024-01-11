@@ -13,26 +13,26 @@ from yaml.loader import SafeLoader
 def check_password():
     """Implementes:
     https://github.com/mkhorasani/Streamlit-Authenticator
-    
+
     Returns:
         str: email address of user
         str: User's full name
         bool: If they've successfully authenticated
     """
     # Get all credentials
-    with open('config.yaml') as file:
+    with open("config.yaml") as file:
         config = yaml.load(file, Loader=SafeLoader)
 
     authenticator = stauth.Authenticate(
-        config['credentials'],
-        config['cookie']['name'],
-        config['cookie']['key'],
-        config['cookie']['expiry_days'],
-        config['preauthorized']
+        config["credentials"],
+        config["cookie"]["name"],
+        config["cookie"]["key"],
+        config["cookie"]["expiry_days"],
+        config["preauthorized"],
     )
 
     # --- Authentication Code
-    authenticator.login('Login', 'main')
+    authenticator.login("Login", "main")
 
     if st.session_state["authentication_status"] is False:
         st.error("Username/password is incorrect")
@@ -46,9 +46,8 @@ def check_password():
         email = st.session_state["username"]
         st.sidebar.write(f"Welcome, {user_name}")
         st.sidebar.write(f"Email: {email}")
-        
-        return email, user_name, True
 
+        return email, user_name, True
 
 
 def save_value(key):
@@ -70,7 +69,11 @@ def load_snowflake_table(conn, table):
     return session_picks.table(table).to_pandas()
 
 
-
+def run_snowflake_query(conn, query):
+    with conn.cursor() as cur:
+        cur.execute(query)
+        result = cur.fetch_pandas_all()
+        return result
 
 
 def the_arbiter(prompt, arbiter_version="main"):

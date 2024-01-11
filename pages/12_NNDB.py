@@ -3,18 +3,12 @@ Display some dead people stats
 """
 import streamlit as st
 import altair as alt
-from utilities import check_password, load_snowflake_table
+from utilities import check_password, load_snowflake_table, run_snowflake_query
 
 st.set_page_config(page_title="NNDB Stats", page_icon=":skull:")
 
 email, user_name, authticated = check_password()
 if authticated:
-
-    def run_query(conn, query):
-        with conn.cursor() as cur:
-            cur.execute(query)
-            result = cur.fetch_pandas_all()
-            return result
 
     # Initialize connection.
     conn = st.connection("snowflake")
@@ -62,7 +56,7 @@ if authticated:
     ORDER BY 2 DESC
     LIMIT 15
     """
-    df_occupation = run_query(conn, occupation_ratio)
+    df_occupation = run_snowflake_query(conn, occupation_ratio)
     df_occupation["RATIO"] = df_occupation["RATIO"].astype(float)
     df_occupation = df_occupation.sort_values(by="RATIO", ascending=False)
 
@@ -93,7 +87,7 @@ if authticated:
     ORDER BY 3 DESC
     LIMIT 200
     """
-    df_risk = run_query(conn, risk_factors)
+    df_risk = run_snowflake_query(conn, risk_factors)
     st.subheader("High Risk People by Age")
     st.dataframe(df_risk)
 
