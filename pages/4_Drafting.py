@@ -80,7 +80,6 @@ if authticated:
 if "submitted" in st.session_state:
     if st.session_state.submitted:
         st.write("Draft Pick:", pick)
-        st.write("Draft Pick:", pick)
 
         MATCH = has_fuzzy_match(pick, current_drafts)
 

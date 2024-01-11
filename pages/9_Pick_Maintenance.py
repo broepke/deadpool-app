@@ -36,7 +36,9 @@ if authticated:
 
     # Load all the picks into a drop down for easy selection
     with st.form("Pick to Update"):
-        sel_pick = st.selectbox("Select a pick", df_picks_list, key="sel_selected_pick")  # noqa: E501
+        sel_pick = st.selectbox(
+            "Select a pick", df_picks_list, key="sel_selected_pick"
+        )  # noqa: E501
 
         submitted = st.form_submit_button("Choose pick")
 
