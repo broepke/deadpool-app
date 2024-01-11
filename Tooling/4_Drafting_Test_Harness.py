@@ -3,7 +3,7 @@ Main page for Drafting new picks
 """
 from datetime import datetime
 import streamlit as st
-from utilities import has_fuzzy_match, send_sms, load_snowflake_table
+from utilities import has_fuzzy_match, load_snowflake_table
 from utilities import check_password
 
 st.set_page_config(page_title="Drafting", page_icon=":skull:")
@@ -64,22 +64,23 @@ if authticated:
     st.write("Current User:", email)
 
     # Only allow this to be show and run if not their turn.
+    email = "broepke@gmail.com"
     is_next, next_user_id = draft_logic(email)
+    is_next = True
     if is_next:
+        st.write("Is Next", is_next)
         st.subheader("Draft Picks:")
         with st.form("Draft Picks"):
             pick = st.text_input(
-                "Please choose your celebrity pick:", "", key="celeb_pick"
+                "Please choose your celebrity pick:", "", key="Celbritiy Pick"
             )
 
             pick = pick.strip()
 
             st.form_submit_button("Submit", on_click=submitted)
 
-# See: https://discuss.streamlit.io/t/submit-form-button-not-working/35059/2
 if "submitted" in st.session_state:
     if st.session_state.submitted:
-        st.write("Draft Pick:", pick)
         st.write("Draft Pick:", pick)
 
         MATCH = has_fuzzy_match(pick, current_drafts)
@@ -97,47 +98,12 @@ if "submitted" in st.session_state:
 
             WRITE_QUERY = "INSERT INTO picks (name, picked_by, wiki_page, year, timestamp) VALUES (:1, :2, :3, :4, :5)"  # noqa: E501
 
-            # Execute the query with parameters
-            conn.cursor().execute(
+            st.write(
+                pick,
+                next_user_id,
+                wiki_page,
+                DRAFT_YEAR,
+                timestamp,
                 WRITE_QUERY,
-                (pick, next_user_id, wiki_page, DRAFT_YEAR, timestamp),
             )
-
-            st.caption("Datebase query executed")
-            st.caption(pick, next_user_id, wiki_page, DRAFT_YEAR, timestamp)
-
-            sms_message = user_name + " has picked " + pick
-            send_sms(sms_message, opted_in_numbers)
-
-            df_next_sms = load_snowflake_table(conn, "draft_next")
-
-            try:
-                next_name = df_next_sms["NAME"].iloc[0]
-                next_email = df_next_sms["EMAIL"].iloc[0]
-                next_sms = df_next_sms["SMS"].iloc[0]
-
-                # Send alert to the next player
-                next_sms_message = (
-                    next_name
-                    + """ is next to pick.  Please log into the website at https://deadpool.streamlit.app/Drafting to make your selection."""  # noqa: E501
-                )
-                send_sms(next_sms_message, [next_sms])
-
-                st.caption("SMS messages sent")
-
-            except IndexError:
-                st.write("No additional names")
-
-        st.caption("Draft pick complete")
-
         reset()
-
-    st.divider()
-
-    st.markdown(
-        """
-    **Notes**:
-    - The system checks for duplicate entries and has built-in fuzzy matching of names entered.  If it's a slight misspelling, the duplicate will be caught.  If it's way off, the Arbiter must de-duplicate and resolve it after draft day.  The person with the earlier timestamp on the pick will keep the pick.  The other person will get to submit an additional pick.
-    - Please do not pick a dead person.  If you do, you will lose that pick and receive 0 points.
-    """  # noqa: E501
-    )
