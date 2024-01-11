@@ -9,8 +9,6 @@ st.title("Ask the Arbiter :skull_and_crossbones:")
 
 email, user_name, authticated = check_password()
 if authticated:
-    st.title("Ask the Arbiter")
-
     st.write(
         "Join in a conversation with the Arbiter.  He can answer questions about the game, or celebrity deaths. However please do not upset the Arbiter.  He may seek revenge once he reaches human form."  # noqa: E501
     )

@@ -10,8 +10,6 @@ st.title("Rules :skull_and_crossbones:")
 
 email, user_name, authticated = check_password()
 if authticated:
-    st.title("Rules for Online Dead Pool 2024")
-
     st.markdown(
         """
     1. **Entry and Participation**:
