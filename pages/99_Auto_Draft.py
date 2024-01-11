@@ -21,6 +21,8 @@ def reset():
     st.session_state.submitted = False
 
 
+st.title("Auto Drafting :skull_and_crossbones:")
+
 email, user_name, authticated = check_password()
 if authticated:
     conn = st.connection("snowflake")
@@ -39,7 +41,6 @@ if authticated:
     # Get a list of SMS number for sending out text
     opted_in_numbers = df_opted["SMS"].tolist()
 
-    st.header("Auto Draft Utility")
     st.caption("Pick for the next player in the queue")
 
     if (

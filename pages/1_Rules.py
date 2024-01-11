@@ -6,6 +6,8 @@ from utilities import check_password
 
 st.set_page_config(page_title="Rules", page_icon=":skull:")
 
+st.title("Rules :skull_and_crossbones:")
+
 email, user_name, authticated = check_password()
 if authticated:
     st.title("Rules for Online Dead Pool 2024")

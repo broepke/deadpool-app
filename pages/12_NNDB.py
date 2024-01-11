@@ -7,6 +7,8 @@ from utilities import check_password, load_snowflake_table, run_snowflake_query
 
 st.set_page_config(page_title="NNDB Stats", page_icon=":skull:")
 
+st.title("NNDB :skull_and_crossbones:")
+
 email, user_name, authticated = check_password()
 if authticated:
 

@@ -6,6 +6,8 @@ from utilities import check_password, load_snowflake_table, run_snowflake_query
 
 st.set_page_config(page_title="All Draft Picks", page_icon=":skull:")
 
+st.title("Draft Picks :skull_and_crossbones:")
+
 email, user_name, authticated = check_password()
 if authticated:
     # Initialize connection.
@@ -14,7 +16,7 @@ if authticated:
     df_2024 = load_snowflake_table(conn, "picks_twenty_four")
     df_2023 = load_snowflake_table(conn, "picks_twenty_three")
 
-    st.title("2024 Draft Picks:")
+    st.header("2024 Draft Picks:")
     st.dataframe(df_2024)
 
     st.subheader("2024 Draft Picks by Person")

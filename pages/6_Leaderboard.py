@@ -6,6 +6,8 @@ from utilities import check_password, load_snowflake_table
 
 st.set_page_config(page_title="Leaderboard", page_icon=":skull:")
 
+st.title("Leaderboards :skull_and_crossbones:")
+
 email, user_name, authticated = check_password()
 if authticated:
     # Initialize connection.
@@ -17,7 +19,7 @@ if authticated:
     df_score_2024.drop(columns="EMAIL", inplace=True)
     df_score_2023.drop(columns="EMAIL", inplace=True)
 
-    st.title("2024 Leaderboard:")
+    st.header("2024 Leaderboard:")
 
     st.dataframe(
         df_score_2024.style.highlight_max(axis=0, subset=["SCORE"]),

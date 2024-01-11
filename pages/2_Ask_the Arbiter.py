@@ -5,6 +5,8 @@ from utilities import check_password, the_arbiter
 
 st.set_page_config(page_title="Ask the Arbiter", page_icon=":skull:")
 
+st.title("Ask the Arbiter :skull_and_crossbones:")
+
 email, user_name, authticated = check_password()
 if authticated:
     st.title("Ask the Arbiter")
@@ -27,5 +29,5 @@ if authticated:
             st.caption(f"Time taken to load: {time_taken:.2f} seconds")
 
     st.caption(
-        "If you don't like a response please enter: 'I would like to speak to a manager' along with your complaint"
-        )  # noqa: E501
+        "If you don't like a response please enter: 'I would like to speak to a manager' along with your complaint"  # noqa: E501
+        )

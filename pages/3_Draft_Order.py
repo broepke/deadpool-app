@@ -6,6 +6,8 @@ from utilities import check_password, load_snowflake_table
 
 st.set_page_config(page_title="Draft Order", page_icon=":skull:")
 
+st.title("Draft Order :skull_and_crossbones:")
+
 email, user_name, authticated = check_password()
 if authticated:
     conn = st.connection("snowflake")

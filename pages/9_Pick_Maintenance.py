@@ -6,9 +6,10 @@ from utilities import check_password, load_snowflake_table
 
 st.set_page_config(page_title="Draft Pick Maintenance", page_icon=":skull:")
 
+st.title("Draft Pick Maintenance :skull_and_crossbones:")
+
 email, user_name, authticated = check_password()
 if authticated:
-    st.title("Pick Maintenance Tools")
     st.markdown(
         """
     Use this form to fix the Wikipedia links if they were not guessed properly by the code when loaded.  In some cases there are disambiguation data such as '(actor)' for common names or there can be other URL encoding for special characters in names.
