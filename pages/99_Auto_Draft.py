@@ -12,13 +12,6 @@ from utilities import (
 
 st.set_page_config(page_title="Drafting", page_icon=":skull_and_crossbones:")
 
-if "disabled" not in st.session_state:
-    st.session_state["disabled"] = False
-
-
-def disable():
-    st.session_state["disabled"] = True
-
 
 email, user_name, authticated = check_password()
 if authticated:
@@ -42,24 +35,20 @@ if authticated:
     st.caption("Pick for the next player in the queue")
 
     if (
-        email == "broepke@gmail.com" or email == "christopherpvienneau@gmail.com"  # noqa: E501
+        email == "broepke@gmail.com"
+        or email == "christopherpvienneau@gmail.com"  # noqa: E501
     ):  # noqa: E501
         st.write("Drafting for:", df_player)
         st.subheader("Draft Picks:")
 
         with st.form("Draft Picks"):
             pick = st.text_input(
-                "Please choose your celebrity pick:",
-                "",
-                key="celeb_auto_pick",
-                disabled=st.session_state.disabled,
+                "Please choose your celebrity pick:", "", key="celeb_auto_pick"
             )
 
             pick = pick.strip()
 
-            submitted = st.form_submit_button(
-                "Submit", on_click=disable, disabled=st.session_state.disabled
-            )
+            submitted = st.form_submit_button("Submit")
             if submitted:
                 st.write("Draft Pick:", pick)
 
