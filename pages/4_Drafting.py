@@ -45,6 +45,8 @@ def draft_logic(current_email):
         return False, ""
 
 
+st.title("Drafting :skull_and_crossbones:")
+
 email, user_name, authticated = check_password()
 if authticated:
     conn = st.connection("snowflake")
