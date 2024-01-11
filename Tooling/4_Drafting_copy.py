@@ -3,17 +3,10 @@ Main page for Drafting new picks
 """
 from datetime import datetime
 import streamlit as st
-from utilities import has_fuzzy_match, send_sms, load_snowflake_table
+from utilities import has_fuzzy_match, load_snowflake_table
 from utilities import check_password
 
 st.set_page_config(page_title="Drafting", page_icon=":skull:")
-
-if "disabled" not in st.session_state:
-    st.session_state["disabled"] = False
-
-
-def disable():
-    st.session_state["disabled"] = True
 
 
 def draft_logic(current_email):
@@ -73,14 +66,13 @@ if authticated:
             pick = st.text_input(
                 "Please choose your celebrity pick:",
                 "",
-                key="Celbritiy Pick",
-                disabled=st.session_state.disabled,
+                key="Celbritiy Pick"
             )
 
             pick = pick.strip()
 
             submitted = st.form_submit_button(
-                "Submit", on_click=disable, disabled=st.session_state.disabled
+                "Submit"
             )
             if submitted:
                 st.write(submitted)
@@ -109,3 +101,4 @@ if authticated:
                         timestamp,
                         WRITE_QUERY,
                     )
+

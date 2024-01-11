@@ -8,13 +8,6 @@ from utilities import check_password
 
 st.set_page_config(page_title="Drafting", page_icon=":skull:")
 
-if "disabled" not in st.session_state:
-    st.session_state["disabled"] = False
-
-
-def disable():
-    st.session_state["disabled"] = True
-
 
 def draft_logic(current_email):
     """Check to see if the current user is the person who will draft next
@@ -68,17 +61,12 @@ if authticated:
         st.subheader("Draft Picks:")
         with st.form("Draft Picks"):
             pick = st.text_input(
-                "Please choose your celebrity pick:",
-                "",
-                key="celeb_pick",
-                disabled=st.session_state.disabled,
+                "Please choose your celebrity pick:", "", key="celeb_pick"
             )
 
             pick = pick.strip()
 
-            submitted = st.form_submit_button(
-                "Submit", on_click=disable, disabled=st.session_state.disabled
-            )
+            submitted = st.form_submit_button("Submit")
             if submitted:
                 st.write("Draft Pick:", pick)
 
