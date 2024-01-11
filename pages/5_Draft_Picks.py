@@ -20,14 +20,14 @@ if authticated:
     st.title("2024 Draft Picks by Person")
 
     query = """
-    select 
-    concat(first_name || ' ' || last_name) as name, 
-    count(*) as total_picks
-    from deadpool.prod.picks pi
-    join deadpool.prod.players pl
-    on pi.picked_by = pl.id
-    where year = 2024
-    group by 1;
+    SELECT
+    CONCAT(FIRST_NAME || ' ' || LAST_NAME) AS NAME, 
+    COUNT(*) AS TOTAL_PICKS
+    FROM DEADPOOL.PROD.PICKS PI
+    JOIN DEADPOOL.PROD.PLAYERS PL
+    ON PI.PICKED_BY = PL.ID
+    WHERE YEAR = 2024
+    GROUP BY 1
     """
 
     df_pics_by_player = run_snowflake_query(conn, query)
