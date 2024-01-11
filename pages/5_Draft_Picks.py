@@ -31,7 +31,7 @@ if authticated:
     """
 
     df_pics_by_player = run_snowflake_query(conn, query)
-    st.dataframe(df_pics_by_player)
+    st.dataframe(df_pics_by_player, use_container_width=True)
 
     st.header("2023 Draft Picks:")
     st.dataframe(df_2023)
