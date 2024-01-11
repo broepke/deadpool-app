@@ -10,17 +10,14 @@ st.set_page_config(page_title="NNDB Stats", page_icon=":skull:")
 email, user_name, authticated = check_password()
 if authticated:
 
-
     def run_query(conn, query):
         with conn.cursor() as cur:
             cur.execute(query)
             result = cur.fetch_pandas_all()
             return result
 
-
     # Initialize connection.
     conn = st.connection("snowflake")
-
 
     df_nndb = load_snowflake_table(conn, "nndb")
     df_nndb = df_nndb[df_nndb["AGE"] < 100]
@@ -30,7 +27,7 @@ if authticated:
 
     df_nndb_dead = df_nndb[df_nndb["IS_DECEASED"]]
 
-    st.subheader("Count of People Who are Dead by Age")
+    st.subheader("Number of People Who are Dead by Age")
     st.write(
         "Data from the Notable Names Database.  The following charts "
         "represent statistics on celebrities."
@@ -94,7 +91,7 @@ if authticated:
     AND AGE < 101
     GROUP BY 1, 2, 3
     ORDER BY 3 DESC
-    LIMIT 50
+    LIMIT 200
     """
     df_risk = run_query(conn, risk_factors)
     st.subheader("High Risk People by Age")
