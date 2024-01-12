@@ -81,67 +81,72 @@ if authticated:
 # See: https://discuss.streamlit.io/t/submit-form-button-not-working/35059/2
 if "submitted" in st.session_state:
     if st.session_state.submitted:
-        st.write("Draft Pick:", pick)
+        try:
+            st.write("Draft Pick:", pick)
 
-        MATCH = has_fuzzy_match(pick, current_drafts)
+            MATCH = has_fuzzy_match(pick, current_drafts)
 
-        if MATCH:
-            st.write(
-                """That pick has already been taken, please try again. Please review the "Draft Picks" page for more information."""  # noqa: E501
-            )
-
-        else:
-            # Set up a coupld of variables for the query
-            wiki_page = pick.replace(" ", "_")
-            DRAFT_YEAR = 2024
-            timestamp = datetime.utcnow()
-
-            WRITE_QUERY = "INSERT INTO picks (name, picked_by, wiki_page, year, timestamp) VALUES (:1, :2, :3, :4, :5)"  # noqa: E501
-
-            # Execute the query with parameters
-            conn.cursor().execute(
-                WRITE_QUERY,
-                (pick, next_user_id, wiki_page, DRAFT_YEAR, timestamp),
-            )
-
-            st.caption("Datebase query executed")
-            st.caption(
-                pick
-                + ", "
-                + next_user_id
-                + ", "
-                + wiki_page
-                + ", "
-                + str(DRAFT_YEAR)
-                + ", "
-                + str(timestamp)
-            )
-
-            sms_message = user_name + " has picked " + pick
-            send_sms(sms_message, opted_in_numbers)
-
-            df_next_sms = load_snowflake_table(conn, "draft_next")
-
-            try:
-                next_name = df_next_sms["NAME"].iloc[0]
-                next_email = df_next_sms["EMAIL"].iloc[0]
-                next_sms = df_next_sms["SMS"].iloc[0]
-
-                # Send alert to the next player
-                next_sms_message = (
-                    next_name
-                    + """ is next to pick.  Please log into the website at https://deadpool.streamlit.app/Drafting to make your selection."""  # noqa: E501
+            if MATCH:
+                st.write(
+                    """That pick has already been taken, please try again. Please review the "Draft Picks" page for more information."""  # noqa: E501
                 )
-                send_sms(next_sms_message, [next_sms])
 
-                st.caption("SMS messages sent")
+            else:
+                # Set up a coupld of variables for the query
+                wiki_page = pick.replace(" ", "_")
+                DRAFT_YEAR = 2024
+                timestamp = datetime.utcnow()
 
-            except IndexError:
-                st.write("No additional names")
+                WRITE_QUERY = "INSERT INTO picks (name, picked_by, wiki_page, year, timestamp) VALUES (:1, :2, :3, :4, :5)"  # noqa: E501
 
-        st.caption("Draft pick complete")
+                # Execute the query with parameters
+                conn.cursor().execute(
+                    WRITE_QUERY,
+                    (pick, next_user_id, wiki_page, DRAFT_YEAR, timestamp),
+                )
 
-        reset()
+                st.caption("Datebase query executed")
+                st.caption(
+                    pick
+                    + ", "
+                    + next_user_id
+                    + ", "
+                    + wiki_page
+                    + ", "
+                    + str(DRAFT_YEAR)
+                    + ", "
+                    + str(timestamp)
+                )
+
+                sms_message = user_name + " has picked " + pick
+                send_sms(sms_message, opted_in_numbers)
+
+                df_next_sms = load_snowflake_table(conn, "draft_next")
+
+                try:
+                    next_name = df_next_sms["NAME"].iloc[0]
+                    next_email = df_next_sms["EMAIL"].iloc[0]
+                    next_sms = df_next_sms["SMS"].iloc[0]
+
+                    # Send alert to the next player
+                    next_sms_message = (
+                        next_name
+                        + """ is next to pick.  Please log into the website at https://deadpool.streamlit.app/Drafting to make your selection."""  # noqa: E501
+                    )
+                    send_sms(next_sms_message, [next_sms])
+
+                    st.caption("SMS messages sent")
+
+                except IndexError:
+                    st.write("No additional names")
+
+                st.caption("Draft pick complete")
+
+                reset()
+
+        except Exception as e:
+            st.write(f"Please try your pick again.  Error: {e}")
+            reset()
 
     st.divider()
 
