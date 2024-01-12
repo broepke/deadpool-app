@@ -2,7 +2,9 @@
 Simple display of all picks
 """
 import streamlit as st
-from dp_utilities import check_password, load_snowflake_table, run_snowflake_query
+from dp_utilities import check_password
+from dp_utilities import load_snowflake_table
+from dp_utilities import run_snowflake_query
 
 st.set_page_config(page_title="All Draft Picks", page_icon=":skull:")
 
@@ -36,4 +38,4 @@ if authticated:
     st.dataframe(df_pics_by_player, use_container_width=True)
 
     st.header("2023 Draft Picks:")
-    st.dataframe(df_2023)
+    st.dataframe(df_2023, use_container_width=True)
