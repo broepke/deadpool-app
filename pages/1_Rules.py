@@ -2,7 +2,7 @@
 List of all scoring rules
 """
 import streamlit as st
-from utilities import check_password
+from dp_utilities import check_password
 
 st.set_page_config(page_title="Rules", page_icon=":skull:")
 

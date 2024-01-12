@@ -3,8 +3,8 @@ Main page for Drafting new picks
 """
 from datetime import datetime
 import streamlit as st
-from utilities import has_fuzzy_match, send_sms, load_snowflake_table
-from utilities import check_password
+from dp_utilities import has_fuzzy_match, send_sms, load_snowflake_table
+from dp_utilities import check_password
 
 st.set_page_config(page_title="Drafting", page_icon=":skull:")
 

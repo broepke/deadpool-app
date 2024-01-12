@@ -3,7 +3,7 @@ Display some dead people stats
 """
 import streamlit as st
 import altair as alt
-from utilities import check_password, load_snowflake_table, run_snowflake_query
+from dp_utilities import check_password, load_snowflake_table, run_snowflake_query
 
 st.set_page_config(page_title="NNDB Stats", page_icon=":skull:")
 

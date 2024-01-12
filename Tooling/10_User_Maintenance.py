@@ -2,7 +2,7 @@
 User maintenance tools
 """
 import streamlit as st
-from utilities import check_password, get_user_name, load_snowflake_table
+from dp_utilities import check_password, get_user_name, load_snowflake_table
 
 st.set_page_config(page_title="User Maintenance",
                    page_icon=":skull_and_crossbones:")

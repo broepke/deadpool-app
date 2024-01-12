@@ -3,7 +3,7 @@ Main page for Trade Day
 """
 from datetime import datetime
 import streamlit as st
-from utilities import (
+from dp_utilities import (
     check_password,
     has_fuzzy_match,
     send_sms,

@@ -3,7 +3,7 @@ New User Registration
 """
 from uuid import uuid4
 import streamlit as st
-from utilities import (
+from dp_utilities import (
     check_password,
     get_user_name,
     load_snowflake_table,

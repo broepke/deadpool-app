@@ -2,7 +2,7 @@
 Display leaderboards and other stats for the games
 """
 import streamlit as st
-from utilities import check_password, load_snowflake_table
+from dp_utilities import check_password, load_snowflake_table
 
 st.set_page_config(page_title="Leaderboard", page_icon=":skull:")
 
