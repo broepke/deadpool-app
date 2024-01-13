@@ -88,6 +88,7 @@ if authticated:
             st.write(WRITE_QUERY)
             st.write(sub_name)
             st.write(sub_wiki_page)
+            st.write(SEL_NAME)
 
             # Clear out the form fields
             SEL_NAME = ""
