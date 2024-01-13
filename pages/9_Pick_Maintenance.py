@@ -80,12 +80,10 @@ if authticated:
         if submitted:
             WRITE_QUERY = "UPDATE picks SET name = :1, wiki_page = :2 WHERE name = :3 AND year = 2024"  # noqa: E501
 
-            orig_name = sub_name
-
             # Execute the query with parameters
             conn.cursor().execute(WRITE_QUERY, (sub_name,
                                                 sub_wiki_page,
-                                                orig_name))
+                                                SEL_NAME))
 
             st.write(WRITE_QUERY)
             st.write(sub_name)
