@@ -26,12 +26,14 @@ if authticated:
     query = """
     SELECT
     CONCAT(FIRST_NAME || ' ' || LAST_NAME) AS NAME,
+    YEAR_TWO,
     COUNT(*) AS TOTAL_PICKS
     FROM DEADPOOL.PROD.PICKS PI
     JOIN DEADPOOL.PROD.PLAYERS PL
     ON PI.PICKED_BY = PL.ID
     WHERE YEAR = 2024
-    GROUP BY 1
+    GROUP BY 1, 2
+    ORDER BY 2
     """
 
     df_pics_by_player = run_snowflake_query(conn, query)
