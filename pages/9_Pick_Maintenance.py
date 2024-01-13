@@ -78,10 +78,14 @@ if authticated:
 
         submitted = st.form_submit_button("Submit")
         if submitted:
-            WRITE_QUERY = "UPDATE picks SET wiki_page = :1 WHERE name = :2 AND year = 2024"  # noqa: E501
+            WRITE_QUERY = "UPDATE picks SET name = :1 wiki_page = :2 WHERE name = :3 AND year = 2024"  # noqa: E501
+
+            orig_name = sub_name
 
             # Execute the query with parameters
-            conn.cursor().execute(WRITE_QUERY, (sub_wiki_page, sub_name))
+            conn.cursor().execute(WRITE_QUERY, (sub_name,
+                                                sub_wiki_page,
+                                                orig_name))
 
             st.write(WRITE_QUERY)
             st.write(sub_name)
