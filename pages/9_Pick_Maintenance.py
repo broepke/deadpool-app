@@ -78,7 +78,7 @@ if authticated:
 
         submitted = st.form_submit_button("Submit")
         if submitted:
-            WRITE_QUERY = "UPDATE picks SET name = :1 wiki_page = :2 WHERE name = :3 AND year = 2024"  # noqa: E501
+            WRITE_QUERY = "UPDATE picks SET name = :1, wiki_page = :2 WHERE name = :3 AND year = 2024"  # noqa: E501
 
             orig_name = sub_name
 
