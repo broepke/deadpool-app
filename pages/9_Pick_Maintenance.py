@@ -92,13 +92,17 @@ if authticated:
                 WRITE_QUERY, (sub_name, sub_wiki_page, sub_wiki_id, SEL_NAME)
             )
 
-            st.write(WRITE_QUERY)
-            st.write(sub_name)
-            st.write(sub_wiki_page)
-            st.write(sub_wiki_id)
-            st.write(SEL_NAME)
+            st.write("Query: %s", WRITE_QUERY)
+            st.write("New Name: %s", sub_name)
+            st.write("New Wiki Page: %s", sub_wiki_page)
+            st.write("New Wiki ID: %s", sub_wiki_id)
+            st.write("Orgininal Name: %s", SEL_NAME)
 
             # Clear out the form fields
             SEL_NAME = ""
             SEL_WIKI_PAGE = ""
             SEL_WIKI_ID = ""
+            
+            st.session_state["reg_name"] = ""
+            st.session_state["reg_wiki_page"] = ""
+            st.session_state["reg_wiki_id"] = ""
