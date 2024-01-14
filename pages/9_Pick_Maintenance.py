@@ -49,9 +49,11 @@ if authticated:
             if not filtered_df.empty:
                 SEL_NAME = filtered_df.iloc[0]["NAME"]
                 SEL_WIKI_PAGE = filtered_df.iloc[0]["WIKI_PAGE"]
+                SEL_WIKI_ID = filtered_df.iloc[0]["WIKI_ID"]
 
                 st.session_state["reg_name"] = SEL_NAME
                 st.session_state["reg_wiki_page"] = SEL_WIKI_PAGE
+                st.session_state["reg_wiki_id"] = SEL_WIKI_ID
 
             else:
                 print("No user found with the given email")
@@ -62,9 +64,11 @@ if authticated:
         try:
             SEL_NAME = st.session_state["reg_name"]
             SEL_WIKI_PAGE = st.session_state["reg_wiki_page"]
+            SEL_WIKI_ID = st.session_state["reg_wiki_id"]
         except KeyError:
             SEL_NAME = ""
             SEL_WIKI_PAGE = ""
+            SEL_WIKI_ID = ""
 
         sub_name = st.text_input(
             "First Name:",
@@ -75,21 +79,26 @@ if authticated:
         sub_wiki_page = st.text_input(
             "Wiki Page:", SEL_WIKI_PAGE, 256, key="_reg_wiki_page"
         )
+        sub_wiki_id = st.text_input(
+            "Wiki ID:", SEL_WIKI_ID, key="_reg_wiki_id"
+        )  # noqa: E501
 
         submitted = st.form_submit_button("Submit")
         if submitted:
-            WRITE_QUERY = "UPDATE picks SET name = :1, wiki_page = :2 WHERE name = :3 AND year = 2024"  # noqa: E501
+            WRITE_QUERY = "UPDATE picks SET name = :1, wiki_page = :2, wiki_id = :3 WHERE name = :4 AND year = 2024"  # noqa: E501
 
             # Execute the query with parameters
-            conn.cursor().execute(WRITE_QUERY, (sub_name,
-                                                sub_wiki_page,
-                                                SEL_NAME))
+            conn.cursor().execute(
+                WRITE_QUERY, (sub_name, sub_wiki_page, sub_wiki_id, SEL_NAME)
+            )
 
             st.write(WRITE_QUERY)
             st.write(sub_name)
             st.write(sub_wiki_page)
+            st.write(sub_wiki_id)
             st.write(SEL_NAME)
 
             # Clear out the form fields
             SEL_NAME = ""
             SEL_WIKI_PAGE = ""
+            SEL_WIKI_ID = ""
