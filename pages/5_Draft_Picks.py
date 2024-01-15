@@ -4,7 +4,6 @@ Simple display of all picks
 import streamlit as st
 from dp_utilities import check_password
 from dp_utilities import load_snowflake_table
-from dp_utilities import run_snowflake_query
 
 st.set_page_config(page_title="All Draft Picks", page_icon=":skull:")
 
