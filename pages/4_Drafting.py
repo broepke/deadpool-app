@@ -84,6 +84,9 @@ if "submitted" in st.session_state:
         try:
             st.write("Draft Pick:", pick)
 
+            if not pick:
+                st.write("Please enter a valid selection.")
+
             MATCH = has_fuzzy_match(pick, current_drafts)
 
             if MATCH:

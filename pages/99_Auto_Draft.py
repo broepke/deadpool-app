@@ -70,12 +70,19 @@ if "submitted" in st.session_state:
     if st.session_state.submitted:
         st.write("Draft Pick:", pick)
 
+        if not pick:
+            st.write("Please enter a valid selection.")
+
+            reset()
+
         MATCH = has_fuzzy_match(pick, current_drafts)
 
         if MATCH:
             st.write(
                 """That pick has already been taken, please try again. Please review the "Draft Picks" page for more information."""  # noqa: E501
             )
+
+            reset()
 
         else:
             # Set up a coupld of variables for the query
