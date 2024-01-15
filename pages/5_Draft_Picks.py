@@ -32,6 +32,7 @@ if authticated:
     JOIN DEADPOOL.PROD.PLAYERS PL
     ON PI.PICKED_BY = PL.ID
     WHERE YEAR = 2024
+    AND PI.DEATH_DATE IS NULL
     GROUP BY 1, 2
     ORDER BY 2
     """
