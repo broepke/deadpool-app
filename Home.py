@@ -3,19 +3,13 @@ Streamlit main app
 """
 import random
 import time
-import logging
 import streamlit as st
 from dp_utilities import check_password, the_arbiter
 
 st.set_page_config(page_title="Deadpool", page_icon=":skull:")
 
-logger = logging.getLogger()
-logger.addHandler(logging.StreamHandler())
-logger.setLevel(logging.INFO)
-
 email, user_name, authticated = check_password()
 if authticated:
-    logger.info("User has logged in: %s", email)
     # --- Main Application Code
     st.title("Deadpool 2024 :skull_and_crossbones:")
 
