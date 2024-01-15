@@ -10,7 +10,7 @@ from dp_utilities import (
     load_snowflake_table,
 )
 
-st.set_page_config(page_title="Drafting", page_icon=":skull_and_crossbones:")
+st.set_page_config(page_title="Drafting", page_icon=":skull:")
 
 
 def submitted():
@@ -28,7 +28,7 @@ if authticated:
     conn = st.connection("snowflake")
 
     df_players = load_snowflake_table(conn, "draft_next")
-    
+
     try:
         df_player = df_players["EMAIL"].iloc[0]
 
@@ -45,15 +45,13 @@ if authticated:
 
         st.caption("Pick for the next player in the queue")
 
-        if email == "broepke@gmail.com": 
+        if email == "broepke@gmail.com":
             st.write("Drafting for:", df_player)
             st.subheader("Draft Picks:")
 
             with st.form("Draft Picks"):
                 pick = st.text_input(
-                    "Please choose your celebrity pick:",
-                    "",
-                    key="celeb_auto_pick"
+                    "Please choose your celebrity pick:", "", key="celeb_auto_pick"  # noqa: E501
                 )
 
                 pick = pick.strip()
