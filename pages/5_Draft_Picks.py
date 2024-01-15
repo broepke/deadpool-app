@@ -23,22 +23,9 @@ if authticated:
 
     st.subheader("2024 Draft Picks by Person")
 
-    query = """
-    SELECT
-    CONCAT(FIRST_NAME || ' ' || LAST_NAME) AS NAME,
-    YEAR_TWO,
-    COUNT(*) AS TOTAL_PICKS
-    FROM DEADPOOL.PROD.PICKS PI
-    JOIN DEADPOOL.PROD.PLAYERS PL
-    ON PI.PICKED_BY = PL.ID
-    WHERE YEAR = 2024
-    AND PI.DEATH_DATE IS NULL
-    GROUP BY 1, 2
-    ORDER BY 2
-    """
-
-    df_pics_by_player = run_snowflake_query(conn, query)
-    st.dataframe(df_pics_by_player, use_container_width=True)
+    df_picks = load_snowflake_table(conn, "draft")
+    df_picks.drop(columns="ID", inplace=True)
+    st.dataframe(df_picks, use_container_width=True)
 
     st.header("2023 Draft Picks:")
     st.dataframe(df_2023, use_container_width=True)
