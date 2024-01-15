@@ -28,40 +28,44 @@ if authticated:
     conn = st.connection("snowflake")
 
     df_players = load_snowflake_table(conn, "draft_next")
-    df_player = df_players["EMAIL"].iloc[0]
+    
+    try:
+        df_player = df_players["EMAIL"].iloc[0]
 
-    df_picks = load_snowflake_table(conn, "picks")
-    # Filter for just this year
-    df_2024 = df_picks[df_picks["YEAR"] == 2024]
-    # Convert into a list for fuzzy matching
-    current_drafts = df_2024["NAME"].tolist()
+        df_picks = load_snowflake_table(conn, "picks")
+        # Filter for just this year
+        df_2024 = df_picks[df_picks["YEAR"] == 2024]
+        # Convert into a list for fuzzy matching
+        current_drafts = df_2024["NAME"].tolist()
 
-    # Get a list of the people that opted into alerts
-    df_opted = load_snowflake_table(conn, "draft_opted_in")
-    # Get a list of SMS number for sending out text
-    opted_in_numbers = df_opted["SMS"].tolist()
+        # Get a list of the people that opted into alerts
+        df_opted = load_snowflake_table(conn, "draft_opted_in")
+        # Get a list of SMS number for sending out text
+        opted_in_numbers = df_opted["SMS"].tolist()
 
-    st.caption("Pick for the next player in the queue")
+        st.caption("Pick for the next player in the queue")
 
-    if (
-        email == "broepke@gmail.com"
-        or email == "christopherpvienneau@gmail.com"  # noqa: E501
-    ):  # noqa: E501
-        st.write("Drafting for:", df_player)
-        st.subheader("Draft Picks:")
+        if email == "broepke@gmail.com": 
+            st.write("Drafting for:", df_player)
+            st.subheader("Draft Picks:")
 
-        with st.form("Draft Picks"):
-            pick = st.text_input(
-                "Please choose your celebrity pick:", "", key="celeb_auto_pick"
-            )
+            with st.form("Draft Picks"):
+                pick = st.text_input(
+                    "Please choose your celebrity pick:",
+                    "",
+                    key="celeb_auto_pick"
+                )
 
-            pick = pick.strip()
+                pick = pick.strip()
 
-            st.form_submit_button("Submit", on_click=submitted)
-    else:
-        st.write(
-            "You are not authorized to use this incredibly powerful tool."
-        )  # noqa: E501
+                st.form_submit_button("Submit", on_click=submitted)
+        else:
+            st.write(
+                "You are not authorized to use this incredibly powerful tool."
+            )  # noqa: E501
+    except Exception as e:
+        st.write("There are no additional players to draft for.")
+        st.write(str(e))
 
 # See: https://discuss.streamlit.io/t/submit-form-button-not-working/35059/2
 if "submitted" in st.session_state:
