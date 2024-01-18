@@ -63,7 +63,7 @@ if authticated:
             )  # noqa: E501
     except Exception as e:
         st.write("There are no additional players to draft for.")
-        st.write(str(e))
+        st.caption(f"Error: {str(e)}")
 
 # See: https://discuss.streamlit.io/t/submit-form-button-not-working/35059/2
 if "submitted" in st.session_state:
