@@ -6,8 +6,6 @@ from fuzzywuzzy import fuzz
 from twilio.rest import Client
 import streamlit as st
 import streamlit_authenticator as stauth
-import yaml
-from yaml.loader import SafeLoader
 
 
 def check_password():
@@ -19,16 +17,35 @@ def check_password():
         str: User's full name
         bool: If they've successfully authenticated
     """
-    # Get all credentials
-    with open("config.yaml") as file:
-        config = yaml.load(file, Loader=SafeLoader)
+
+    query = """
+    SELECT
+    EMAIL AS USERNAME,
+    EMAIL,
+    CONCAT(FIRST_NAME || ' ' || LAST_NAME) AS NAME,
+    PASSWORD
+    FROM DEADPOOL.PROD.PLAYERS;
+    """
+    conn = st.connection("snowflake")
+    df = run_snowflake_query(conn, query)
+
+    # Initializing an empty dictionary
+    credentials = {"usernames": {}}
+
+    # Iterating through the DataFrame and populating the dictionary
+    for index, row in df.iterrows():
+        username = row["USERNAME"]
+        credentials["usernames"][username] = {
+            "email": row["EMAIL"],
+            "name": row["NAME"],
+            "password": row["PASSWORD"],
+        }
 
     authenticator = stauth.Authenticate(
-        config["credentials"],
-        config["cookie"]["name"],
-        config["cookie"]["key"],
-        config["cookie"]["expiry_days"],
-        config["preauthorized"],
+        credentials=credentials,
+        cookie_name="deadpool_authenticated",
+        key="XwCmifJi9dFXnqzAcc6bVbARxZAt",
+        cookie_expiry_days=30,
     )
 
     # --- Authentication Code
@@ -65,8 +82,8 @@ def load_snowflake_table(conn, table):
     Returns:
         DataFrame: dataframe of the entire table.
     """
-    session_picks = conn.session()
-    return session_picks.table(table).to_pandas()
+    snowflake_table = conn.session()
+    return snowflake_table.table(table).to_pandas()
 
 
 def run_snowflake_query(conn, query):
