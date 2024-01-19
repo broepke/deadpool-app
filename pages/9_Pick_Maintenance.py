@@ -102,7 +102,7 @@ if authticated:
             SEL_NAME = ""
             SEL_WIKI_PAGE = ""
             SEL_WIKI_ID = ""
-            
+
             st.session_state["reg_name"] = ""
             st.session_state["reg_wiki_page"] = ""
             st.session_state["reg_wiki_id"] = ""
