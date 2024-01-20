@@ -10,6 +10,13 @@ import yaml
 from yaml.loader import SafeLoader
 
 
+@st.cache_resource
+def snowflake_connection_helper():
+    conn = st.connection("snowflake")
+
+    return conn
+
+
 def check_password():
     """Implementes:
     https://github.com/mkhorasani/Streamlit-Authenticator
@@ -55,6 +62,7 @@ def save_value(key):
     st.session_state[key] = st.session_state["_" + key]
 
 
+@st.cache_data
 def load_snowflake_table(conn, table):
     """Loads a specific Snowflake table
 
@@ -69,6 +77,7 @@ def load_snowflake_table(conn, table):
     return snowflake_table.table(table).to_pandas()
 
 
+@st.cache_data
 def run_snowflake_query(conn, query):
     with conn.cursor() as cur:
         cur.execute(query)

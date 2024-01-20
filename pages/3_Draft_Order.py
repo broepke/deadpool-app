@@ -2,7 +2,10 @@
 List of all scoring rules
 """
 import streamlit as st
-from dp_utilities import check_password, load_snowflake_table
+from dp_utilities import check_password
+from dp_utilities import load_snowflake_table
+from dp_utilities import snowflake_connection_helper
+
 
 st.set_page_config(page_title="Draft Order", page_icon=":skull:")
 
@@ -10,7 +13,7 @@ st.title("Draft Order :skull_and_crossbones:")
 
 email, user_name, authticated = check_password()
 if authticated:
-    conn = st.connection("snowflake")
+    conn = snowflake_connection_helper()
 
     df_ord = load_snowflake_table(conn, "players")
 

@@ -2,7 +2,9 @@
 Tools to modify pick information mostly the wiki page
 """
 import streamlit as st
-from dp_utilities import check_password, load_snowflake_table
+from dp_utilities import check_password
+from dp_utilities import load_snowflake_table
+from dp_utilities import snowflake_connection_helper
 
 st.set_page_config(page_title="Draft Pick Maintenance", page_icon=":skull:")
 
@@ -24,7 +26,7 @@ if authticated:
     SEL_WIKI_PAGE = ""
 
     # Initialize connection.
-    conn = st.connection("snowflake")
+    conn = snowflake_connection_helper()
 
     df_picks = load_snowflake_table(conn, "picks")
 

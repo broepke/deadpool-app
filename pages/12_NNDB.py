@@ -3,8 +3,10 @@ Display some dead people stats
 """
 import streamlit as st
 import altair as alt
-from dp_utilities import check_password, load_snowflake_table
+from dp_utilities import check_password
+from dp_utilities import load_snowflake_table
 from dp_utilities import run_snowflake_query
+from dp_utilities import snowflake_connection_helper
 
 st.set_page_config(page_title="NNDB Stats", page_icon=":skull:")
 
@@ -14,7 +16,7 @@ email, user_name, authticated = check_password()
 if authticated:
 
     # Initialize connection.
-    conn = st.connection("snowflake")
+    conn = snowflake_connection_helper()
 
     df_nndb = load_snowflake_table(conn, "nndb")
     df_nndb = df_nndb[df_nndb["AGE"] < 100]

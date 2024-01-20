@@ -1,7 +1,8 @@
 """The Arbiter LLM Based Chatbot"""
 import time
 import streamlit as st
-from dp_utilities import check_password, the_arbiter
+from dp_utilities import check_password
+from dp_utilities import the_arbiter
 
 st.set_page_config(page_title="Ask the Arbiter", page_icon=":skull:")
 

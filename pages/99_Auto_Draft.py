@@ -8,7 +8,9 @@ from dp_utilities import (
     has_fuzzy_match,
     send_sms,
     load_snowflake_table,
+    snowflake_connection_helper,
 )
+
 
 st.set_page_config(page_title="Drafting", page_icon=":skull:")
 
@@ -25,7 +27,7 @@ st.title("Auto Drafting :skull_and_crossbones:")
 
 email, user_name, authticated = check_password()
 if authticated:
-    conn = st.connection("snowflake")
+    conn = snowflake_connection_helper()
 
     df_players = load_snowflake_table(conn, "draft_next")
 

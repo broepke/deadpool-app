@@ -4,6 +4,8 @@ Simple display of all picks
 import streamlit as st
 from dp_utilities import check_password
 from dp_utilities import load_snowflake_table
+from dp_utilities import snowflake_connection_helper
+
 
 st.set_page_config(page_title="All Draft Picks", page_icon=":skull:")
 
@@ -12,7 +14,7 @@ st.title("Draft Picks :skull_and_crossbones:")
 email, user_name, authticated = check_password()
 if authticated:
     # Initialize connection.
-    conn = st.connection("snowflake")
+    conn = snowflake_connection_helper()
 
     df_2024 = load_snowflake_table(conn, "picks_twenty_four")
     df_2023 = load_snowflake_table(conn, "picks_twenty_three")
