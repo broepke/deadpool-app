@@ -63,7 +63,7 @@ def save_value(key):
 
 
 @st.cache_data(ttl=3600)
-def load_snowflake_table(conn, table):
+def load_snowflake_table(_conn, table):
     """Loads a specific Snowflake table
 
     Args:
@@ -73,13 +73,13 @@ def load_snowflake_table(conn, table):
     Returns:
         DataFrame: dataframe of the entire table.
     """
-    snowflake_table = conn.session()
+    snowflake_table = _conn.session()
     return snowflake_table.table(table).to_pandas()
 
 
 @st.cache_data(ttl=3600)
-def run_snowflake_query(conn, query):
-    with conn.cursor() as cur:
+def run_snowflake_query(_conn, query):
+    with _conn.cursor() as cur:
         cur.execute(query)
         result = cur.fetch_pandas_all()
         return result
