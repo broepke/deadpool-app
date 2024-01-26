@@ -2,5 +2,5 @@ fuzzywuzzy
 python-Levenshtein
 twilio
 streamlit
-streamlit-authenticator=0.2.3
+streamlit-authenticator==0.2.3
 snowflake-snowpark-python
