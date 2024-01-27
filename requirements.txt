@@ -3,4 +3,10 @@ python-Levenshtein
 twilio
 streamlit
 streamlit-authenticator
+langchain
+langchain-openai
+langchain-community
+langchain-experimental
+langchainhub
+openai
 snowflake-snowpark-python
