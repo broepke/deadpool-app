@@ -9,4 +9,6 @@ langchain-community
 langchain-experimental
 langchainhub
 openai
+tabulate
+numexpr
 snowflake-snowpark-python
