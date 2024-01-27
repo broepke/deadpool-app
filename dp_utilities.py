@@ -39,7 +39,7 @@ def check_password():
     )
 
     # --- Authentication Code
-    authenticator.login("Login", "main")
+    authenticator.login()
 
     if st.session_state["authentication_status"] is False:
         st.error("Username/password is incorrect")
