@@ -108,10 +108,13 @@ if "submitted" in st.session_state:
 
         # Note: new messages are saved to history automatically by Langchain
         config = {"configurable": {"session_id": "any"}}
-        response = chain_with_history.invoke({"input": prompt}, config)
+        try:
+            response = chain_with_history.invoke({"input": prompt}, config)
 
-        # Write and save the AI message
-        st.chat_message("ai").write(response["output"])
+            # Write and save the AI message
+            st.chat_message("ai").write(response["output"])
+        except Exception as e:
+            st.write("Please submit your question again. ", e)
 
         # Draw the messages at the end, so newly
         # generated ones show up immediately
