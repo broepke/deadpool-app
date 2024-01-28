@@ -54,7 +54,7 @@ openai_api_key = st.secrets["llm"]["openai_api_key"]
 
 llm = ChatOpenAI(
     model_name="gpt-3.5-turbo",
-    temperature=0.1,
+    temperature=0.9,
     openai_api_key=openai_api_key,
     streaming=True,  # noqa: E501
 )
