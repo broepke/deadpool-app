@@ -21,6 +21,7 @@ def submitted():
 
 def reset():
     st.session_state.submitted = False
+    st.session_state.prompt = None
 
 
 # Get the snowflake connection
@@ -80,16 +81,10 @@ chain_with_history = RunnableWithMessageHistory(
 
 email, user_name, authticated = check_password()
 if authticated:
-    st.write(
-        "Join in a conversation with the Arbiter.  He can answer questions about the game, or celebrity deaths. However please do not upset the Arbiter.  He may seek revenge once he reaches human form."  # noqa: E501
-    )
-
     # Set up memory
     msgs = StreamlitChatMessageHistory(key="langchain_messages")
     if len(msgs.messages) == 0:
         msgs.add_ai_message("How can I help you?")
-
-    view_messages = st.expander("View the message contents in session state")
 
     # Render current messages from StreamlitChatMessageHistory
     for msg in msgs.messages:
@@ -118,16 +113,3 @@ if "submitted" in st.session_state:
 
         # Call a reset ti clear the submit button variables
         reset()
-
-        # Draw the messages at the end, so newly
-        # generated ones show up immediately
-        with view_messages:
-            """
-            Message History initialized with:
-            ```python
-            msgs = StreamlitChatMessageHistory(key="langchain_messages")
-            ```
-
-            Contents of `st.session_state.langchain_messages`:
-            """
-            view_messages.json(st.session_state.langchain_messages)
