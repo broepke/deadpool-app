@@ -79,48 +79,50 @@ chain_with_history = RunnableWithMessageHistory(
 )
 
 
+# Set up memory
+msgs = StreamlitChatMessageHistory(key="langchain_messages")
+if len(msgs.messages) == 0:
+    msgs.add_ai_message("How can I help you?")
+
+view_messages = st.expander("View the message contents in session state")
+
+# Render current messages from StreamlitChatMessageHistory
+for msg in msgs.messages:
+    st.chat_message(msg.type).write(msg.content)
+
 email, user_name, authticated = check_password()
 if authticated:
 
-    # Set up memory
-    msgs = StreamlitChatMessageHistory(key="langchain_messages")
-    if len(msgs.messages) == 0:
-        msgs.add_ai_message("How can I help you?")
 
-    view_messages = st.expander("View the message contents in session state")
-
-    # Render current messages from StreamlitChatMessageHistory
-    for msg in msgs.messages:
-        st.chat_message(msg.type).write(msg.content)
 
     # If user inputs a new prompt, generate and draw a new response
     st.session_state.prompt = st.chat_input(on_submit=submitted)
 
 
 if "submitted" in st.session_state and st.session_state.prompt is not None:
-    if st.session_state.submitted:
-        prompt = st.session_state.prompt
-        # Write and save the human message
-        st.chat_message("human").write(prompt)
+    # if st.session_state.submitted:
+    prompt = st.session_state.prompt
+    # Write and save the human message
+    st.chat_message("human").write(prompt)
 
-        # Note: new messages are saved to history automatically by Langchain
-        config = {"configurable": {"session_id": "any"}}
-        response = chain_with_history.invoke({"input": prompt}, config)
+    # Note: new messages are saved to history automatically by Langchain
+    config = {"configurable": {"session_id": "any"}}
+    response = chain_with_history.invoke({"input": prompt}, config)
 
-        # Write and save the AI message
-        st.chat_message("ai").write(response["output"])
+    # Write and save the AI message
+    st.chat_message("ai").write(response["output"])
 
-    # Draw the messages at the end, so newly generated ones show up immediately
-    with view_messages:
-        """
-        Message History initialized with:
-        ```python
-        msgs = StreamlitChatMessageHistory(key="langchain_messages")
-        ```
+# Draw the messages at the end, so newly generated ones show up immediately
+with view_messages:
+    """
+    Message History initialized with:
+    ```python
+    msgs = StreamlitChatMessageHistory(key="langchain_messages")
+    ```
 
-        Contents of `st.session_state.langchain_messages`:
-        """
-        view_messages.json(st.session_state)
+    Contents of `st.session_state.langchain_messages`:
+    """
+    view_messages.json(st.session_state)
 
-    # Call a reset ti clear the submit button variables
-    reset()
+# Call a reset ti clear the submit button variables
+reset()
