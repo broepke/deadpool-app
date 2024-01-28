@@ -12,7 +12,7 @@ from dp_utilities import check_password
 import logging
 
 # Configure logging
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 st.set_page_config(page_title="Ask the Arbiter", page_icon=":skull:")
 
 st.title("Ask the Arbiter :skull_and_crossbones:")
@@ -95,7 +95,7 @@ if authticated:
 
     # If user inputs a new prompt, generate and draw a new response
     prompt = st.chat_input(on_submit=submitted)
-    logging.debug(f"User submitted prompt (after button): {prompt}")
+    logging.warning(f"User submitted prompt (after button): {prompt}")
     st.session_state.prompt = prompt
 
 
@@ -105,13 +105,13 @@ if "submitted" in st.session_state:
         # Write and save the human message
         st.chat_message("human").write(prompt)
 
-        logging.debug(f"User submitted prompt: {prompt}")
+        logging.warning(f"User submitted prompt: {prompt}")
 
         # Note: new messages are saved to history automatically by Langchain
         config = {"configurable": {"session_id": "any"}}
         try:
             response = chain_with_history.invoke({"input": prompt}, config)
-            logging.debug(f"Response from chain_with_history: {response}")
+            logging.warning(f"Response from chain_with_history: {response}")
 
             # Write and save the AI message
             st.chat_message("ai").write(response["output"])
