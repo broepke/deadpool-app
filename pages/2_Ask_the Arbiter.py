@@ -45,7 +45,6 @@ def fetch_llm_results(df, user_prompt):
         verbose=True,
         agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
         agent_executor_kwargs={"handle_parsing_errors": True},
-        number_of_head_rows=1,
     )
 
     chain = prompt | agent
