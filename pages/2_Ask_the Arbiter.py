@@ -63,7 +63,7 @@ agent = create_pandas_dataframe_agent(
     llm,
     df,
     verbose=True,
-    agent_type=AgentType.OPENAI_FUNCTIONS,
+    agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
     agent_executor_kwargs={"handle_parsing_errors": True},
 )
 
@@ -82,7 +82,7 @@ if authticated:
     # Set up memory
     msgs = StreamlitChatMessageHistory(key="langchain_messages")
     if len(msgs.messages) == 0:
-        msgs.add_ai_message("How can I help you?")
+        msgs.add_ai_message("What questions do you have about the Deadpool?")
 
     view_messages = st.expander("View the message contents in session state")
 
@@ -111,13 +111,16 @@ if "submitted" in st.session_state and st.session_state.prompt is not None:
     reset()
 
 # Draw the messages at the end, so newly generated ones show up immediately
-with view_messages:
-    """
-    Message History initialized with:
-    ```python
-    msgs = StreamlitChatMessageHistory(key="langchain_messages")
-    ```
+try:
+    with view_messages:
+        """
+        Message History initialized with:
+        ```python
+        msgs = StreamlitChatMessageHistory(key="langchain_messages")
+        ```
 
-    Contents of `st.session_state.langchain_messages`:
-    """
-    view_messages.json(st.session_state.langchain_messages)
+        Contents of `st.session_state.langchain_messages`:
+        """
+        view_messages.json(st.session_state.langchain_messages)
+except Exception as e:
+    print(e)
