@@ -49,8 +49,6 @@ prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-# "Answer the following questions as best you can.",   # noqa: E501
-
 openai_api_key = st.secrets["llm"]["openai_api_key"]
 
 llm = ChatOpenAI(
@@ -79,19 +77,19 @@ chain_with_history = RunnableWithMessageHistory(
 )
 
 
-# Set up memory
-msgs = StreamlitChatMessageHistory(key="langchain_messages")
-if len(msgs.messages) == 0:
-    msgs.add_ai_message("How can I help you?")
-
-view_messages = st.expander("View the message contents in session state")
-
-# Render current messages from StreamlitChatMessageHistory
-for msg in msgs.messages:
-    st.chat_message(msg.type).write(msg.content)
-
 email, user_name, authticated = check_password()
 if authticated:
+    # Set up memory
+    msgs = StreamlitChatMessageHistory(key="langchain_messages")
+    if len(msgs.messages) == 0:
+        msgs.add_ai_message("How can I help you?")
+
+    view_messages = st.expander("View the message contents in session state")
+
+    # Render current messages from StreamlitChatMessageHistory
+    for msg in msgs.messages:
+        st.chat_message(msg.type).write(msg.content)
+
     # If user inputs a new prompt, generate and draw a new response
     st.session_state.prompt = st.chat_input(on_submit=submitted)
 
