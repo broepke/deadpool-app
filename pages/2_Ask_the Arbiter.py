@@ -72,15 +72,17 @@ def get_snowflake_table(_conn, table_name):
     return snowflake_table.table(table_name).to_pandas()
 
 
+# Set up memory
+msgs = StreamlitChatMessageHistory(key="langchain_messages")
+if len(msgs.messages) == 0:
+    msgs.add_ai_message("What questions do you have about the Deadpool?")
+
 view_messages = st.expander("View the message contents in session state")
 
 
 email, user_name, authticated = check_password()
 if authticated:
-    # Set up memory
-    msgs = StreamlitChatMessageHistory(key="langchain_messages")
-    if len(msgs.messages) == 0:
-        msgs.add_ai_message("What questions do you have about the Deadpool?")
+
 
     # Render current messages from StreamlitChatMessageHistory
     for msg in msgs.messages:
