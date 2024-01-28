@@ -79,15 +79,15 @@ chain_with_history = RunnableWithMessageHistory(
 
 
 # Set up memory
-msgs = StreamlitChatMessageHistory(key="langchain_messages")
-if len(msgs.messages) == 0:
-    msgs.add_ai_message("What questions do you have about the Deadpool?")
+# msgs = StreamlitChatMessageHistory(key="langchain_messages")
+# if len(msgs.messages) == 0:
+#     msgs.add_ai_message("What questions do you have about the Deadpool?")
 
-view_messages = st.expander("View the message contents in session state")
+# view_messages = st.expander("View the message contents in session state")
 
-# Render current messages from StreamlitChatMessageHistory
-for msg in msgs.messages:
-    st.chat_message(msg.type).write(msg.content)
+# # Render current messages from StreamlitChatMessageHistory
+# for msg in msgs.messages:
+#     st.chat_message(msg.type).write(msg.content)
 
 
 email, user_name, authticated = check_password()
@@ -114,13 +114,13 @@ if "submitted" in st.session_state and st.session_state.prompt is not None:
 
 
 # Draw the messages at the end, so newly generated ones show up immediately
-with view_messages:
-    """
-    Message History initialized with:
-    ```python
-    msgs = StreamlitChatMessageHistory(key="langchain_messages")
-    ```
+# with view_messages:
+#     """
+#     Message History initialized with:
+#     ```python
+#     msgs = StreamlitChatMessageHistory(key="langchain_messages")
+#     ```
 
-    Contents of `st.session_state.langchain_messages`:
-    """
-    view_messages.json(st.session_state.langchain_messages)
+#     Contents of `st.session_state.langchain_messages`:
+#     """
+#     view_messages.json(st.session_state.langchain_messages)
