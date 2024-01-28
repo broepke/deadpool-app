@@ -100,14 +100,15 @@ if "submitted" in st.session_state and st.session_state.prompt is not None:
     # if st.session_state.submitted:
     prompt = st.session_state.prompt
     # Write and save the human message
-    st.chat_message("human").write(prompt)
-
-    # Note: new messages are saved to history automatically by Langchain
-    config = {"configurable": {"session_id": "any"}}
-    response = chain_with_history.invoke({"input": prompt}, config)
+    with st.chat_message("human"):
+        st.write(prompt)
+        # Note: new messages are saved to history automatically by Langchain
+        config = {"configurable": {"session_id": "any"}}
+        response = chain_with_history.invoke({"input": prompt}, config)
 
     # Write and save the AI message
-    st.chat_message("ai").write(response["output"])
+    with st.chat_message("ai"):
+        st.write(response["output"])
 
     # Call a reset ti clear the submit button variables
     reset()
