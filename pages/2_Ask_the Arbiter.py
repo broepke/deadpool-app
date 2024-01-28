@@ -110,7 +110,9 @@ if "submitted" in st.session_state and st.session_state.prompt is not None:
     # Call a reset ti clear the submit button variables
     reset()
 else:
-    st.warning("**Note:** Please submit your response again.")
+    st.error("**Note:** Please submit your response again.")
+    reset()
+    st.session_state.prompt = None
 
 # Draw the messages at the end, so newly generated ones show up immediately
 with view_messages:
