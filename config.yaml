@@ -56,6 +56,10 @@ credentials:
       email: jahnwarren@gmail.com
       name: Warren Jahn
       password: $2b$12$6WY79P5TGP9TP5YupbLeyuqmfGmWlK./EjSAtJ7V7hlJ8R6r7Hkjq
+    msb829@gmail.com:
+      email: msb829@gmail.com
+      name: Munj Nayak
+      password: $2b$12$WYSL/UtQXngL8cQI8/BbNOGt9/TyFK04S6QIW0blTNN7VI25ig.8W
 cookie:
   expiry_days: 30
   key: "abcd" # Must be string
