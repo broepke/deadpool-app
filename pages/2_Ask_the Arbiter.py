@@ -116,6 +116,9 @@ if "submitted" in st.session_state:
         except Exception as e:
             st.write("Please submit your question again. ", e)
 
+        # Call a reset ti clear the submit button variables
+        reset()
+
         # Draw the messages at the end, so newly
         # generated ones show up immediately
         with view_messages:
