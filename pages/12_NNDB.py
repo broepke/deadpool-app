@@ -35,7 +35,7 @@ if authticated:
     age_line_chart = (
         alt.Chart(df_nndb_dead)
         .mark_line()
-        .encode(alt.X("AGE"), y="count()", color=alt.value("#F28749"))
+        .encode(alt.X("AGE"), y="count()")  # , color=alt.value("#F28749")
     )
 
     st.altair_chart(age_line_chart, use_container_width=True)
@@ -72,7 +72,7 @@ if authticated:
         .encode(
             x="RATIO:Q",
             y=alt.Y("OCCUPATION:N", sort=None),
-            color=alt.value("#F28749"),
+            # color=alt.value("#F28749"),
         )
     )
 
