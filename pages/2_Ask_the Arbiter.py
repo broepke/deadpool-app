@@ -96,20 +96,25 @@ if authticated:
         st.chat_message(msg.type).write(msg.content)
 
     # If user inputs a new prompt, generate and draw a new response
-    if prompt := st.chat_input(on_submit=submitted):
-        st.chat_message("human").write(prompt)
-        # Note: new messages are saved to history automatically by Langchain
-        config = {"configurable": {"session_id": "any"}}
-        response = chain_with_history.invoke({"input": prompt}, config)
-        st.chat_message("ai").write(response["output"])
+    prompt = st.chat_input(on_submit=submitted)
+    st.session_state.prompt = prompt
 
 
 if "submitted" in st.session_state:
     if st.session_state.submitted:
+        prompt = st.session_state.prompt
+        # Write and save the human message
+        st.chat_message("human").write(prompt)
 
+        # Note: new messages are saved to history automatically by Langchain
+        config = {"configurable": {"session_id": "any"}}
+        response = chain_with_history.invoke({"input": prompt}, config)
 
+        # Write and save the AI message
+        st.chat_message("ai").write(response["output"])
 
-        # Draw the messages at the end, so newly generated ones show up immediately
+        # Draw the messages at the end, so newly
+        # generated ones show up immediately
         with view_messages:
             """
             Message History initialized with:
@@ -119,4 +124,4 @@ if "submitted" in st.session_state:
 
             Contents of `st.session_state.langchain_messages`:
             """
-            view_messages.json(st.session_state.langchain_messages)        
+            view_messages.json(st.session_state.langchain_messages)
