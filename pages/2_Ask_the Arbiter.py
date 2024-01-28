@@ -24,6 +24,13 @@ def reset():
     st.session_state.submitted = False
 
 
+# Render current messages from StreamlitChatMessageHistory
+for msg in msgs.messages:
+    st.chat_message(msg.type).write(msg.content)
+
+view_messages = st.expander("View the message contents in session state")
+
+
 # Get the snowflake connection
 conn = st.connection("snowflake")
 
@@ -85,12 +92,6 @@ if authticated:
     msgs = StreamlitChatMessageHistory(key="langchain_messages")
     if len(msgs.messages) == 0:
         msgs.add_ai_message("How can I help you?")
-
-    view_messages = st.expander("View the message contents in session state")
-
-    # Render current messages from StreamlitChatMessageHistory
-    for msg in msgs.messages:
-        st.chat_message(msg.type).write(msg.content)
 
     # If user inputs a new prompt, generate and draw a new response
     st.session_state.prompt = st.chat_input(on_submit=submitted)
