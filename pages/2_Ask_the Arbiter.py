@@ -24,6 +24,11 @@ def reset():
     st.session_state.submitted = False
 
 
+# Set up memory
+msgs = StreamlitChatMessageHistory(key="langchain_messages")
+if len(msgs.messages) == 0:
+    msgs.add_ai_message("How can I help you?")
+
 # Render current messages from StreamlitChatMessageHistory
 for msg in msgs.messages:
     st.chat_message(msg.type).write(msg.content)
@@ -88,11 +93,6 @@ chain_with_history = RunnableWithMessageHistory(
 
 email, user_name, authticated = check_password()
 if authticated:
-    # Set up memory
-    msgs = StreamlitChatMessageHistory(key="langchain_messages")
-    if len(msgs.messages) == 0:
-        msgs.add_ai_message("How can I help you?")
-
     # If user inputs a new prompt, generate and draw a new response
     st.session_state.prompt = st.chat_input(on_submit=submitted)
 
