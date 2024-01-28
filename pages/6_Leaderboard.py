@@ -37,4 +37,4 @@ if authticated:
         use_container_width=True,
     )
 
-    st.bar_chart(data=df_score_2023, x="PLAYER", y="SCORE")
+    st.bar_chart(data=df_score_2023, x="PLAYER", y="SCORE", color="#F63366")
