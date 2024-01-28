@@ -28,8 +28,7 @@ if authticated:
         use_container_width=True,
     )
 
-    # , color="#F28749"
-    st.bar_chart(data=df_score_2024, x="PLAYER", y="SCORE")  
+    st.bar_chart(data=df_score_2024, x="PLAYER", y="SCORE", color="#F63366")
 
     st.header("2023 Leaderboard:")
 
