@@ -111,16 +111,13 @@ if "submitted" in st.session_state and st.session_state.prompt is not None:
     reset()
 
 # Draw the messages at the end, so newly generated ones show up immediately
-try:
-    with view_messages:
-        """
-        Message History initialized with:
-        ```python
-        msgs = StreamlitChatMessageHistory(key="langchain_messages")
-        ```
+with view_messages:
+    """
+    Message History initialized with:
+    ```python
+    msgs = StreamlitChatMessageHistory(key="langchain_messages")
+    ```
 
-        Contents of `st.session_state.langchain_messages`:
-        """
-        view_messages.json(st.session_state.langchain_messages)
-except Exception as e:
-    print(e)
+    Contents of `st.session_state.langchain_messages`:
+    """
+    view_messages.json(st.session_state.langchain_messages)
