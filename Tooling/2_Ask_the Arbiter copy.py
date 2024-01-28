@@ -16,6 +16,15 @@ st.set_page_config(page_title="Ask the Arbiter", page_icon=":skull:")
 st.title("Ask the Arbiter :skull_and_crossbones:")
 
 
+def submitted():
+    st.session_state.submitted = True
+
+
+def reset():
+    st.session_state.submitted = False
+    st.session_state.prompt = None
+
+
 # Get the snowflake connection
 conn = st.connection("snowflake")
 
@@ -84,19 +93,25 @@ if authticated:
         st.chat_message(msg.type).write(msg.content)
 
     # If user inputs a new prompt, generate and draw a new response
-    if prompt := st.chat_input():
+    st.session_state.prompt = st.chat_input(on_submit=submitted)
 
-        # Write and save the human message
-        with st.chat_message("human"):
-            st.write(prompt)
-            # Note: new messages are saved to history 
-            # automatically by Langchain
-            config = {"configurable": {"session_id": "any"}}
-            response = chain_with_history.invoke({"input": prompt}, config)
 
-        # Write and save the AI message
-        with st.chat_message("ai"):
-            st.write(response["output"])
+if "submitted" in st.session_state and st.session_state.prompt is not None:
+    # if st.session_state.submitted:
+    prompt = st.session_state.prompt
+    # Write and save the human message
+    with st.chat_message("human"):
+        st.write(prompt)
+        # Note: new messages are saved to history automatically by Langchain
+        config = {"configurable": {"session_id": "any"}}
+        response = chain_with_history.invoke({"input": prompt}, config)
+
+    # Write and save the AI message
+    with st.chat_message("ai"):
+        st.write(response["output"])
+
+    # Call a reset ti clear the submit button variables
+    reset()
 
 
 # Draw the messages at the end, so newly generated ones show up immediately
