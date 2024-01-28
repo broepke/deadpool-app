@@ -110,9 +110,6 @@ if "submitted" in st.session_state and st.session_state.prompt is not None:
         # Write and save the AI message
         st.chat_message("ai").write(response["output"])
 
-        # Call a reset ti clear the submit button variables
-        reset()
-
     # Draw the messages at the end, so newly generated ones show up immediately
     with view_messages:
         """
@@ -124,3 +121,6 @@ if "submitted" in st.session_state and st.session_state.prompt is not None:
         Contents of `st.session_state.langchain_messages`:
         """
         view_messages.json(st.session_state)
+
+    # Call a reset ti clear the submit button variables
+    reset()
