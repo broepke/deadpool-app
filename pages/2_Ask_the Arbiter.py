@@ -53,7 +53,7 @@ prompt = ChatPromptTemplate.from_messages(
 openai_api_key = st.secrets["llm"]["openai_api_key"]
 
 llm = ChatOpenAI(
-    model_name="gpt-4",
+    model_name="gpt-3.5-turbo-1106",
     temperature=0.9,
     openai_api_key=openai_api_key,
     streaming=True,  # noqa: E501
