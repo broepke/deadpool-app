@@ -123,5 +123,3 @@ with view_messages:
     Contents of `st.session_state.langchain_messages`:
     """
     view_messages.json(st.session_state)
-
-
