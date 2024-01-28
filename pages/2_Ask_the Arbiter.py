@@ -92,9 +92,6 @@ for msg in msgs.messages:
 
 email, user_name, authticated = check_password()
 if authticated:
-
-
-
     # If user inputs a new prompt, generate and draw a new response
     st.session_state.prompt = st.chat_input(on_submit=submitted)
 
@@ -112,6 +109,9 @@ if "submitted" in st.session_state and st.session_state.prompt is not None:
     # Write and save the AI message
     st.chat_message("ai").write(response["output"])
 
+    # Call a reset ti clear the submit button variables
+    reset()
+
 # Draw the messages at the end, so newly generated ones show up immediately
 with view_messages:
     """
@@ -124,5 +124,4 @@ with view_messages:
     """
     view_messages.json(st.session_state)
 
-# Call a reset ti clear the submit button variables
-reset()
+
