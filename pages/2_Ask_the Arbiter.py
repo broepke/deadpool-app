@@ -27,6 +27,8 @@ def reset():
     st.session_state.prompt = None
 
 
+st.session_state
+
 # Get the snowflake connection
 conn = st.connection("snowflake")
 
