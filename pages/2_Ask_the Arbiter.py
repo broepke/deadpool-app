@@ -9,10 +9,8 @@ from langchain_community.chat_message_histories import (
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from dp_utilities import check_password
-import logging
 
-# Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
 st.set_page_config(page_title="Ask the Arbiter", page_icon=":skull:")
 
 st.title("Ask the Arbiter :skull_and_crossbones:")
@@ -24,10 +22,7 @@ def submitted():
 
 def reset():
     st.session_state.submitted = False
-    st.session_state.prompt = None
 
-
-st.session_state
 
 # Get the snowflake connection
 conn = st.connection("snowflake")
@@ -91,14 +86,14 @@ if authticated:
     if len(msgs.messages) == 0:
         msgs.add_ai_message("How can I help you?")
 
+    view_messages = st.expander("View the message contents in session state")
+
     # Render current messages from StreamlitChatMessageHistory
     for msg in msgs.messages:
         st.chat_message(msg.type).write(msg.content)
 
     # If user inputs a new prompt, generate and draw a new response
-    prompt = st.chat_input(on_submit=submitted)
-    logging.warning(f"User submitted prompt (after button): {prompt}")
-    st.session_state.prompt = prompt
+    st.session_state.prompt = st.chat_input(on_submit=submitted)
 
 
 if "submitted" in st.session_state:
@@ -107,19 +102,29 @@ if "submitted" in st.session_state:
         # Write and save the human message
         st.chat_message("human").write(prompt)
 
-        logging.warning(f"User submitted prompt: {prompt}")
-
         # Note: new messages are saved to history automatically by Langchain
         config = {"configurable": {"session_id": "any"}}
         try:
             response = chain_with_history.invoke({"input": prompt}, config)
-            logging.warning(f"Response from chain_with_history: {response}")
 
             # Write and save the AI message
             st.chat_message("ai").write(response["output"])
+
         except Exception as e:
-            logging.error("Error during response generation", exc_info=True)
             st.write("Please submit your question again. ", e)
 
         # Call a reset ti clear the submit button variables
         reset()
+
+
+# Draw the messages at the end, so newly generated ones show up immediately
+with view_messages:
+    """
+    Message History initialized with:
+    ```python
+    msgs = StreamlitChatMessageHistory(key="langchain_messages")
+    ```
+
+    Contents of `st.session_state.langchain_messages`:
+    """
+    view_messages.json(st.session_state.langchain_messages)
