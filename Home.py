@@ -52,7 +52,7 @@ if authticated:
         st.write(e)
         st.write("Welcome Back, " + user_name)
 
-    st.image("deadpool.png", "The Arbiter")
+    st.image("arbiter.jpg", "The Arbiter")
 
     st.caption(prompt)
     st.caption(f"Time taken to load: {time_taken:.2f} seconds")
