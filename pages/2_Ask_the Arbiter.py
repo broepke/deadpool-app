@@ -17,6 +17,15 @@ st.title("Ask the Arbiter :skull_and_crossbones:")
 
 
 def fetch_llm_results(df, user_prompt):
+    """Return results from Conversational LLM
+
+    Args:
+        df (DataFrame): Pandas DF to analyize with the LLM
+        user_prompt (srt): Question to ask of the DF
+
+    Returns:
+        dict: AIMessage response in the "content" key
+    """
     # Generate LLM response
     prompt = ChatPromptTemplate.from_messages(
         [
@@ -66,13 +75,14 @@ def fetch_llm_results(df, user_prompt):
 conn = st.connection("snowflake")
 
 
+# Cache the snowflake table for an hour.  It's pretty static.
 @st.cache_data(ttl=3600)
 def get_snowflake_table(_conn, table_name):
     snowflake_table = _conn.session()
     return snowflake_table.table(table_name).to_pandas()
 
 
-# Set up memory
+# Initialize the Streamlit chat history from LangChain
 msgs = StreamlitChatMessageHistory(key="langchain_messages")
 if len(msgs.messages) == 0:
     msgs.add_ai_message("What questions do you have about the Deadpool?")

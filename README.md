@@ -9,4 +9,4 @@
 ## Snowflake
 [Connect Streamlit to Snowflake](https://docs.streamlit.io/knowledge-base/tutorials/databases/snowflake)
 
-![The Arbiter](deadpool.png)
+![The Arbiter](arbiter.jpg)
