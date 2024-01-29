@@ -20,7 +20,8 @@ The following features are part of this overall application.
 * Daily automation that checks for celebrity deaths.
 * Slack notification for maintenance issues for the primary moderators.
 * AWS based Auto-Scale group for workflow execution on EC2 servers.
-* 
+* Seachable Database of 26k plus alive and dead famous people, including information about their deaths and or health scraped from Wikipedia.
+* XGBoose based binary classifier for predicting death based on known health issues. 
 
 
 ## Sofware
