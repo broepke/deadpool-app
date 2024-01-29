@@ -38,6 +38,7 @@ The architecture comprises many common Data Analytics, Data Science, and Data En
 
 ## References
 **AWS Setup**: 
+_Note: This is not currently being used.  The application is deployed on Streamlit.app cloud_
  [How to Deploy a Streamlit App using an Amazon Free ec2 instance?](https://towardsdatascience.com/how-to-deploy-a-streamlit-app-using-an-amazon-free-ec2-instance-416a41f69dc3)
 
 **Snowflake**: 
