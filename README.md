@@ -1,27 +1,27 @@
 # Deadpool Application
 
 # Overview 
-The Deadpool application facilities a draft like process for an annual Celebrity Deathpool, not unlike a fantasy foodball draft.  The objective, of course, is to pick the most amount of celebrities that will pass away throughout the year.  
+The Deadpool application facilities a draft-like process for an annual Celebrity Deathpool, not unlike a fantasy football draft.  The objective, of course, is to pick the most celebrities who will pass away throughout the year.  
 
 ## Motivation
-Historically we simply tracked this on a spreadsheet, however, with the increase in number of participants (14 this year), and the 
+Historically, we tracked this on a spreadsheet; however, with the increase in the number of participants (14 this year) and the number of picks to 20 per person, or 280 today picks.  
 
-In order to facilitate the volume of picks we needed some software automation. As an experiment I wrote this all utilizing Data Engineer, and Data Sciece like principles and technqiues, vs. traditional software engineering techniques.  While this could have been done with less overall cost utilizing SWE practicies, it was a great exercies to continue to learn the ecosystem.  
+To facilitate the volume of picks, we needed some software automation.  As an experiment, I wrote this all utilizing Data engineering and Data science principles and techniques vs. traditional software engineering techniques.  While this could have been done with less overall cost by utilizing SWE practices, it was a great exercise to continue to learn about the ecosystem.  
 
 ## Features
 The following features are part of this overall application.
 
 * Responsive web and mobile application
 * User authentication
-* Cloud hosted data for high availability
-* Round robin drafting process (players go in a particular order and cycle through until complete.)
-* SMS based notification of drafts and deaths via [Twillio](https://www.twilio.com).
-* Automatic population of ages and brith dates as well as validates Wikipedia ID (for death checking.)
+* Cloud-hosted data for high availability
+* Round-robin drafting process (players go in a particular order and cycle through until complete.)
+* SMS-based notification of drafts and deaths via [Twillio](https://www.twilio.com).
+* Automatic population of ages and birth dates and validates Wikipedia ID (for death checking.)
 * Daily automation that checks for celebrity deaths.
 * Slack notification for maintenance issues for the primary moderators.
-* AWS based Auto-Scale group for workflow execution on EC2 servers.
-* Seachable Database of 26k plus alive and dead famous people, including information about their deaths and or health scraped from Wikipedia.
-* XGBoose based binary classifier for predicting death based on known health issues. 
+* AWS-based Auto-Scale group for workflow execution on EC2 servers.
+* Searchable database of 26k plus living and dead famous people, including information about their deaths and health scraped from Wikipedia.
+* XGBoose-based binary classifier for predicting death based on known health issues. 
 
 
 ## Sofware
@@ -32,7 +32,7 @@ The entire application sits in four GitHub repos.
 * [Deadpool Analysis and Predictive Model](https://github.com/broepke/deadpool-analysis)
 
 ## Architechture
-The architecture consists of many common tools for Data Analytics, Data Science and Data Engineering.  All modern practices were followed while constructing this application.
+The architecture comprises many common Data Analytics, Data Science, and Data Engineering tools.  All modern practices were followed while constructing this application.
 ![The Deadpool Architecture](dp_arch.png)
 
 
