@@ -88,13 +88,8 @@ if len(msgs.messages) == 0:
     msgs.add_ai_message("What questions do you have about the Deadpool?")
 
 
-try:
-    st.session_state.authentication_status
-except:
-    email, user_name, authticated = check_password()
-
-
-if st.session_state.authentication_status:
+email, user_name, authenticated = check_password()
+if authenticated:
     view_messages = st.expander("View the message contents in session state")
 
     # Render current messages from StreamlitChatMessageHistory

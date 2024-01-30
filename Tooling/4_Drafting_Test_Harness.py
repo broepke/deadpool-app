@@ -45,8 +45,8 @@ def draft_logic(current_email):
         return False, ""
 
 
-email, user_name, authticated = check_password()
-if authticated:
+email, user_name, authenticated = check_password()
+if authenticated:
     conn = st.connection("snowflake")
 
     df_picks = load_snowflake_table(conn, "picks")

@@ -51,8 +51,8 @@ def draft_logic(current_email):
 
 st.title("Drafting :skull_and_crossbones:")
 
-email, user_name, authticated = check_password()
-if authticated:
+email, user_name, authenticated = check_password()
+if authenticated:
     conn = snowflake_connection_helper()
 
     df_picks = load_snowflake_table(conn, "picks")

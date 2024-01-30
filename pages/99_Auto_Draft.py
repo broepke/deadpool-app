@@ -23,8 +23,8 @@ def reset():
 
 st.title("Auto Drafting :skull_and_crossbones:")
 
-email, user_name, authticated = check_password()
-if authticated:
+email, user_name, authenticated = check_password()
+if authenticated:
     conn = snowflake_connection_helper()
 
     df_players = load_snowflake_table(conn, "draft_next")

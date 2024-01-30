@@ -78,8 +78,8 @@ chain_with_history = RunnableWithMessageHistory(
 )
 
 
-email, user_name, authticated = check_password()
-if authticated:
+email, user_name, authenticated = check_password()
+if authenticated:
 
     # Set up memory
     msgs = StreamlitChatMessageHistory(key="langchain_messages")

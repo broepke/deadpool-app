@@ -5,8 +5,8 @@ st.set_page_config(page_title="Death Wall", page_icon=":skull:")
 
 st.title("Death Wall :skull_and_crossbones:")
 
-email, user_name, authticated = check_password()
-if authticated:
+email, user_name, authenticated = check_password()
+if authenticated:
     col1, col2 = st.columns(2)
 
     with col1:
