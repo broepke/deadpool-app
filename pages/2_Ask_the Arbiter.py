@@ -123,3 +123,5 @@ if authticated:
         Contents of `st.session_state.langchain_messages`:
         """
         view_messages.json(st.session_state.langchain_messages)
+
+    st.rerun()
