@@ -88,7 +88,9 @@ if len(msgs.messages) == 0:
     msgs.add_ai_message("What questions do you have about the Deadpool?")
 
 
-if not st.session_state.authentication_status:
+try:
+    st.session_state.authentication_status
+except:
     email, user_name, authticated = check_password()
 
 
