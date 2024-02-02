@@ -35,6 +35,13 @@ The entire application sits in four GitHub repos.
 The architecture comprises many common Data Analytics, Data Science, and Data Engineering tools.  All modern practices were followed while constructing this application.
 ![The Deadpool Architecture](dp_arch.png)
 
+## EC2
+
+Check the service status
+
+```
+sudo systemctl status streamlit-agent
+```
 
 ## References
 **AWS Setup**: 
