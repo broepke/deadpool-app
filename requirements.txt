@@ -11,4 +11,4 @@ langchainhub
 openai
 tabulate
 numexpr
-snowflake-snowpark-python
+snowflake-snowpark-python[pandas]

@@ -29,8 +29,21 @@ sudo yum install -y git
 
 # Install Python Required Packages under the "prefect" user
 sudo -u prefect -i bash -c "pip install --user \
+    fuzzywuzzy \
+    python-Levenshtein \
+    twilio \
     streamlit \
-    snowflake-snowpark-python"
+    streamlit-authenticator \
+    langchain \
+    langchain-openai \
+    langchain-community \
+    langchain-experimental \
+    langchainhub \
+    openai \
+    tabulate \
+    numexpr \
+    Jinja2 \
+    snowflake-snowpark-python[pandas]"
 
 # Git Clone the source
 sudo -u prefect -i bash -c 'git clone https://github.com/broepke/deadpool-app'
