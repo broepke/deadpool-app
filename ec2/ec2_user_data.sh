@@ -28,7 +28,7 @@ sudo -u streamlit -i bash -c "sudo yum install -y git"
 sudo yum install -y git
 
 # Install Python Required Packages under the "streamlit" user
-sudo -u streamlit -i bash -c "pip install --user \
+sudo -u streamlit -i bash -c "pip install --user --upgrade \
     fuzzywuzzy \
     python-Levenshtein \
     twilio \
@@ -42,7 +42,7 @@ sudo -u streamlit -i bash -c "pip install --user \
     openai \
     tabulate \
     numexpr \
-    Jinja2 \
+    Jinja2>=3.1.2 \
     snowflake-snowpark-python[pandas]"
 
 # Git Clone the source

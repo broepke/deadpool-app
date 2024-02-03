@@ -11,4 +11,5 @@ langchainhub
 openai
 tabulate
 numexpr
+Jinja2
 snowflake-snowpark-python[pandas]
