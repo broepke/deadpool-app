@@ -73,8 +73,8 @@ sudo systemctl start streamlit-agent
 source ~/.bashrc
 
 # Fetch secrets from AWS Secrets Manager
-snowflake_account=$(aws secretsmanager get-secret-value --secret-id streamlit-secrets --query 'SecretString' | jq -r '. | fromjson | ."snowflake_account"')
-snowflake_password=$(aws secretsmanager get-secret-value --secret-id streamlit-secrets --query 'SecretString' | jq -r '. | fromjson | ."snowflake_password"')
+snowflake_account=$(aws secretsmanager get-secret-value --secret-id streamlit-secrets --query 'SecretString' | jq -r '. | fromjson | ."snow-account"')
+snowflake_password=$(aws secretsmanager get-secret-value --secret-id streamlit-secrets --query 'SecretString' | jq -r '. | fromjson | ."snow-password"')
 twilio_sid=$(aws secretsmanager get-secret-value --secret-id streamlit-secrets --query 'SecretString' | jq -r '. | fromjson | ."twilio-sid"')
 twilio_token=$(aws secretsmanager get-secret-value --secret-id streamlit-secrets --query 'SecretString' | jq -r '. | fromjson | ."twilio-token"')
 apify_main_bearer=$(aws secretsmanager get-secret-value --secret-id streamlit-secrets --query 'SecretString' | jq -r '. | fromjson | ."apify-main-bearer"')

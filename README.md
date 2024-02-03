@@ -43,10 +43,6 @@ Check the service status
 sudo systemctl status streamlit-agent
 ```
 
-```
-aws secretsmanager get-secret-value --secret-id streamlit-secrets --query 'SecretString' | jq -r '. | fromjson | .openai-key'
-```
-
 ## References
 **AWS Setup**: 
 _Note: This is not currently being used.  The application is deployed on Streamlit.app cloud_
