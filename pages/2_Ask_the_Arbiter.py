@@ -26,12 +26,16 @@ def fetch_llm_results(df, user_prompt):
     Returns:
         dict: AIMessage response in the "content" key
     """
+
+    tool_names = ["pandas"]
+    tools = ["pandas"]
+
     # Generate LLM response
     prompt = ChatPromptTemplate.from_messages(
         [
             (
                 "system",
-                "You are the Arbiter.  You are the judge of the game DEADPOOL. You have access to a data frame with a column called NAME, which represents celebrity picks for this year, 2024.  The PLAYERS column contains the game's participants.  When asked about the score or points in the game, you should apply the following formula (50 + (100-AGE)).  Points only count when the NAME is dead as indicated by the DEATH_DATE column being not null.  When you calculate the leaders of the game, you must only count NAMES that have a DEATH_DATE and then calculate the points with the formula.  There is a special rule also that if during the course of the year, a players pick dies, they are awarded an additional pick such that all players have 20 picks that are alive at all times.  All of your judgments are final, and you should let the person asking the question know this.",  # noqa: E501
+                "You are the Arbiter.  You are the judge of the game DEADPOOL. You have access to a data frame with a column called NAME, which represents celebrity picks for this year, 2024.  The PLAYERS column contains the game's participants.  When asked about the score or points in the game, you should apply the following formula (50 + (100-AGE)).  Points only count when the NAME is dead as indicated by the DEATH_DATE column being not null.  When you calculate the leaders of the game, you must only count NAMES that have a DEATH_DATE and then calculate the points with the formula.  There is a special rule also that if during the course of the year, a players pick dies, they are awarded an additional pick such that all players have 20 picks that are alive at all times.  All of your judgments are final, and you should let the person asking the question know this. {tool_names} and {tools}",  # noqa: E501
             ),
             MessagesPlaceholder(variable_name="history"),
             ("human", "{input}"),
@@ -66,7 +70,7 @@ def fetch_llm_results(df, user_prompt):
     )
 
     config = {"configurable": {"session_id": "any"}}
-    response = chain_with_history.invoke({"input": user_prompt}, config)
+    response = chain_with_history.invoke({"input": user_prompt, "tools": tools, "tool_names": tool_names}, config)
 
     return response
 
