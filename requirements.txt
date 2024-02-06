@@ -1,4 +1,7 @@
 fuzzywuzzy
+openai
+tabulate
+numexpr
 python-Levenshtein
 twilio
 streamlit
@@ -8,8 +11,4 @@ langchain-openai
 langchain-community
 langchain-experimental
 langchainhub
-openai
-tabulate
-numexpr
-Jinja2
-snowflake-snowpark-python[pandas]
+snowflake-snowpark-python
