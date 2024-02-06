@@ -42,6 +42,7 @@ sudo -u streamlit -i bash -c "pip install --user --upgrade \
     langchain-community \
     langchain-experimental==0.0.49 \
     langchainhub \
+    'Jinja2>=3.1.2' \
     snowflake-snowpark-python"
 
 # Git Clone the source
