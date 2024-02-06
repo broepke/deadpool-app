@@ -24,17 +24,17 @@ if authenticated:
     st.header("2024 Leaderboard:")
 
     st.dataframe(
-        df_score_2024.style.highlight_max(axis=0, subset=["SCORE"]),
+        df_score_2024.style.highlight_max(axis=0, subset=["TOTAL"]),
         use_container_width=True,
     )
 
-    st.bar_chart(data=df_score_2024, x="PLAYER", y="SCORE", color="#F63366")
+    st.bar_chart(data=df_score_2024, x="PLAYER", y="TOTAL", color="#F63366")
 
     st.header("2023 Leaderboard:")
 
     st.dataframe(
-        df_score_2023.style.highlight_max(axis=0, subset=["SCORE"]),
+        df_score_2023.style.highlight_max(axis=0, subset=["TOTAL"]),
         use_container_width=True,
     )
 
-    st.bar_chart(data=df_score_2023, x="PLAYER", y="SCORE", color="#F63366")
+    st.bar_chart(data=df_score_2023, x="PLAYER", y="TOTAL", color="#F63366")
