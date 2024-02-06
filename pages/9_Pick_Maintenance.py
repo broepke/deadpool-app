@@ -28,9 +28,7 @@ if authenticated:
     # Initialize connection.
     conn = snowflake_connection_helper()
 
-    df_picks = load_snowflake_table(conn, "picks")
-
-    df_picks_2024 = df_picks[df_picks["YEAR"] == 2024]
+    df_picks_2024 = load_snowflake_table(conn, "picks_twenty_four")
 
     df_picks_list = df_picks_2024["NAME"].to_list()
     df_picks_list.sort()
