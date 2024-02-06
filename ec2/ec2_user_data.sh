@@ -30,6 +30,9 @@ sudo yum install -y git
 # Install Python Required Packages under the "streamlit" user
 sudo -u streamlit -i bash -c "pip install --user --upgrade \
     fuzzywuzzy \
+    openai \
+    tabulate \
+    numexpr \
     python-Levenshtein \
     twilio \
     streamlit \
@@ -39,11 +42,7 @@ sudo -u streamlit -i bash -c "pip install --user --upgrade \
     langchain-community \
     langchain-experimental \
     langchainhub \
-    openai \
-    tabulate \
-    numexpr \
-    Jinja2>=3.1.2 \
-    snowflake-snowpark-python[pandas]"
+    snowflake-snowpark-python"
 
 # Git Clone the source
 sudo -u streamlit -i bash -c 'git clone https://github.com/broepke/deadpool-app'
