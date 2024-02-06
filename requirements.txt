@@ -9,6 +9,6 @@ streamlit-authenticator
 langchain
 langchain-openai
 langchain-community
-langchain-experimental
+langchain-experimental==0.0.49
 langchainhub
 snowflake-snowpark-python

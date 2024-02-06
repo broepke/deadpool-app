@@ -40,7 +40,7 @@ sudo -u streamlit -i bash -c "pip install --user --upgrade \
     langchain \
     langchain-openai \
     langchain-community \
-    langchain-experimental \
+    langchain-experimental==0.0.49 \
     langchainhub \
     snowflake-snowpark-python"
 
