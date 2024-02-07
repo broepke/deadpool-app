@@ -115,7 +115,7 @@ EOF'
 github_token=$(aws secretsmanager get-secret-value --secret-id github-pat \
 --query 'SecretString' | jq -r '. | fromjson | .key')
 
-sudo -u streamlit bash -c 'cat <<EOF > /home/streamlit/github_webhook.py
+cat <<EOF > /home/streamlit/github_webhook.py
 from flask import Flask, request, jsonify
 import logging
 from subprocess import STDOUT, check_output
@@ -139,8 +139,9 @@ def github_webhook():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
-EOF'
+EOF
 
+chown streamlit:streamlit /home/streamlit/github_webhook.py
 
 # Create a systemd service unit file for the Flask server
 cat <<EOF | sudo tee /etc/systemd/system/github-webhook.service
