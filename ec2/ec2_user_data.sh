@@ -117,15 +117,24 @@ github_token=$(aws secretsmanager get-secret-value --secret-id github-pat \
 
 sudo -u streamlit bash -c 'cat <<EOF > /home/streamlit/github_webhook.py
 from flask import Flask, request, jsonify
-import subprocess
+import logging
+from subprocess import STDOUT, check_output
 
+# Initialize Flask app
 app = Flask(__name__)
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
 
 @app.route("/github-webhook", methods=["POST"])
 def github_webhook():
     payload = request.json
-    if payload["ref"] == "refs/heads/MAIN":
-        subprocess.run(["git", "-C", "/home/streamlit/deadpool-app", "pull"])
+    if payload["ref"].lower() == "refs/heads/main":  # Ensure case-insensitive comparison
+        try:
+            output = check_output(["git", "-C", "/home/streamlit/deadpool-app", "pull"], stderr=STDOUT)
+            logging.info(f"Git pull output: {output.decode('utf-8')}")
+        except Exception as e:
+            logging.error(f"Git pull failed: {e}")
     return jsonify({"message": "Webhook received"}), 200
 
 if __name__ == "__main__":
