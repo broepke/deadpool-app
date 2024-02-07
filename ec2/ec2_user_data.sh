@@ -115,23 +115,23 @@ EOF'
 github_token=$(aws secretsmanager get-secret-value --secret-id github-pat \
 --query 'SecretString' | jq -r '. | fromjson | .key')
 
-# Create the Flask script file
-sudo -u streamlit bash -c 'cat > /home/github_webhook.py <<EOF
+sudo -u streamlit bash -c 'cat <<EOF > /home/streamlit/github_webhook.py
 from flask import Flask, request, jsonify
 import subprocess
 
 app = Flask(__name__)
 
-@app.route('/github-webhook', methods=['POST'])
+@app.route("/github-webhook", methods=["POST"])
 def github_webhook():
     payload = request.json
-    if payload['ref'] == "refs/heads/MAIN":
+    if payload["ref"] == "refs/heads/MAIN":
         subprocess.run(["git", "-C", "/home/streamlit/deadpool-app", "pull"])
     return jsonify({"message": "Webhook received"}), 200
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
 EOF'
+
 
 # Create a systemd service unit file for the Flask server
 cat <<EOF | sudo tee /etc/systemd/system/github-webhook.service
@@ -141,8 +141,8 @@ After=network.target
 
 [Service]
 User=streamlit
-WorkingDirectory=/home
-ExecStart=/usr/bin/python3 /home/github_webhook.py
+WorkingDirectory=/home/streamlit
+ExecStart=/usr/bin/python3 /home/streamlit/github_webhook.py
 Restart=always
 
 [Install]

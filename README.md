@@ -41,6 +41,7 @@ Check the service status
 
 ```
 sudo systemctl status streamlit-agent
+sudo systemctl status github-webhook
 ```
 
 ## References
