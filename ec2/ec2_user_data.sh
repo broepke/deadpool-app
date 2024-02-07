@@ -115,6 +115,7 @@ EOF'
 github_token=$(aws secretsmanager get-secret-value --secret-id github-pat \
 --query 'SecretString' | jq -r '. | fromjson | .key')
 
+# Create a local Python Flask app and route for the GitHub WebHook
 cat <<EOF > /home/streamlit/github_webhook.py
 from flask import Flask, request, jsonify
 import logging
