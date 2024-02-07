@@ -29,6 +29,7 @@ sudo yum install -y git
 
 # Install Python Required Packages under the "streamlit" user
 sudo -u streamlit -i bash -c "pip install --user --upgrade \
+    flask \
     fuzzywuzzy \
     openai \
     tabulate \
@@ -109,6 +110,49 @@ base_bearer = "'"$apify_base_bearer"'"
 [llm]
 openai_api_key = "'"$openai_key"'"
 EOF'
+
+# GitHub Personal Access Token
+github_token=$(aws secretsmanager get-secret-value --secret-id github-pat \
+--query 'SecretString' | jq -r '. | fromjson | .key')
+
+# Create the Flask script file
+sudo -u streamlit bash -c 'cat > /home/github_webhook.py <<EOF
+from flask import Flask, request, jsonify
+import subprocess
+
+app = Flask(__name__)
+
+@app.route('/github-webhook', methods=['POST'])
+def github_webhook():
+    payload = request.json
+    if payload['ref'] == "refs/heads/MAIN":
+        subprocess.run(["git", "-C", "/home/streamlit/deadpool-app", "pull"])
+    return jsonify({"message": "Webhook received"}), 200
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+EOF'
+
+# Create a systemd service unit file for the Flask server
+cat <<EOF | sudo tee /etc/systemd/system/github-webhook.service
+[Unit]
+Description=GitHub Webhook Service
+After=network.target
+
+[Service]
+User=streamlit
+WorkingDirectory=/home
+ExecStart=/usr/bin/python3 /home/github_webhook.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Enable and start the GitHub Webhook service
+sudo systemctl daemon-reload
+sudo systemctl enable github-webhook
+sudo systemctl start github-webhook
 
 # Install DataDog
 export DD_API_KEY=$(aws secretsmanager get-secret-value \
