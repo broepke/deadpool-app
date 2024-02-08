@@ -127,6 +127,10 @@ app = Flask(__name__)
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
 
+@app.route("/health_check", methods=["GET"])
+def health_check():
+    return jsonify({"status": "healthy"}), 200
+
 @app.route("/github-webhook", methods=["POST"])
 def github_webhook():
     payload = request.json
