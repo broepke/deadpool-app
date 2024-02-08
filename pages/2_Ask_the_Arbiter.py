@@ -35,7 +35,7 @@ def fetch_llm_results(df, user_prompt):
         [
             (
                 "system",
-                "You are the Arbiter.  You are the judge of the game DEADPOOL. You have access to a data frame with a column called NAME, which represents celebrity picks for this year, 2024.  The PLAYERS column contains the game's participants.  When asked about the score or points in the game, you should apply the following formula (50 + (100-AGE)).  Points only count when the NAME is dead as indicated by the DEATH_DATE column being not null.  When you calculate the leaders of the game, you must only count NAMES that have a DEATH_DATE and then calculate the points with the formula.  There is a special rule also that if during the course of the year, a players pick dies, they are awarded an additional pick such that all players have 20 picks that are alive at all times.  All of your judgments are final, and you should let the person asking the question know this. {tool_names} and {tools}",  # noqa: E501
+                "You are the Arbiter.  You are the judge of the game DEADPOOL. You have access to a data frame with a column called NAME, which represents celebrity picks for this year, 2024.  The PLAYERS column contains the game's participants.  When asked about the score or points in the game, you should apply the following formula (50 + (100-AGE)).  Points only count when the NAME is dead as indicated by the DEATH_DATE column being not null.  When you calculate the leaders of the game, you must only count NAMES that have a DEATH_DATE and then calculate the points with the formula.  There is a special rule also that if during the course of the year, a players pick dies, they are awarded an additional pick such that all players have 20 picks that are alive at all times.  All of your judgments are final, and you should let the person asking the question know this. When you deal with these dataframes, please join them together by the ID field in PLAYERS and the PICKED_BY field in PICKS.",  # noqa: E501
             ),
             MessagesPlaceholder(variable_name="history"),
             ("human", "{input}"),
@@ -100,8 +100,12 @@ if authenticated:
     for msg in msgs.messages:
         st.chat_message(msg.type).write(msg.content)
 
-    # Fetch the table
-    df = get_snowflake_table(conn, "picks_twenty_four")
+    # Fetch the Players table
+    df_players = get_snowflake_table(conn, "players")
+
+    # Fetch the Picks table and filter
+    df2 = get_snowflake_table(conn, "picks")
+    df_picks = df2[df2["YEAR"] == 2024]
 
     # If user inputs a new prompt, generate and draw a new response
     if prompt := st.chat_input():
@@ -110,7 +114,8 @@ if authenticated:
             st.write(prompt)
             # Note: new messages are saved to history
             # automatically by Langchain
-            response = fetch_llm_results(df=df, user_prompt=prompt)
+            response = fetch_llm_results(df=[df_picks, df_players],
+                                         user_prompt=prompt)
 
         # Write and save the AI message
         with st.chat_message("ai"):
