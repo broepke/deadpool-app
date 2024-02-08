@@ -1,7 +1,5 @@
 # Deadpool Application
 
---- TEST --- AGAIN
-
 # Overview 
 The Deadpool application facilities a draft-like process for an annual Celebrity Deathpool, not unlike a fantasy football draft.  The objective, of course, is to pick the most celebrities who will pass away throughout the year.  
 
