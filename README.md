@@ -36,6 +36,13 @@ The architecture comprises many common Data Analytics, Data Science, and Data En
 ![The Deadpool Architecture](dp_arch.png)
 
 ## EC2
+The application is hosted on AWS using:
+
+* Launch Template: With extensive user-data script (in this repo) for deploying and configuring the server and services.
+* AutoScaling Group: Setup to help with deploy, refresh and scaling.
+* Load Balancer: With the ASG, but additionally so it can be hosted behind a custom secure domain.
+* GitHub WebHooks: The ability for a change to the main branch in the repo to trigger new code to be deployed.
+
 
 Check the service status
 
