@@ -15,6 +15,9 @@ RUN git clone https://github.com/broepke/deadpool-app.git .
 
 RUN pip3 install -r requirements.txt
 
+# Copy the secrets.toml file from the local machine to the image
+COPY secrets.toml /app/.streamlit/secrets.toml
+
 EXPOSE 8501
 
 HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health
