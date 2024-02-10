@@ -58,7 +58,6 @@ sudo systemctl status github-webhook
 docker run -p 8501:8501 deadpoolapp
 ```
 
-
 ## References
 **AWS Setup**: 
 _Note: This is not currently being used.  The application is deployed on Streamlit.app cloud_
