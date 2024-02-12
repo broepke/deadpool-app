@@ -46,7 +46,7 @@ permissions:
 jobs:
   deploy:
     name: Deploy
-    runs-on: python:3.11
+    runs-on: ubuntu-latest
     environment: production
 
     steps:
