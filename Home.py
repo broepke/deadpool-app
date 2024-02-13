@@ -42,7 +42,7 @@ if authenticated:
     try:
         start_time = time.time()
         # output = the_arbiter(prompt, arbiter_version="base")
-        output = "Greetings, savages."
+        output = "Greetings, savages. All judgements are final."
 
         # Calculate the time taken and print it
         end_time = time.time()
