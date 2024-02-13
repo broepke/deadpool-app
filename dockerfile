@@ -16,7 +16,7 @@ RUN git clone https://github.com/broepke/deadpool-app.git .
 
 RUN pip3 install -r requirements.txt
 
-# Copy the secrets.toml file from the local machine to the image
+# Copy the dynamically generated secrets.toml as secrets.toml into the image
 COPY secrets.toml /app/.streamlit/secrets.toml
 
 EXPOSE 8501
