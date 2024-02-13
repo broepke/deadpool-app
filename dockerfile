@@ -19,6 +19,9 @@ RUN pip3 install -r requirements.txt
 # Copy the dynamically generated secrets.toml as secrets.toml into the image
 COPY secrets.toml /app/.streamlit/secrets.toml
 
+# DEBUG ONLY
+RUN cat /app/.streamlit/secrets.toml
+
 EXPOSE 8501
 
 HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health
