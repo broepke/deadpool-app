@@ -55,6 +55,9 @@ sudo systemctl status github-webhook
 ## Docker
 
 ```
+docker build --no-cache -t deadpoolapp:latest .
+
+
 docker run -p 8501:8501 deadpoolapp
 ```
 
