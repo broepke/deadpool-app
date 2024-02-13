@@ -65,6 +65,23 @@ docker run -p 8501:8501 deadpoolapp
 
 The architecture needs to be the same with your image's build environment.
 
+## ECS
+
+To add the second target group, we need to [Registering multiple target groups with a service](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/register-multiple-targetgroups.html) via the **AWS CLI**. First Export the **Service Description** to JSON so you can see where to add a new **Target Groups** and copy the structure of the other one.
+```
+aws ecs describe-services --services deadpool-fargate-service --cluster deadpool-app-fargate --query "services[0]" > deadpool-fargate-service.json
+
+```
+
+And finally **Update** the service
+
+```
+aws ecs update-service --cluster deadpool-app-fargate --service deadpool-fargate-service \
+--load-balancers targetGroupArn=arn:aws:elasticloadbalancing:us-east-1:222975130657:targetgroup/deadpool-fargate-tg/3ba657d612a4194e,containerName=deadpool,containerPort=8501 \
+targetGroupArn=arn:aws:elasticloadbalancing:us-east-1:222975130657:targetgroup/deadpool-fargate-tg-flask/84f8864279670ad9,containerName=deadpool,containerPort=5000
+
+```
+
 
 ## References
 **AWS Setup**: 
