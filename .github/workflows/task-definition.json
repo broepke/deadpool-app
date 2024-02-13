@@ -1,5 +1,5 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:us-east-1:222975130657:task-definition/deadpool-task-fargate:4",
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:222975130657:task-definition/deadpool-task-fargate:12",
     "containerDefinitions": [
         {
             "name": "deadpool",
@@ -9,19 +9,17 @@
             "memoryReservation": 1024,
             "portMappings": [
                 {
+                    "name": "streamlit",
                     "containerPort": 8501,
                     "hostPort": 8501,
                     "protocol": "tcp",
-                    "name": "streamlit",
                     "appProtocol": "http"
                 }
             ],
             "essential": true,
             "environment": [],
-            "environmentFiles": [],
             "mountPoints": [],
             "volumesFrom": [],
-            "ulimits": [],
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
@@ -47,7 +45,7 @@
     "taskRoleArn": "arn:aws:iam::222975130657:role/ecsTaskExecutionRole",
     "executionRoleArn": "arn:aws:iam::222975130657:role/ecsTaskExecutionRole",
     "networkMode": "awsvpc",
-    "revision": 4,
+    "revision": 12,
     "volumes": [],
     "status": "ACTIVE",
     "requiresAttributes": [
@@ -93,15 +91,16 @@
         "EC2",
         "FARGATE"
     ],
-    "runtimePlatform": {
-        "cpuArchitecture": "ARM64",
-        "operatingSystemFamily": "LINUX"
-    },
     "requiresCompatibilities": [
         "FARGATE"
     ],
     "cpu": "1024",
     "memory": "2048",
-    "registeredAt": "2024-02-11T17:26:50.809000-06:00",
-    "registeredBy": "arn:aws:iam::222975130657:root"
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    },
+    "registeredAt": "2024-02-13T01:46:37.241Z",
+    "registeredBy": "arn:aws:iam::222975130657:root",
+    "tags": []
 }
