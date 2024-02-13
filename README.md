@@ -35,7 +35,7 @@ The entire application sits in four GitHub repos.
 The architecture comprises many common Data Analytics, Data Science, and Data Engineering tools.  All modern practices were followed while constructing this application.
 ![The Deadpool Architecture](dp_arch.png)
 
-## EC2
+## Virtual Machine Deployment on EC2
 The application is hosted on AWS using:
 
 * Launch Template: With extensive user-data script (in this repo) for deploying and configuring the server and services.
@@ -52,7 +52,9 @@ sudo systemctl status streamlit-agent
 sudo systemctl status github-webhook
 ```
 
-## Docker
+## Container Based Deployment
+
+### Docker
 
 ```
 docker build --no-cache -t deadpoolapp:latest .
@@ -61,13 +63,9 @@ docker build --no-cache -t deadpoolapp:latest .
 docker run -p 8501:8501 deadpoolapp
 ```
 
-## GitHub Actions for CI/CD
+### ECS
 
-The architecture needs to be the same with your image's build environment.
-
-## ECS
-
-To add the second target group, we need to [Registering multiple target groups with a service](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/register-multiple-targetgroups.html) via the **AWS CLI**. First Export the **Service Description** to JSON so you can see where to add a new **Target Groups** and copy the structure of the other one.
+To add the **second Target Group**, we need to [Registering multiple target groups with a service](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/register-multiple-targetgroups.html) via the **AWS CLI**. First Export the **Service Description** to JSON so you can see where to add a new **Target Groups** and copy the structure of the other one.
 ```
 aws ecs describe-services --services deadpool-fargate-service --cluster deadpool-app-fargate --query "services[0]" > deadpool-fargate-service.json
 
@@ -81,6 +79,10 @@ aws ecs update-service --cluster deadpool-app-fargate --service deadpool-fargate
 targetGroupArn=arn:aws:elasticloadbalancing:us-east-1:222975130657:targetgroup/deadpool-fargate-tg-flask/84f8864279670ad9,containerName=deadpool,containerPort=5000
 
 ```
+
+## GitHub Actions for CI/CD
+
+The architecture needs to be the same with your image's build environment.
 
 
 ## References
