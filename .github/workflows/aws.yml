@@ -40,11 +40,6 @@ jobs:
         run: |
           printf '%s\n' '$${{ secrets.SENSITIVE_FILE_CONTENT }}' > secrets.toml
 
-      - name: Check the file (safe for logs)
-        run: |
-          echo "Lines in secrets.toml: $(wc -l < secrets.toml)"
-          echo "Checksum of secrets.toml: $(sha256sum secrets.toml)"
-
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
