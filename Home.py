@@ -5,7 +5,6 @@ import random
 import time
 import streamlit as st
 from dp_utilities import check_password
-from dp_utilities import the_arbiter
 
 st.set_page_config(page_title="Deadpool", page_icon=":skull:")
 
@@ -58,4 +57,3 @@ if authenticated:
 
     st.caption(prompt)
     st.caption(f"Time taken to load: {time_taken:.2f} seconds")
-    st.caption("Docker")
