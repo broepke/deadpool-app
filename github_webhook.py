@@ -21,7 +21,7 @@ def github_webhook():
     if payload["ref"].lower() == "refs/heads/main":
         try:
             output = check_output(
-                ["git", "-C", "/app", "pull"],
+                ["git", "-C", ".", "pull"],
                 stderr=STDOUT
             )
             logging.info(f"Git pull output: {output.decode('utf-8')}")
