@@ -21,7 +21,7 @@ def github_webhook():
     if payload["ref"].lower() == "refs/heads/main":
         try:
             output = check_output(
-                ["git", "-C", "/home/streamlit/deadpool-app", "pull"],
+                ["git", "-C", "/app", "pull"],
                 stderr=STDOUT
             )
             logging.info(f"Git pull output: {output.decode('utf-8')}")
