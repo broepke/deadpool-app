@@ -74,10 +74,12 @@ aws ecs describe-services --services deadpool-fargate-service --cluster deadpool
 And finally **Update** the service
 
 ```
-aws ecs update-service --cluster deadpool-app-fargate --service deadpool-fargate-service \
---load-balancers targetGroupArn=arn:aws:elasticloadbalancing:us-east-1:222975130657:targetgroup/deadpool-fargate-tg/3ba657d612a4194e,containerName=deadpool,containerPort=8501 \
-targetGroupArn=arn:aws:elasticloadbalancing:us-east-1:222975130657:targetgroup/deadpool-fargate-tg-flask/84f8864279670ad9,containerName=deadpool,containerPort=5000
-
+aws ecs update-service \
+    --cluster deadpool-app-fargate \
+    --service deadpool-fargate-service \
+    --load-balancers \
+    targetGroupArn=arn:aws:elasticloadbalancing:us-east-1:222975130657:targetgroup/deadpool-fargate-tg/3ba657d612a4194e,containerName=deadpool,containerPort=8501 \
+    targetGroupArn=arn:aws:elasticloadbalancing:us-east-1:222975130657:targetgroup/deadpool-fargate-tg-flask/84f8864279670ad9,containerName=deadpool,containerPort=5000
 ```
 
 ## GitHub Actions for CI/CD
