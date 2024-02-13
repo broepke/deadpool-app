@@ -21,7 +21,7 @@ The following features are part of this overall application.
 * Slack notification for maintenance issues for the primary moderators.
 * AWS-based Auto-Scale group for workflow execution on EC2 servers.
 * Searchable database of 26k plus living and dead famous people, including information about their deaths and health scraped from Wikipedia.
-* XGBoose-based binary classifier for predicting death based on known health issues. 
+* XGBoost-based binary classifier for predicting death based on known health issues. 
 
 
 ## Sofware
