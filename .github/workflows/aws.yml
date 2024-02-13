@@ -55,8 +55,8 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        role-to-assume: arn:aws:iam::222975130657:role/GitHub # Update the ARN of the IAM role
-        role-session-name: GitHub
+        role-to-assume: arn:aws:iam::222975130657:role/GitHub-Deadpool-App # Update the ARN of the IAM role
+        role-session-name: GitHub-Deadpool-App
         aws-region: ${{ env.AWS_REGION }}
 
     - name: Login to Amazon ECR
