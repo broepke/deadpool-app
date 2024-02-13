@@ -152,7 +152,7 @@ cython_debug/
 #.idea/
 
 # Streamlit
-# secrets.toml
+secrets.toml
 
 # Other
 .DS_Store
