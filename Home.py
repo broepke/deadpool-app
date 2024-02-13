@@ -57,3 +57,4 @@ if authenticated:
 
     st.caption(prompt)
     st.caption(f"Time taken to load: {time_taken:.2f} seconds")
+    st.caption("Will you just update for me, dammit!")
