@@ -62,7 +62,6 @@ def save_value(key):
     st.session_state[key] = st.session_state["_" + key]
 
 
-@st.cache_data(ttl=3600)
 def load_snowflake_table(_conn, table):
     """Loads a specific Snowflake table
 
@@ -77,7 +76,6 @@ def load_snowflake_table(_conn, table):
     return snowflake_table.table(table).to_pandas()
 
 
-@st.cache_data(ttl=3600)
 def run_snowflake_query(_conn, query):
     with _conn.cursor() as cur:
         cur.execute(query)
