@@ -62,6 +62,7 @@ docker run -p 8501:8501 deadpoolapp
 
 The architecture needs to be the same with your image's build environment.
 
+
 ## References
 **AWS Setup**: 
 _Note: This is not currently being used.  The application is deployed on Streamlit.app cloud_
