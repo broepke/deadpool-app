@@ -1,7 +1,7 @@
 # app/Dockerfile
 
 # Use the ARM-compatible base image for Python 3.11
-FROM arm64v8/python:3.11
+FROM python:3.11-slim
 
 WORKDIR /app
 
