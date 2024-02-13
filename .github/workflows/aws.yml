@@ -38,7 +38,7 @@ jobs:
       # New step to create a file with the sensitive information
       - name: Create sensitive file
         run: |
-          printf '%s\n' "$${{ secrets.SENSITIVE_FILE_CONTENT }}" > secrets.toml
+          printf '%s\n' "${{ secrets.SENSITIVE_FILE_CONTENT }}" > secrets.toml
 
       - name: Build, tag, and push image to Amazon ECR
         id: build-image

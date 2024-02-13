@@ -4,7 +4,8 @@ Streamlit main app
 import random
 import time
 import streamlit as st
-from dp_utilities import check_password, the_arbiter
+from dp_utilities import check_password
+from dp_utilities import the_arbiter
 
 st.set_page_config(page_title="Deadpool", page_icon=":skull:")
 
