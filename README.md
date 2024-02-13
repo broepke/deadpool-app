@@ -67,7 +67,11 @@ docker run -p 8501:8501 deadpoolapp
 
 To add the **second Target Group**, we need to [Registering multiple target groups with a service](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/register-multiple-targetgroups.html) via the **AWS CLI**. First Export the **Service Description** to JSON so you can see where to add a new **Target Groups** and copy the structure of the other one.
 ```
-aws ecs describe-services --services deadpool-fargate-service --cluster deadpool-app-fargate --query "services[0]" > deadpool-fargate-service.json
+aws ecs describe-services \
+    --services deadpool-fargate-service \
+    --cluster deadpool-app-fargate \
+    --query "services[0]" \
+    > deadpool-fargate-service.json
 
 ```
 
@@ -78,19 +82,26 @@ aws ecs update-service \
     --cluster deadpool-app-fargate \
     --service deadpool-fargate-service \
     --load-balancers \
-    targetGroupArn=arn:aws:elasticloadbalancing:us-east-1:222975130657:targetgroup/deadpool-fargate-tg/3ba657d612a4194e,containerName=deadpool,containerPort=8501 \
-    targetGroupArn=arn:aws:elasticloadbalancing:us-east-1:222975130657:targetgroup/deadpool-fargate-tg-flask/84f8864279670ad9,containerName=deadpool,containerPort=5000
+    targetGroupArn=arn:aws:elasticloadbalancing:us-east-1:############:targetgroup/deadpool-fargate-tg/3ba657d612a4194e,containerName=deadpool,containerPort=8501 \
+    targetGroupArn=arn:aws:elasticloadbalancing:us-east-1:############:targetgroup/deadpool-fargate-tg-flask/84f8864279670ad9,containerName=deadpool,containerPort=5000
 ```
+`
+## CI/CD
 
-## GitHub Actions for CI/CD
+### GitHub WebHooks for Automatic Repo Updates
+
+
+### GitHub Actions for CI/CD
 
 The architecture needs to be the same with your image's build environment.
 
 
 ## References
-**AWS Setup**: 
-_Note: This is not currently being used.  The application is deployed on Streamlit.app cloud_
+**AWS EC2 Setup**: 
  [How to Deploy a Streamlit App using an Amazon Free ec2 instance?](https://towardsdatascience.com/how-to-deploy-a-streamlit-app-using-an-amazon-free-ec2-instance-416a41f69dc3)
 
-**Snowflake**: 
-[Connect Streamlit to Snowflake](https://docs.streamlit.io/knowledge-base/tutorials/databases/snowflake)
+**AWS ECS**: [How to Setup AWS ECS Fargate with a Load Balancer | Step by Step](https://www.youtube.com/watch?v=o7s-eigrMAI)
+
+**Snowflake**: [Connect Streamlit to Snowflake](https://docs.streamlit.io/knowledge-base/tutorials/databases/snowflake)
+
+**Docker and Streamlit**: [Deploy Streamlit using Docker](https://docs.streamlit.io/knowledge-base/tutorials/deploy/docker)
