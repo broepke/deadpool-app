@@ -48,7 +48,7 @@ def fetch_llm_results(df, user_prompt):
         model_name="gpt-4",
         temperature=0.9,
         openai_api_key=openai_api_key,
-        streaming=True,  # noqa: E501
+        streaming=False,  # noqa: E501
     )
 
     # Create Pandas DataFrame Agent
@@ -70,7 +70,7 @@ def fetch_llm_results(df, user_prompt):
     )
 
     config = {"configurable": {"session_id": "any"}}
-    response = chain_with_history.invoke({"input": user_prompt, "tools": tools, "tool_names": tool_names}, config)
+    response = chain_with_history.invoke({"input": user_prompt, "tools": tools, "tool_names": tool_names}, config)  # noqa: E501
 
     return response
 
