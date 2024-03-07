@@ -44,3 +44,12 @@ if authenticated:
         st.image(
             "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Playing_to_the_base%2C_Toby_Keith_sings_at_Camp_Buehring_during_his_%27Live_In_Overdrive%27_USO_tour_120426-A-OQ455-001.jpg/440px-Playing_to_the_base%2C_Toby_Keith_sings_at_Camp_Buehring_during_his_%27Live_In_Overdrive%27_USO_tour_120426-A-OQ455-001.jpg"
         )  # noqa: E501
+
+    with col1:
+        st.subheader("Iris Apfel")
+        st.write(
+            "Iris Apfel; August 29, 1921 - March 1, 2024) was an American businesswoman, interior designer, and fashion designer, known for her flamboyant style, outspoken personality and oversized eyeglasses. In business with her husband, Carl, from 1950 to 1992, Apfel had a career in textiles, including a contract with the White House that spanned nine presidencies. In retirement, she drew acclaim for a 2005 show at the Costume Institute at The Metropolitan Museum of Art featuring her collection of costume jewelry and styled with clothes on mannequins as she would wear them. She became a fashion icon, was the focus of the 2014 Albert Maysles documentary Iris, then signed to IMG in 2019 as a model at age 97."
+        )  # noqa: E501
+        st.image(
+            "https://upload.wikimedia.org/wikipedia/commons/d/d6/Iris_Apfel_at_MIFF_%28cropped%29.jpg"
+        )  # noqa: E501
