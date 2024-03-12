@@ -8,9 +8,11 @@ python-Levenshtein
 twilio
 streamlit
 streamlit-authenticator
-langchain
-langchain-openai
-langchain-community
-langchain-experimental==0.0.49
+streamlit_code_editor
+vanna[snowflake]
+langchain==0.1.9
+langchain-openai==0.0.6
+langchain-community==0.0.24
+langchain-experimental
 langchainhub
 snowflake-snowpark-python
