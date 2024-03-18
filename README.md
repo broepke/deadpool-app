@@ -63,6 +63,10 @@ docker build --no-cache -t deadpoolapp:latest .
 docker run -p 8501:8501 deadpoolapp
 ```
 
+### ECR
+
+To build the container and publish to ECR, Follow the steps in the app's **Push commands for deadpool-docker-private** settings.  Simple as that.
+
 ### ECS
 
 To add the **second Target Group**, we need to [Registering multiple target groups with a service](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/register-multiple-targetgroups.html) via the **AWS CLI**. First Export the **Service Description** to JSON so you can see where to add a new **Target Groups** and copy the structure of the other one.
