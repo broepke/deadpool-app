@@ -25,7 +25,9 @@ vn.connect_to_snowflake(
     role="ENGINEER",
 )
 
-st.sidebar.button("Rerun", on_click=setup_session_state, use_container_width=True)
+st.sidebar.button("Rerun",
+                  on_click=setup_session_state,
+                  use_container_width=True)
 
 st.title("Vanna AI")
 
@@ -48,20 +50,15 @@ if my_question:
     user_message.write(f"{my_question}")
 
     if my_question is not None:
-        assistant_message_table = st.chat_message(
-            "assistant",
-            avatar="https://ask.vanna.ai/static/img/vanna_circle.png",
-        )
-        answer = vn.ask(question=my_question,
-                        visualize=False,
-                        print_results=False)
+        assistant_message_table = st.chat_message("assistant")
 
-        assistant_message_table.code(answer[0])
-        assistant_message_table.write(answer[1])
+        sql = vn.generate_sql(question=my_question)
+        answer = vn.run_sql(sql)
+
+        assistant_message_table.code(sql)
+        assistant_message_table.write(answer)
 
     else:
-        assistant_message_error = st.chat_message(
-            "assistant", avatar="https://ask.vanna.ai/static/img/vanna_circle.png"
-        )
-        assistant_message_error.error("I wasn't able to generate SQL for that.")
+        assistant_message_error = st.chat_message("assistant")
+        assistant_message_error.error("I wasn't able to generate SQL.")
         st.write(st.session_state)
