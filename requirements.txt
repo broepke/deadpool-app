@@ -10,9 +10,9 @@ streamlit
 streamlit-authenticator
 streamlit_code_editor
 vanna[snowflake]
-langchain==0.1.9
-langchain-openai==0.0.6
-langchain-community==0.0.24
+langchain
+langchain-openai
+langchain-community
 langchain-experimental
 langchainhub
 snowflake-snowpark-python
