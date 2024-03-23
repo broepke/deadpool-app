@@ -29,7 +29,7 @@ st.sidebar.button("Rerun",
                   on_click=setup_session_state,
                   use_container_width=True)
 
-st.title("Vanna AI")
+st.title("Vanna.AI")
 
 
 def set_question(question):
