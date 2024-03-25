@@ -108,7 +108,7 @@ if authenticated:
     df_picks = df2[df2["YEAR"] == 2024]
 
     # Fetch the Players table
-    df_score = get_snowflake_table(conn, "score")
+    df_scores = get_snowflake_table(conn, "scores")
 
     # If user inputs a new prompt, generate and draw a new response
     if prompt := st.chat_input():
@@ -117,7 +117,7 @@ if authenticated:
             st.write(prompt)
             # Note: new messages are saved to history
             # automatically by Langchain
-            response = fetch_llm_results(df=[df_picks, df_players, df_score],
+            response = fetch_llm_results(df=[df_picks, df_players, df_scores],
                                          user_prompt=prompt)
 
         # Write and save the AI message
