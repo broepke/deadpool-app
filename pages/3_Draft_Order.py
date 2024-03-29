@@ -1,11 +1,14 @@
 """
 List of all scoring rules
 """
-import streamlit as st
-from dp_utilities import check_password
-from dp_utilities import load_snowflake_table
-from dp_utilities import snowflake_connection_helper
 
+import streamlit as st
+
+from dp_utilities import (
+    check_password,
+    load_snowflake_table,
+    snowflake_connection_helper,
+)
 
 st.set_page_config(page_title="Draft Order", page_icon=":skull:")
 
@@ -20,8 +23,7 @@ if authenticated:
     df_sorted = df_ord.sort_values(by="YEAR_TWO").reset_index(drop=True)
 
     df_sorted.drop(
-        columns=["EMAIL", "YEAR_ONE", "OPT_IN", "SMS", "ID", "PASSWORD"],
-        inplace=True
+        columns=["EMAIL", "YEAR_ONE", "OPT_IN", "SMS", "ID", "PASSWORD"], inplace=True
     )
 
     st.subheader("2024 Draft Order")
