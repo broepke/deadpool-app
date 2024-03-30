@@ -25,9 +25,7 @@ vn.connect_to_snowflake(
     role="ENGINEER",
 )
 
-st.sidebar.button("Rerun",
-                  on_click=setup_session_state,
-                  use_container_width=True)
+st.sidebar.button("Rerun", on_click=setup_session_state, use_container_width=True)
 
 st.title("Vanna.AI")
 

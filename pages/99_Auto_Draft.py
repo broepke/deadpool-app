@@ -1,6 +1,7 @@
 """
 Main page for Drafting new picks
 """
+
 from datetime import datetime
 import streamlit as st
 from dp_utilities import check_password
@@ -51,16 +52,16 @@ if authenticated:
 
             with st.form("Draft Picks"):
                 pick = st.text_input(
-                    "Please choose your celebrity pick:", "", key="celeb_auto_pick"  # noqa: E501
+                    "Please choose your celebrity pick:",
+                    "",
+                    key="celeb_auto_pick",  # noqa: E501
                 )
 
                 pick = pick.strip()
 
                 st.form_submit_button("Submit", on_click=submitted)
         else:
-            st.write(
-                "You are not authorized to use this incredibly powerful tool."
-            )  # noqa: E501
+            st.write("You are not authorized to use this incredibly powerful tool.")  # noqa: E501
     except Exception as e:
         st.write("There are no additional players to draft for.")
         st.caption(f"Error: {str(e)}")
