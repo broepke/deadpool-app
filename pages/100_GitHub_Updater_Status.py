@@ -5,9 +5,9 @@ import streamlit as st
 import requests
 from dp_utilities import check_password
 
-st.set_page_config(page_title="App Status", page_icon=":skull:")
+st.set_page_config(page_title="GitHub Updater Status", page_icon=":skull:")
 
-st.title("App Status :skull_and_crossbones:")
+st.title("GitHub Updater Status :skull_and_crossbones:")
 
 email, user_name, authenticated = check_password()
 if authenticated:
