@@ -35,7 +35,6 @@ def check_password():
         config["cookie"]["name"],
         config["cookie"]["key"],
         config["cookie"]["expiry_days"],
-        config["preauthorized"],
     )
 
     # --- Authentication Code
