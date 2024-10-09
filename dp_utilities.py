@@ -17,8 +17,17 @@ from cryptography.hazmat.primitives import serialization
 
 # Function to load the private key from secrets
 def load_private_key_from_secrets(private_key_str):
+    """Function to take a plain text string of an RSA Private key and convert
+       into the proper format needed for a connection string.
+
+    Args:
+        private_key_str (str): The original and full RSA key with begin and end strings + line breaks
+
+    Returns:
+        RSA Key: binary encoded RSA key from string
+    """
     private_key = serialization.load_pem_private_key(
-        private_key_str.encode(),  # Convert the string to bytes
+        private_key_str.encode(),
         password=None,
         backend=default_backend(),
     )
@@ -90,22 +99,9 @@ def save_value(key):
     st.session_state[key] = st.session_state["_" + key]
 
 
-# def load_snowflake_table(_conn, table):
-#     """Loads a specific Snowflake table
-
-#     Args:
-#         conn (conn): st.connection
-#         table (str): table or view - no DB or schema needed
-
-#     Returns:
-#         DataFrame: dataframe of the entire table.
-#     """
-#     snowflake_table = _conn.session()
-#     return snowflake_table.table(table).to_pandas()
-
 
 def load_snowflake_table(_conn, table):
-    """Loads a specific Snowflake table
+    """Loads a specific Snowflake table using SQL
 
     Args:
         _conn (conn): Snowflake connection
