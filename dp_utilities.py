@@ -1,18 +1,47 @@
 """
 Reusable components
 """
+
 import requests
+import pandas as pd
+import snowflake.connector
 from fuzzywuzzy import fuzz
 from twilio.rest import Client
 import streamlit as st
 import streamlit_authenticator as stauth
 import yaml
 from yaml.loader import SafeLoader
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import serialization
+
+
+# Function to load the private key from secrets
+def load_private_key_from_secrets(private_key_str):
+    private_key = serialization.load_pem_private_key(
+        private_key_str.encode(),  # Convert the string to bytes
+        password=None,
+        backend=default_backend(),
+    )
+    return private_key
 
 
 @st.cache_resource(ttl=3600)
 def snowflake_connection_helper():
-    conn = st.connection("snowflake")
+    # Load the private key from secrets directly inside the function to avoid passing it as an argument
+    private_key = load_private_key_from_secrets(
+        st.secrets["connections"]["snowflake"]["private_key"]
+    )
+
+    # Set up the connection using the formatted private key, without caching the private key object
+    conn = snowflake.connector.connect(
+        account=st.secrets["connections"]["snowflake"]["account"],
+        user=st.secrets["connections"]["snowflake"]["user"],
+        private_key=private_key,
+        role=st.secrets["connections"]["snowflake"]["role"],
+        warehouse=st.secrets["connections"]["snowflake"]["warehouse"],
+        database=st.secrets["connections"]["snowflake"]["database"],
+        schema=st.secrets["connections"]["snowflake"]["schema"],
+    )
 
     return conn
 
@@ -61,18 +90,43 @@ def save_value(key):
     st.session_state[key] = st.session_state["_" + key]
 
 
+# def load_snowflake_table(_conn, table):
+#     """Loads a specific Snowflake table
+
+#     Args:
+#         conn (conn): st.connection
+#         table (str): table or view - no DB or schema needed
+
+#     Returns:
+#         DataFrame: dataframe of the entire table.
+#     """
+#     snowflake_table = _conn.session()
+#     return snowflake_table.table(table).to_pandas()
+
+
 def load_snowflake_table(_conn, table):
     """Loads a specific Snowflake table
 
     Args:
-        conn (conn): st.connection
+        _conn (conn): Snowflake connection
         table (str): table or view - no DB or schema needed
 
     Returns:
         DataFrame: dataframe of the entire table.
     """
-    snowflake_table = _conn.session()
-    return snowflake_table.table(table).to_pandas()
+    query = f"SELECT * FROM {table}"
+
+    # Use cursor to execute the query
+    with _conn.cursor() as cur:
+        cur.execute(query)
+        result = cur.fetchall()
+        # Get column names from cursor
+        columns = [desc[0] for desc in cur.description]
+
+    # Convert the result to a Pandas DataFrame
+    df = pd.DataFrame(result, columns=columns)
+
+    return df
 
 
 def run_snowflake_query(_conn, query):

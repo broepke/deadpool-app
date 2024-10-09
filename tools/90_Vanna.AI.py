@@ -1,5 +1,7 @@
 from vanna.remote import VannaDefault
 import streamlit as st
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import serialization
 
 
 def setup_session_state():
@@ -13,14 +15,29 @@ vn = VannaDefault(model=vanna_model_name, api_key=api_key)
 
 SNOW_ACCOUNT = st.secrets["connections"]["snowflake"]["account"]
 SNOW_USER = st.secrets["connections"]["snowflake"]["user"]
-SNOW_PASS = st.secrets["connections"]["snowflake"]["password"]
+SNOW_KEY = st.secrets["connections"]["snowflake"]["private_key"]
 SNOW_WAREHOUSE = "DEADPOOL"
 SNOW_DATABASE = "DEADPOOL"
+
+
+
+
+# Function to load the private key from secrets
+def load_private_key_from_secrets(private_key_str):
+    private_key = serialization.load_pem_private_key(
+        private_key_str.encode(),  # Convert the string to bytes
+        password=None,
+        backend=default_backend(),
+    )
+    return private_key
+
+
+private_key = load_private_key_from_secrets(SNOW_KEY)
 
 vn.connect_to_snowflake(
     account=SNOW_ACCOUNT,
     username=SNOW_USER,
-    password=SNOW_PASS,
+    private_key=private_key,
     database=SNOW_DATABASE,
     role="ENGINEER",
 )

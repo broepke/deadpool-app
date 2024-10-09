@@ -22,7 +22,7 @@ RUN pip3 install -r requirements.txt
 COPY github_webhook.py /app/github_webhook.py
 
 # Copy the dynamically generated secrets.toml as secrets.toml into the image
-COPY secrets.toml /app/.streamlit/secrets.toml
+COPY .streamlit/secrets.toml /app/.streamlit/secrets.toml
 
 # Setup Supervisord configuration
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
