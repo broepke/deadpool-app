@@ -9,6 +9,7 @@ twilio
 streamlit
 streamlit-authenticator
 streamlit_code_editor
+SPARQLWrapper
 vanna[snowflake]
 langchain
 langchain-openai
