@@ -54,7 +54,10 @@ if authenticated:
     # Initialize connection and get all the dead people.
     conn = snowflake_connection_helper()
     df = load_snowflake_table(conn, "picks")
+
+    # Filter for the dead people and sort by DEATH_DATE (latest first)
     df_dead = df.loc[df["DEATH_DATE"].notnull() & (df['YEAR'] == 2024)]
+    df_dead = df_dead.sort_values(by="DEATH_DATE", ascending=False)
     
     # Load the dead people from 2024 in the dataframe
     col1, col2 = st.columns(2)
