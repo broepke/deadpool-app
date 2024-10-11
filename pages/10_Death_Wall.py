@@ -5,7 +5,6 @@ from dp_utilities import (
     load_snowflake_table,
     snowflake_connection_helper,
 )
-import pandas as pd
 from functools import lru_cache
 
 st.set_page_config(page_title="Death Wall", page_icon=":skull:")
