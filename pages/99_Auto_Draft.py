@@ -95,8 +95,11 @@ if "submitted" in st.session_state:
             next_user = df_draft_next["EMAIL"].iloc[0]
             next_user_name = df_draft_next["NAME"].iloc[0]
             next_user_id = df_draft_next["ID"].iloc[0]
-
-            WRITE_QUERY = "INSERT INTO picks (name, picked_by, wiki_page, year, timestamp) VALUES (:1, :2, :3, :4, :5)"  # noqa: E501
+            
+            WRITE_QUERY = """
+            INSERT INTO picks (name, picked_by, wiki_page, year, timestamp)
+            VALUES (%s, %s, %s, %s, %s)
+            """
 
             # Execute the query with parameters
             conn.cursor().execute(
