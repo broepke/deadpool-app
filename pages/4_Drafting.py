@@ -103,7 +103,7 @@ if "submitted" in st.session_state:
                 # Set up a coupld of variables for the query
                 wiki_page = pick.replace(" ", "_")
                 DRAFT_YEAR = 2024
-                timestamp = datetime.utcnow()
+                timestamp = datetime.now(datetime.timezone.utc)
 
                 WRITE_QUERY = """
                 INSERT INTO picks (name, picked_by, wiki_page, year, timestamp)

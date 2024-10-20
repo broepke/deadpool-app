@@ -89,7 +89,7 @@ if "submitted" in st.session_state:
             # Set up a coupld of variables for the query
             wiki_page = pick.replace(" ", "_")
             DRAFT_YEAR = 2024
-            timestamp = datetime.utcnow()
+            timestamp = datetime.now(datetime.timezone.utc)
 
             df_draft_next = load_snowflake_table(conn, "draft_next")
             next_user = df_draft_next["EMAIL"].iloc[0]

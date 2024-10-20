@@ -1,6 +1,7 @@
 """
 Main page for Drafting new picks
 """
+
 from datetime import datetime
 import streamlit as st
 from dp_utilities import has_fuzzy_match, load_snowflake_table
@@ -95,9 +96,9 @@ if "submitted" in st.session_state:
             # Set up a coupld of variables for the query
             wiki_page = pick.replace(" ", "_")
             DRAFT_YEAR = 2024
-            timestamp = datetime.utcnow()
+            timestamp = datetime.now(datetime.timezone.utc)
 
-            WRITE_QUERY = "INSERT INTO picks (name, picked_by, wiki_page, year, timestamp) VALUES (:1, :2, :3, :4, :5)"  # noqa: E501
+            WRITE_QUERY = """INSERT INTO picks (name, picked_by, wiki_page, year, timestamp) VALUES (%s, %s, %s, %s, %s)"""
 
             # Execute the query with parameters
             # conn.cursor().execute(
