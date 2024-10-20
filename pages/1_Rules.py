@@ -8,7 +8,7 @@ st.set_page_config(page_title="Rules", page_icon=":skull:")
 
 st.title("Rules :skull_and_crossbones:")
 
-email, user_name, authenticated = check_password()
+email, user_name, authenticator, config, authenticated = check_password()
 if authenticated:
     st.markdown(
         """

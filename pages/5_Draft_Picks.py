@@ -11,7 +11,7 @@ st.set_page_config(page_title="All Draft Picks", page_icon=":skull:")
 
 st.title("Draft Picks :skull_and_crossbones:")
 
-email, user_name, authenticated = check_password()
+email, user_name, authenticator, config, authenticated = check_password()
 if authenticated:
     # Initialize connection.
     conn = snowflake_connection_helper()

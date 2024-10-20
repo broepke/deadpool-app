@@ -6,6 +6,7 @@ tabulate
 numexpr
 python-Levenshtein
 twilio
+sendgrid
 streamlit
 streamlit-authenticator
 streamlit_code_editor

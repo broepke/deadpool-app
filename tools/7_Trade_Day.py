@@ -14,7 +14,7 @@ st.set_page_config(page_title="Trade Day", page_icon=":skull:")
 
 st.title("Trade Day :skull_and_crossbones:")
 
-email, user_name, authenticated = check_password()
+email, user_name, authenticator, config, authenticated = check_password()
 if authenticated:
     # Function to check if today is the first day of any calendar quarter
     def is_first_day_of_quarter(date):

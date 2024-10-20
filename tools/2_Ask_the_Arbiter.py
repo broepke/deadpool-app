@@ -92,7 +92,7 @@ if len(msgs.messages) == 0:
     msgs.add_ai_message("What questions do you have about the Deadpool?")
 
 
-email, user_name, authenticated = check_password()
+email, user_name, authenticator, config, authenticated = check_password()
 if authenticated:
     view_messages = st.expander("View the message contents in session state")
 

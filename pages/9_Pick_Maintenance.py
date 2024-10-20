@@ -11,7 +11,7 @@ st.set_page_config(page_title="Draft Pick Maintenance", page_icon=":skull:")
 
 st.title("Draft Pick Maintenance :skull_and_crossbones:")
 
-email, user_name, authenticated = check_password()
+email, user_name, authenticator, config, authenticated = check_password()
 if authenticated:
     st.markdown(
         """

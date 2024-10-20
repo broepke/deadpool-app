@@ -9,7 +9,7 @@ from dp_utilities import check_password
 
 st.set_page_config(page_title="Deadpool", page_icon=":skull:")
 
-email, user_name, authenticated = check_password()
+email, user_name, authenticator, config, authenticated = check_password()
 if authenticated:
     # --- Main Application Code
     st.title("Deadpool 2024 :skull_and_crossbones:")

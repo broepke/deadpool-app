@@ -9,6 +9,7 @@ from fuzzywuzzy import fuzz
 from twilio.rest import Client
 import streamlit as st
 import streamlit_authenticator as stauth
+from streamlit_authenticator.utilities import LoginError
 import yaml
 from yaml.loader import SafeLoader
 from cryptography.hazmat.backends import default_backend
@@ -68,36 +69,40 @@ def check_password():
     with open("config.yaml") as file:
         config = yaml.load(file, Loader=SafeLoader)
 
+    stauth.Hasher.hash_passwords(config["credentials"])
+
     authenticator = stauth.Authenticate(
-        config["credentials"],
-        config["cookie"]["name"],
-        config["cookie"]["key"],
-        config["cookie"]["expiry_days"],
+        credentials=config["credentials"],
+        cookie_name=config["cookie"]["name"],
+        cookie_key=config["cookie"]["key"],
+        cookie_expiry_days=config["cookie"]["expiry_days"],
+        auto_hash=True,
     )
 
     # --- Authentication Code
-    authenticator.login()
+    try:
+        authenticator.login()
+    except LoginError as e:
+        st.error(e)
 
-    if st.session_state["authentication_status"] is False:
-        st.error("Username/password is incorrect")
-        return "", "", False
-    elif st.session_state["authentication_status"] is None:
-        st.warning("Please enter your username and password")
-        return "", "", False
-    elif st.session_state["authentication_status"]:
-        authenticator.logout("Logout", "sidebar", key="unique_key")
+    if st.session_state["authentication_status"]:
+        authenticator.logout("Logout", "sidebar", key="deadpool-authenticator-logout")
         user_name = st.session_state["name"]
         email = st.session_state["username"]
         st.sidebar.write(f"Welcome, {user_name}")
         st.sidebar.write(f"Email: {email}")
-
-        return email, user_name, True
+        return email, user_name, authenticator, config, True
+    elif st.session_state["authentication_status"] is False:
+        st.error("Username/password is incorrect")
+        return "", "", "", "", False
+    elif st.session_state["authentication_status"] is None:
+        st.warning("Please enter your username and password")
+        return "", "", "", "", False
 
 
 def save_value(key):
     """Simple methods for setting temp and permanent session state keys"""
     st.session_state[key] = st.session_state["_" + key]
-
 
 
 def load_snowflake_table(_conn, table):

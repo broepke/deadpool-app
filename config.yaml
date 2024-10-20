@@ -1,82 +1,104 @@
+cookie:
+  expiry_days: 0
+  key: deadpool-app
+  name: deadpool_authenticated
 credentials:
   usernames:
-    broepke@gmail.com:
-      email: broepke@gmail.com
-      name: Brian Roepke
-      password: $2b$12$eqnt856tWE.IyIUb5n3kNObd5TV8l69qo5CSJ4iODYyA7W5VCmusK
-    christopherpvienneau@gmail.com:
-      email: christopherpvienneau@gmail.com
-      name: Chris Vienneau
-      password: $2b$12$nfeQ19.NpzJOrUzkzYxPzuQyVytgCOlrwG1AqbKL9Ui2INjeClvvy
-    cgroepke2@gmail.com:
-      email: cgroepke2@gmail.com
-      name: Chrissy Roepke
-      password: $2b$12$5bKXDZgD43kIm/JphFqaPuWC/Vu7e00z5E6Kf3wLVbUN3xyFqSQuS
-    willcokeley@gmail.com:
-      email: willcokeley@gmail.com
-      name: Will Cokeley
-      password: $2b$12$pNZcZoqxzcLtdnFW4Pusfezypn3hRt4aIHJLdWPE9QFf/acJG06Lu
-    bschanen@gmail.com:
-      email: bschanen@gmail.com
-      name: Brian Schanen
-      password: $2b$12$p7NEUI5.i/nhlk1rPIbhDuvoFoMBzGLAO8KJYjAbP4NggIvPSGela
     alexander.g.obrien@gmail.com:
       email: alexander.g.obrien@gmail.com
-      name: Alexander O'Brien
-      password: $2b$12$SnH62brlbkS.JrUsKi1HS.rCVyPdrDkqB3i5dbxqHdOmbOQePD3qe
-    thepromodepot@gmail.com:
-      email: thepromodepot@gmail.com
-      name: John Wholihan
-      password: $2b$12$6k0maJ7aPlhlZJ794A1t7.5g9ppI.R6vUqU1l0yXejDb.bO8jmuPK
-    frazierandrewd@gmail.com:
-      email: frazierandrewd@gmail.com
-      name: Andrew Frazier
-      password: $2b$12$FpYLSy9./D8fjDvAsDLlaeDoDivLHmdfD7UAb97jTIpmCM7K9ogSK
-    derek.cornwall@wtwco.com:
-      email: derek.cornwall@wtwco.com
-      name: Derek Cornwall
-      password: $2b$12$Cg.3Am9iLNDLF8gy7F9ireQKFOCsn7JfKao2iR39fqBUOgNfH.1g6
-    smohs1@hotmail.com:
-      email: smohs1@hotmail.com
-      name: Steve Mohs
-      password: $2b$12$z0xhRLRQIz9kaitcaLQMc.Wj7XwNzVSuMRLXEwtVyKiVwqiN2p.Ju
-    lwelch15@gmail.com:
-      email: lwelch15@gmail.com
-      name: Loren Welch
-      password: $2b$12$1Qefa7AdPB7aXdqE/T2upetFA5t.CcmgIKA.g3Z53HSJfSoWOW00K
-    rjkennedy1260@gmail.com:
-      email: rjkennedy1260@gmail.com
-      name: Robert Kennedy
-      password: $2b$12$BiMr90GZEUcY/cLeIIF4vu2AI/rUfthOjSakWpQIgN9wtfQ7a8bgW
+      failed_login_attempts: 0
+      first_name: Alexander
+      last_name: O'Brien
+      logged_in: false
+      password: $2b$12$01XhsneBMWwZ/G1ykOUy7OOb5Kbe/hy8wAkvbjVzrC/tZp9E0vJj6
+    broepke@gmail.com:
+      email: broepke@gmail.com
+      failed_login_attempts: 0
+      first_name: Brian
+      last_name: Roepke
+      logged_in: false
+      password: $2b$12$CI2MOIAFgb/XBD9laECG8Omaf75WV3CVRVCwHc/CBqzkyTLdK.STy
+    bschanen@gmail.com:
+      email: bschanen@gmail.com
+      failed_login_attempts: 0
+      first_name: Brian
+      last_name: Schanen
+      logged_in: false
+      password: $2b$12$YdyBoi3DNNsKSCUSREaBNe39SVeK/e6Aa6XCVW4hJ8GH6LWEk7NVK
+    cgroepke2@gmail.com:
+      email: cgroepke2@gmail.com
+      failed_login_attempts: 0
+      first_name: Chrissy
+      last_name: Roepke
+      logged_in: false
+      password: $2b$12$8UqzhcGvIaPUnjB/cRgw9OVqBpaqPWOASZkXw/bztW7CgfJjH8RwK
+    christopherpvienneau@gmail.com:
+      email: christopherpvienneau@gmail.com
+      failed_login_attempts: 0
+      first_name: Chris
+      last_name: Vienneau
+      logged_in: false
+      password: $2b$12$Vmz6ocqB5dm/A3Km4fuKjOKRiTS/T4ko3qd7FnymWKTZxtC0eMFea
     clm1970@gmail.com:
       email: clm1970@gmail.com
-      name: Luke Marble
-      password: $2b$12$/R9UprYiyZy/Z7bZscXXbOvRQAvMQgfcomjWggQDtrO75IHeJJK8.
+      failed_login_attempts: 0
+      first_name: Luke
+      last_name: Marble
+      logged_in: false
+      password: $2b$12$gEDIb.j3fv5skQKpIFegJOZii54QrJKWCFlQhoIyOk3E.2brkdiQ.
+    derek.cornwall@wtwco.com:
+      email: derek.cornwall@wtwco.com
+      failed_login_attempts: 0
+      first_name: Derek
+      last_name: Cornwall
+      logged_in: false
+      password: $2b$12$X.Q2QO8qjNenjN.Fss2iZO1pzm0ea8I94P/PtI9TPzQ7VsL2/kHGa
+    frazierandrewd@gmail.com:
+      email: frazierandrewd@gmail.com
+      failed_login_attempts: 0
+      first_name: Andrew
+      last_name: Frazier
+      logged_in: false
+      password: $2b$12$HVjIloNQsmIj.uTRmBXkqefGQjb8/NQsJ/aawOgKngaDwOACKl5s.
     jahnwarren@gmail.com:
       email: jahnwarren@gmail.com
-      name: Warren Jahn
-      password: $2b$12$6WY79P5TGP9TP5YupbLeyuqmfGmWlK./EjSAtJ7V7hlJ8R6r7Hkjq
-    msb829@gmail.com:
-      email: msb829@gmail.com
-      name: Munj Nayak
-      password: $2b$12$WYSL/UtQXngL8cQI8/BbNOGt9/TyFK04S6QIW0blTNN7VI25ig.8W
-cookie:
-  expiry_days: 30
-  key: "abcd" # Must be string
-  name: "deadpool_authenticated"
-preauthorized:
-  emails:
-  - broepke@gmail.com
-  - christopherpvienneau@gmail.com
-  - cgroepke2@gmail.com
-  - willcokeley@gmail.com
-  - bschanen@gmail.com
-  - alexander.g.obrien@gmail.com
-  - thepromodepot@gmail.com
-  - frazierandrewd@gmail.com
-  - derek.cornwall@wtwco.com
-  - smohs1@hotmail.com
-  - lwelch15@gmail.com
-  - robert_kennedy@gmail.com
-  - clm1970@gmail.com
-  - jahnwarren@gmail.com
+      failed_login_attempts: 0
+      first_name: Warren
+      last_name: Jahn
+      logged_in: false
+      password: $2b$12$BaQwLzEiMCb6yZhaLMDd6epXaeV8nBN6JXxD4RAj0uULaCd6gaiRq
+    lwelch15@gmail.com:
+      email: lwelch15@gmail.com
+      failed_login_attempts: 0
+      first_name: Loren
+      last_name: Welch
+      logged_in: false
+      password: $2b$12$6V3rfa3lcpBwhvY5uyCj3ukoiOYQULNp10kn0xQhdNrl0WaIu1dCa
+    rjkennedy1260@gmail.com:
+      email: rjkennedy1260@gmail.com
+      failed_login_attempts: 0
+      first_name: Robert
+      last_name: Kennedy
+      logged_in: false
+      password: $2b$12$o8b/ljga/s7YRppGpslv8e1CgXMZeVMie5iGI5dhMDlw54qWfSsBG
+    smohs1@hotmail.com:
+      email: smohs1@hotmail.com
+      failed_login_attempts: 0
+      first_name: Steve
+      last_name: Mohs
+      logged_in: false
+      password: $2b$12$4TfNtdCk4V3nNMe5ScaYJeu1x3xAjS/k2HleVAue5KkOXCfV53EDO
+    thepromodepot@gmail.com:
+      email: thepromodepot@gmail.com
+      failed_login_attempts: 0
+      first_name: John
+      last_name: Wholihan
+      logged_in: false
+      password: $2b$12$0gQldRnQDm7QFOC0X3FMmeUgJuFyOVWnWDlEVn/Ok4iasjbtVY9NO
+    willcokeley@gmail.com:
+      email: willcokeley@gmail.com
+      failed_login_attempts: 0
+      first_name: Will
+      last_name: Cokeley
+      logged_in: false
+      password: $2b$12$Fr5LkfQ/FYkjVkTnfcvxoeRHZEGE9YyAYqCLDk2DO7nIy7qWdZZO.
