@@ -57,12 +57,14 @@ def snowflake_connection_helper():
 
 
 def check_password():
-    """Implementes:
+    """Implements:
     https://github.com/mkhorasani/Streamlit-Authenticator
 
     Returns:
         str: email address of user
         str: User's full name
+        obj: Object of stauth.Authenticate
+        obj: Object of config.yaml
         bool: If they've successfully authenticated
     """
     # Get all credentials
@@ -94,10 +96,10 @@ def check_password():
         return email, user_name, authenticator, config, True
     elif st.session_state["authentication_status"] is False:
         st.error("Username/password is incorrect")
-        return "", "", "", "", False
+        return "", "", authenticator, config, False
     elif st.session_state["authentication_status"] is None:
         st.warning("Please enter your username and password")
-        return "", "", "", "", False
+        return "", "", authenticator, config, False
 
 
 def save_value(key):
