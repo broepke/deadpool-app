@@ -1,11 +1,11 @@
 """
 User maintenance tools
 """
+
 import streamlit as st
 from dp_utilities import check_password, get_user_name, load_snowflake_table
 
-st.set_page_config(page_title="User Maintenance",
-                   page_icon=":skull_and_crossbones:")
+st.set_page_config(page_title="User Maintenance", page_icon=":skull_and_crossbones:")
 
 if not check_password():
     st.stop()
@@ -122,9 +122,7 @@ with st.form("Registration"):
     )
     SUB_OPT_IN = st.checkbox("Opt-In", SEL_OPT_IN, key="_reg_opt_in")
     SUB_YEAR_TWO = st.text_input(
-        label="Draft Order:",
-        value=SEL_YEAR_TWO,
-        key="_reg_year_two"
+        label="Draft Order:", value=SEL_YEAR_TWO, key="_reg_year_two"
     )
 
     submitted = st.form_submit_button("Submit")
@@ -134,12 +132,7 @@ with st.form("Registration"):
         else:
             SUB_OPT_IN = False
 
-        WRITE_QUERY = (
-            "UPDATE players "
-            "SET first_name = :1, last_name = :2, "
-            "email = :3, opt_in = :4, sms = :5 , "
-            "year_two = :6 WHERE id = :7"
-        )
+        WRITE_QUERY = """UPDATE players SET first_name = %s, last_name = %s, email = %s, opt_in = %s, sms = %s , year_two = %s WHERE id = %s"""
 
         # Execute the query with parameters
         conn.cursor().execute(

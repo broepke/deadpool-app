@@ -99,7 +99,7 @@ if authenticated:
                         (pick, email, wiki_page, DRAFT_YEAR, timestamp),  # noqa: E501
                     )
 
-                    DELETE_QUERY = "DELETE FROM picks WHERE name = :1 AND picked_by = :2 AND YEAR = :3"  # noqa: E501
+                    DELETE_QUERY = """DELETE FROM picks WHERE name = %s AND picked_by = %s AND YEAR = %s"""
 
                     # Execute the query with parameters
                     conn.cursor().execute(

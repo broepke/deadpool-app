@@ -1,6 +1,7 @@
 """
 Tools to modify pick information mostly the wiki page
 """
+
 import streamlit as st
 from dp_utilities import check_password
 from dp_utilities import load_snowflake_table
@@ -39,9 +40,7 @@ if authenticated:
 
     # Load all the picks into a drop down for easy selection
     with st.form("Pick to Update"):
-        sel_pick = st.selectbox(
-            "Select a pick", df_picks_list, key="sel_selected_pick"
-        )  # noqa: E501
+        sel_pick = st.selectbox("Select a pick", df_picks_list, key="sel_selected_pick")  # noqa: E501
 
         submitted = st.form_submit_button("Choose pick")
 
@@ -81,13 +80,11 @@ if authenticated:
         sub_wiki_page = st.text_input(
             "Wiki Page:", SEL_WIKI_PAGE, 256, key="_reg_wiki_page"
         )
-        sub_wiki_id = st.text_input(
-            "Wiki ID:", SEL_WIKI_ID, key="_reg_wiki_id"
-        )  # noqa: E501
+        sub_wiki_id = st.text_input("Wiki ID:", SEL_WIKI_ID, key="_reg_wiki_id")  # noqa: E501
 
         submitted = st.form_submit_button("Submit")
         if submitted:
-            WRITE_QUERY = "UPDATE picks SET name = :1, wiki_page = :2, wiki_id = :3 WHERE name = :4 AND year = 2024"  # noqa: E501
+            WRITE_QUERY = """UPDATE picks SET name = %s, wiki_page = %s, wiki_id = %s WHERE name = %s AND year = 2024"""
 
             # Execute the query with parameters
             conn.cursor().execute(
