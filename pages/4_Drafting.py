@@ -149,14 +149,14 @@ if "submitted" in st.session_state:
                     st.caption("SMS messages sent")
 
                 except IndexError:
-                    st.write("No additional names")
+                    st.caption("No additional names")
 
                 st.caption("Draft pick complete")
 
                 reset()
 
         except Exception as e:
-            st.write(f"Please try your pick again.  Error: {e}")
+            st.caption(f"Please try your pick again.  Error: {e}")
             reset()
 
     st.divider()
