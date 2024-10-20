@@ -91,11 +91,12 @@ if authenticated:
                 WRITE_QUERY, (sub_name, sub_wiki_page, sub_wiki_id, SEL_NAME)
             )
 
-            st.caption("Query:", WRITE_QUERY)
-            st.caption("New Name:", sub_name)
-            st.caption("New Wiki Page:", sub_wiki_page)
-            st.caption("New Wiki ID:", sub_wiki_id)
-            st.caption("Orgininal Name:", SEL_NAME)
+            # Display the query and parameters in Streamlit
+            st.caption(f"Query: {WRITE_QUERY}")
+            st.caption(f"New Name: {sub_name}")
+            st.caption(f"New Wiki Page: {sub_wiki_page}")
+            st.caption(f"New Wiki ID: {sub_wiki_id}")
+            st.caption(f"Original Name: {SEL_NAME}")
 
             # Clear out the form fields
             SEL_NAME = ""

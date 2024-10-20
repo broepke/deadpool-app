@@ -95,7 +95,7 @@ if "submitted" in st.session_state:
             next_user = df_draft_next["EMAIL"].iloc[0]
             next_user_name = df_draft_next["NAME"].iloc[0]
             next_user_id = df_draft_next["ID"].iloc[0]
-            
+
             WRITE_QUERY = """
             INSERT INTO picks (name, picked_by, wiki_page, year, timestamp)
             VALUES (%s, %s, %s, %s, %s)
@@ -109,15 +109,7 @@ if "submitted" in st.session_state:
 
             st.caption("Datebase query executed")
             st.caption(
-                pick
-                + ", "
-                + next_user_id
-                + ", "
-                + wiki_page
-                + ", "
-                + str(DRAFT_YEAR)
-                + ", "
-                + str(timestamp)
+                f"{pick}, {next_user_id}, {wiki_page}, {DRAFT_YEAR}, {timestamp}"
             )
 
             sms_message = next_user_name + " has picked " + pick
