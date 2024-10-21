@@ -7,8 +7,8 @@ st.title("Reset Password :skull_and_crossbones:")
 
 if st.session_state.get("authentication_status") is not None:
     authenticator = st.session_state.get("authenticator")
-    authenticator.logout(location="sidebar", key="deadpool-app-logout-user-profile")
-    authenticator.login(location="unrendered", key="deadpool-app-login-user-profile")
+    authenticator.logout(location="sidebar", key="deadpool-app-logout-change-password")
+    authenticator.login(location="unrendered", key="deadpool-app-login-change-password")
     name = st.session_state.name
     email = st.session_state.email
     user_name = st.session_state.username
