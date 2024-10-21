@@ -1,15 +1,27 @@
 import streamlit as st
+import streamlit_authenticator as stauth
 import yaml
+from yaml.loader import SafeLoader
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-from dp_utilities import check_password
 
 
 st.set_page_config(page_title="Forgot Password", page_icon=":skull:")
 st.title("Forgot Password :skull_and_crossbones:")
 
-email, user_name, authenticator, config, authenticated = check_password()
-subject = "Your New Password"
+# Get all credentials
+with open("config.yaml") as file:
+    config = yaml.load(file, Loader=SafeLoader)
+
+
+authenticator = stauth.Authenticate(
+    credentials=config["credentials"],
+    cookie_name=config["cookie"]["name"],
+    cookie_key=config["cookie"]["key"],
+    cookie_expiry_days=config["cookie"]["expiry_days"],
+    auto_hash=True,
+)
+
 
 def send_email(receiver_email, subject, body):
     sender_email = st.secrets["sendgrid"]["sendgrid_sender_email"]
@@ -44,16 +56,17 @@ try:
         authenticator.forgot_password()
     )
     if username_of_forgotten_password:
-        st.success("New password to be sent securely")
+        subject = "Your New Password"
         body = f"Hello,\n\nYour new password is: {new_random_password}\n\nBest regards,\nYour App Team"
         if send_email(email_of_forgotten_password, subject, body):
             st.success("Email sent successfully!")
+
+            # Update the Yaml file as well
+            # with open("config.yaml", "w") as file:
+            #     yaml.dump(config, file, default_flow_style=False)
         else:
             st.error("Failed to send the email.")
     elif username_of_forgotten_password is False:
         st.error("Username not found")
 except Exception as e:
     st.error(e)
-
-# with open("config.yaml", "w") as file:
-#     yaml.dump(config, file, default_flow_style=False)

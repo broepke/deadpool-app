@@ -3,7 +3,6 @@ Tools to modify pick information mostly the wiki page
 """
 
 import streamlit as st
-from dp_utilities import check_password
 from dp_utilities import load_snowflake_table
 from dp_utilities import snowflake_connection_helper
 
@@ -11,8 +10,16 @@ st.set_page_config(page_title="Draft Pick Maintenance", page_icon=":skull:")
 
 st.title("Draft Pick Maintenance :skull_and_crossbones:")
 
-email, user_name, authenticator, config, authenticated = check_password()
-if authenticated:
+if st.session_state.get("authentication_status") is not None:
+    authenticator = st.session_state.get("authenticator")
+    authenticator.logout(location="sidebar", key="deadpool-app-logout-pick-maintenance")
+    authenticator.login(location="unrendered", key="deadpool-app-login-pick-maintenance")
+    name = st.session_state.name
+    email = st.session_state.email
+    user_name = st.session_state.username
+    st.sidebar.write(f"Welcome, {name}")
+    st.sidebar.write(f"Email: {email}")
+    
     st.markdown(
         """
     Use this form to fix the Wikipedia links if they were not guessed properly by the code when loaded.  In some cases there are disambiguation data such as '(actor)' for common names or there can be other URL encoding for special characters in names.
@@ -106,3 +113,8 @@ if authenticated:
             st.session_state["reg_name"] = ""
             st.session_state["reg_wiki_page"] = ""
             st.session_state["reg_wiki_id"] = ""
+
+else:
+    st.warning("Please use the button below to navigate to Home and log in.")
+    st.page_link("Home.py", label="Home", icon="🏠")
+    st.stop()

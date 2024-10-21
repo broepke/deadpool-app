@@ -4,18 +4,22 @@ List of all scoring rules
 
 import streamlit as st
 
-from dp_utilities import (
-    check_password,
-    load_snowflake_table,
-    snowflake_connection_helper,
-)
+from dp_utilities import load_snowflake_table, snowflake_connection_helper
 
 st.set_page_config(page_title="Draft Order", page_icon=":skull:")
 
 st.title("Draft Order :skull_and_crossbones:")
 
-email, user_name, authenticator, config, authenticated = check_password()
-if authenticated:
+if st.session_state.get("authentication_status") is not None:
+    authenticator = st.session_state.get("authenticator")
+    authenticator.logout(location="sidebar", key="deadpool-app-logout-draft-order")
+    authenticator.login(location="unrendered", key="deadpool-app-login-draft-order")
+    name = st.session_state.name
+    email = st.session_state.email
+    user_name = st.session_state.username
+    st.sidebar.write(f"Welcome, {name}")
+    st.sidebar.write(f"Email: {email}")
+
     conn = snowflake_connection_helper()
 
     df_ord = load_snowflake_table(conn, "players")
@@ -40,3 +44,8 @@ if authenticated:
     )
 
     st.dataframe(df_sorted, use_container_width=True)
+
+else:
+    st.warning("Please use the button below to navigate to Home and log in.")
+    st.page_link("Home.py", label="Home", icon="🏠")
+    st.stop()

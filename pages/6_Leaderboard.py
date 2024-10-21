@@ -2,7 +2,6 @@
 Display leaderboards and other stats for the games
 """
 import streamlit as st
-from dp_utilities import check_password
 from dp_utilities import load_snowflake_table
 from dp_utilities import snowflake_connection_helper
 
@@ -10,8 +9,16 @@ st.set_page_config(page_title="Leaderboard", page_icon=":skull:")
 
 st.title("Leaderboards :skull_and_crossbones:")
 
-email, user_name, authenticator, config, authenticated = check_password()
-if authenticated:
+if st.session_state.get("authentication_status") is not None:
+    authenticator = st.session_state.get("authenticator")
+    authenticator.logout(location="sidebar", key="deadpool-app-logout-leaderboard")
+    authenticator.login(location="unrendered", key="deadpool-app-login-leaderboard")
+    name = st.session_state.name
+    email = st.session_state.email
+    user_name = st.session_state.username
+    st.sidebar.write(f"Welcome, {name}")
+    st.sidebar.write(f"Email: {email}")
+    
     # Initialize connection.
     conn = snowflake_connection_helper()
 
@@ -38,3 +45,8 @@ if authenticated:
     )
 
     st.bar_chart(data=df_score_2023, x="PLAYER", y="TOTAL", color="#F63366")
+
+else:
+    st.warning("Please use the button below to navigate to Home and log in.")
+    st.page_link("Home.py", label="Home", icon="🏠")
+    st.stop()
