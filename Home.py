@@ -16,8 +16,6 @@ st.set_page_config(page_title="Deadpool", page_icon=":skull:")
 with open("config.yaml") as file:
     config = yaml.load(file, Loader=SafeLoader)
 
-# This is used on the very first time to hash the passwords
-# stauth.Hasher.hash_passwords(config["credentials"])
 
 authenticator = stauth.Authenticate(
     credentials=config["credentials"],
@@ -29,6 +27,7 @@ authenticator = stauth.Authenticate(
 
 # Store the authenticator and config in the session state
 # This will be used across the other pages to persist login.
+# The config is written to the config.yaml file when changes are made
 st.session_state["authenticator"] = authenticator
 st.session_state["config"] = config
 
@@ -38,6 +37,8 @@ try:
 except LoginError as e:
     st.error(e)
 
+# --- Main Application Code
+st.title("Deadpool 2024 :skull_and_crossbones:")
 
 if st.session_state["authentication_status"]:
     authenticator.logout(location="sidebar", key="deadpool-app-logout-home")
@@ -46,9 +47,6 @@ if st.session_state["authentication_status"]:
     user_name = st.session_state.username
     st.sidebar.write(f"Welcome, {name}")
     st.sidebar.write(f"Email: {email}")
-
-    # --- Main Application Code
-    st.title("Deadpool 2024 :skull_and_crossbones:")
 
     try:
         start_time = time.time()
