@@ -1,5 +1,5 @@
 cookie:
-  expiry_days: 0
+  expiry_days: 90
   key: deadpool-app
   name: deadpool_authenticated
 credentials:
