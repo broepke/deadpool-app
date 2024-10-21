@@ -8,9 +8,6 @@ import snowflake.connector
 from fuzzywuzzy import fuzz
 from twilio.rest import Client
 import streamlit as st
-import streamlit_authenticator as stauth
-import yaml
-from yaml.loader import SafeLoader
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 
@@ -55,49 +52,9 @@ def snowflake_connection_helper():
     return conn
 
 
-def check_password():
-    """Implementes:
-    https://github.com/mkhorasani/Streamlit-Authenticator
-
-    Returns:
-        str: email address of user
-        str: User's full name
-        bool: If they've successfully authenticated
-    """
-    # Get all credentials
-    with open("config.yaml") as file:
-        config = yaml.load(file, Loader=SafeLoader)
-
-    authenticator = stauth.Authenticate(
-        config["credentials"],
-        config["cookie"]["name"],
-        config["cookie"]["key"],
-        config["cookie"]["expiry_days"],
-    )
-
-    # --- Authentication Code
-    authenticator.login()
-
-    if st.session_state["authentication_status"] is False:
-        st.error("Username/password is incorrect")
-        return "", "", False
-    elif st.session_state["authentication_status"] is None:
-        st.warning("Please enter your username and password")
-        return "", "", False
-    elif st.session_state["authentication_status"]:
-        authenticator.logout("Logout", "sidebar", key="unique_key")
-        user_name = st.session_state["name"]
-        email = st.session_state["username"]
-        st.sidebar.write(f"Welcome, {user_name}")
-        st.sidebar.write(f"Email: {email}")
-
-        return email, user_name, True
-
-
 def save_value(key):
     """Simple methods for setting temp and permanent session state keys"""
     st.session_state[key] = st.session_state["_" + key]
-
 
 
 def load_snowflake_table(_conn, table):

@@ -1,9 +1,9 @@
 """
 Display some dead people stats
 """
+
 import streamlit as st
 import altair as alt
-from dp_utilities import check_password
 from dp_utilities import load_snowflake_table
 from dp_utilities import run_snowflake_query
 from dp_utilities import snowflake_connection_helper
@@ -12,8 +12,15 @@ st.set_page_config(page_title="NNDB Stats", page_icon=":skull:")
 
 st.title("NNDB :skull_and_crossbones:")
 
-email, user_name, authenticated = check_password()
-if authenticated:
+if st.session_state.get("authentication_status") is not None:
+    authenticator = st.session_state.get("authenticator")
+    authenticator.logout(location="sidebar", key="deadpool-app-logout-nndb")
+    authenticator.login(location="unrendered", key="deadpool-app-login-nndb")
+    name = st.session_state.name
+    email = st.session_state.email
+    user_name = st.session_state.username
+    st.sidebar.write(f"Welcome, {name}")
+    st.sidebar.write(f"Email: {email}")
 
     # Initialize connection.
     conn = snowflake_connection_helper()
@@ -110,3 +117,8 @@ if authenticated:
         .reset_index(drop=True)
     )
     st.dataframe(df_nndb_preds, use_container_width=True)
+
+else:
+    st.warning("Please use the button below to navigate to Home and log in.")
+    st.page_link("Home.py", label="Home", icon="🏠")
+    st.stop()

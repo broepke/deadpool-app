@@ -78,7 +78,7 @@ chain_with_history = RunnableWithMessageHistory(
 )
 
 
-email, user_name, authenticated = check_password()
+email, user_name, authenticator, config, authenticated = check_password()
 if authenticated:
 
     # Set up memory

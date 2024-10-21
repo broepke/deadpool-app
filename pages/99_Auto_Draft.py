@@ -4,7 +4,6 @@ Main page for Drafting new picks
 
 from datetime import datetime
 import streamlit as st
-from dp_utilities import check_password
 from dp_utilities import has_fuzzy_match
 from dp_utilities import send_sms
 from dp_utilities import load_snowflake_table
@@ -24,8 +23,16 @@ def reset():
 
 st.title("Auto Drafting :skull_and_crossbones:")
 
-email, user_name, authenticated = check_password()
-if authenticated:
+if st.session_state.get("authentication_status") is not None:
+    authenticator = st.session_state.get("authenticator")
+    authenticator.logout(location="sidebar", key="deadpool-app-logout-auto-draft")
+    authenticator.login(location="unrendered", key="deadpool-app-login-auto-draft")
+    name = st.session_state.name
+    email = st.session_state.email
+    user_name = st.session_state.username
+    st.sidebar.write(f"Welcome, {name}")
+    st.sidebar.write(f"Email: {email}")
+    
     conn = snowflake_connection_helper()
 
     df_players = load_snowflake_table(conn, "draft_next")
@@ -65,6 +72,11 @@ if authenticated:
     except Exception as e:
         st.write("There are no additional players to draft for.")
         st.caption(f"Error: {str(e)}")
+
+else:
+    st.warning("Please use the button below to navigate to Home and log in.")
+    st.page_link("Home.py", label="Home", icon="🏠")
+    st.stop()
 
 # See: https://discuss.streamlit.io/t/submit-form-button-not-working/35059/2
 if "submitted" in st.session_state:
@@ -135,3 +147,4 @@ if "submitted" in st.session_state:
         st.caption("Draft pick complete")
 
         reset()
+

@@ -9,7 +9,7 @@ st.set_page_config(page_title="GitHub Updater Status", page_icon=":skull:")
 
 st.title("GitHub Updater Status :skull_and_crossbones:")
 
-email, user_name, authenticated = check_password()
+email, user_name, authenticator, config, authenticated = check_password()
 if authenticated:
 
     def check_url(url):

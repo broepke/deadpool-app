@@ -1,7 +1,6 @@
 import streamlit as st
 from SPARQLWrapper import SPARQLWrapper, JSON
 from dp_utilities import (
-    check_password,
     load_snowflake_table,
     snowflake_connection_helper,
 )
@@ -10,8 +9,6 @@ from functools import lru_cache
 st.set_page_config(page_title="Death Wall", page_icon=":skull:")
 st.title("Death Wall :skull_and_crossbones:")
 
-email, user_name, authenticated = check_password()
-
 
 @lru_cache(maxsize=100)
 def query_wikidata_by_id(wiki_id):
@@ -19,11 +16,11 @@ def query_wikidata_by_id(wiki_id):
     query = f"""
     SELECT ?personLabel ?birthDate ?deathDate ?image ?description
     WHERE {{
-      wd:{wiki_id} wdt:P569 ?birthDate.
-      wd:{wiki_id} wdt:P570 ?deathDate.
-      OPTIONAL {{ wd:{wiki_id} wdt:P18 ?image. }}
-      OPTIONAL {{ wd:{wiki_id} schema:description ?description. FILTER(LANG(?description) = "en") }}
-      SERVICE wikibase:label {{ bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }}
+    wd:{wiki_id} wdt:P569 ?birthDate.
+    wd:{wiki_id} wdt:P570 ?deathDate.
+    OPTIONAL {{ wd:{wiki_id} wdt:P18 ?image. }}
+    OPTIONAL {{ wd:{wiki_id} schema:description ?description. FILTER(LANG(?description) = "en") }}
+    SERVICE wikibase:label {{ bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }}
     }}
     LIMIT 1
     """
@@ -32,17 +29,19 @@ def query_wikidata_by_id(wiki_id):
     results = sparql.query().convert()
     return results["results"]["bindings"]
 
-
 def format_date(date_str):
     """Format the date string from full datetime to YYYY-MM-DD."""
     return date_str.split("T")[0] if "T" in date_str else date_str
 
-
 def display_person_info(row, data):
     if data:
         person = data[0]
-        birth_date = format_date(person.get("birthDate", {}).get("value", "Unknown"))
-        death_date = format_date(person.get("deathDate", {}).get("value", "Unknown"))
+        birth_date = format_date(
+            person.get("birthDate", {}).get("value", "Unknown")
+        )
+        death_date = format_date(
+            person.get("deathDate", {}).get("value", "Unknown")
+        )
         image_url = person.get("image", {}).get("value")
         description = person.get("description", {}).get("value", "")
 
@@ -54,7 +53,6 @@ def display_person_info(row, data):
     else:
         st.write(f"Could not find data for {row['NAME']}.")
 
-
 def load_data():
     conn = snowflake_connection_helper()
     df = load_snowflake_table(conn, "picks")
@@ -63,8 +61,16 @@ def load_data():
     )
     return df_dead
 
-
-if authenticated:
+if st.session_state.get("authentication_status") is not None:
+    authenticator = st.session_state.get("authenticator")
+    authenticator.logout(location="sidebar", key="deadpool-app-logout-death-wall")
+    authenticator.login(location="unrendered", key="deadpool-app-login-death-wall")
+    name = st.session_state.name
+    email = st.session_state.email
+    user_name = st.session_state.username
+    st.sidebar.write(f"Welcome, {name}")
+    st.sidebar.write(f"Email: {email}")
+    
     df_dead = load_data()
 
     # Add a search box
@@ -96,3 +102,8 @@ if authenticated:
     st.write(
         f"Showing {start_idx + 1}-{min(end_idx, len(df_dead))} of {len(df_dead)} results"
     )
+
+else:
+    st.warning("Please use the button below to navigate to Home and log in.")
+    st.page_link("Home.py", label="Home", icon="🏠")
+    st.stop()

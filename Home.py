@@ -2,43 +2,53 @@
 Streamlit main app
 """
 
-import random
 import time
 import streamlit as st
-from dp_utilities import check_password
+import streamlit_authenticator as stauth
+from streamlit_authenticator.utilities import LoginError
+import yaml
+from yaml.loader import SafeLoader
 
 st.set_page_config(page_title="Deadpool", page_icon=":skull:")
 
-email, user_name, authenticated = check_password()
-if authenticated:
+
+# Get all credentials
+with open("config.yaml") as file:
+    config = yaml.load(file, Loader=SafeLoader)
+
+# This is used on the very first time to hash the passwords
+# stauth.Hasher.hash_passwords(config["credentials"])
+
+authenticator = stauth.Authenticate(
+    credentials=config["credentials"],
+    cookie_name=config["cookie"]["name"],
+    cookie_key=config["cookie"]["key"],
+    cookie_expiry_days=config["cookie"]["expiry_days"],
+    auto_hash=True,
+)
+
+# Store the authenticator and config in the session state
+# This will be used across the other pages to persist login.
+st.session_state["authenticator"] = authenticator
+st.session_state["config"] = config
+
+# --- Authentication Code
+try:
+    authenticator.login(key="deadpool-app-login-home")
+except LoginError as e:
+    st.error(e)
+
+
+if st.session_state["authentication_status"]:
+    authenticator.logout(location="sidebar", key="deadpool-app-logout-home")
+    name = st.session_state.name
+    email = st.session_state.email
+    user_name = st.session_state.username
+    st.sidebar.write(f"Welcome, {name}")
+    st.sidebar.write(f"Email: {email}")
+
     # --- Main Application Code
     st.title("Deadpool 2024 :skull_and_crossbones:")
-
-    # Generate a little more randomness into the prompt
-    tone = ["sarcastic", "dry humor", "playful"]
-    insult = ["pick strategy", "their current"]
-    humor = ["puns", "wordplay", "dad joke", "haiku", "rap battle"]
-    style = [
-        "an Eminem rap song?",
-        "Shakeare had written it?",
-        "an Jerry Seinfeld stand up bit?",
-        "Hemmingway had written it?",
-        "an F. Scott Fitzgerlald novel?",
-        "Huter S. Thompson had written it?",
-        "Captain Jack Sparrow from Pirates of the Carribean?",
-    ]
-
-    selected_tone = random.choice(tone)
-    selected_insult = random.choice(insult)
-    selected_humor = random.choice(humor)
-    selected_style = random.choice(style)
-
-    prompt = (
-        "I want you to create a creative insult for the user "
-        + user_name
-        + " but can you make it like the style of "
-        + selected_humor
-    )
 
     try:
         start_time = time.time()
@@ -56,5 +66,18 @@ if authenticated:
 
     st.image("arbiter.jpg", "The Arbiter")
 
-    st.caption(prompt)
-    st.caption(f"Time taken to load: {time_taken:.2f} seconds")
+
+elif st.session_state["authentication_status"] is False:
+    st.error("Username/password is incorrect")
+elif st.session_state["authentication_status"] is None:
+    st.warning("Please enter your username and password")
+
+
+# Quick check of the session state.
+try:
+    user_name
+    if user_name == "broepke@gmail.com":
+        with st.expander("Session State for Debugging", icon="💾"):
+            st.session_state
+except NameError:
+    pass
