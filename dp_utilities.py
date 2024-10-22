@@ -89,6 +89,21 @@ def run_snowflake_query(_conn, query):
         return result
 
 
+def is_admin():
+    try:
+        user_roles = st.session_state["config"]["credentials"]["usernames"][
+            st.session_state.username
+        ].get("roles")
+
+        if "admin" in user_roles:
+            return True
+        else:
+            return False
+
+    except KeyError:
+        return False
+
+
 def the_arbiter(prompt, arbiter_version="main"):
     """Chatbot API call to LangChang LLM
 

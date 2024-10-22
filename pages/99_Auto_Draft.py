@@ -8,6 +8,7 @@ from dp_utilities import has_fuzzy_match
 from dp_utilities import send_sms
 from dp_utilities import load_snowflake_table
 from dp_utilities import snowflake_connection_helper
+from dp_utilities import is_admin
 
 
 st.set_page_config(page_title="Drafting", page_icon=":skull:")
@@ -53,7 +54,7 @@ if st.session_state.get("authentication_status") is not None:
 
         st.caption("Pick for the next player in the queue")
 
-        if email == "broepke@gmail.com":
+        if is_admin():
             st.write("Drafting for:", df_player)
             st.subheader("Draft Picks:")
 

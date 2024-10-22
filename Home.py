@@ -8,6 +8,7 @@ import streamlit_authenticator as stauth
 from streamlit_authenticator.utilities import LoginError
 import yaml
 from yaml.loader import SafeLoader
+from dp_utilities import is_admin
 
 st.set_page_config(page_title="Deadpool", page_icon=":skull:")
 st.title("Deadpool 2024 :skull_and_crossbones:")
@@ -69,26 +70,21 @@ elif st.session_state["authentication_status"] is None:
 
 
 # Check for Admin Access
-try:
-    user_roles = st.session_state["config"]["credentials"]["usernames"][st.session_state.username].get("roles")
+if is_admin():
+    st.subheader("Admin Tools")
 
-    if "admin" in user_roles:
-        st.subheader("Admin Tools")
-        # Download button for updated config.yaml
-        def download_config():
-            config_data = yaml.dump(st.session_state["config"])
-            st.download_button(
-                label="Download Updated Config",
-                data=config_data,
-                file_name="config.yaml",
-                mime="text/yaml",
-            )
+    # Download button for updated config.yaml
+    def download_config():
+        config_data = yaml.dump(st.session_state["config"])
+        st.download_button(
+            label="Download Updated Config",
+            data=config_data,
+            file_name="config.yaml",
+            mime="text/yaml",
+        )
 
-        download_config()
+    download_config()
 
-        # Session State for Debugging
-        with st.expander("Session State for Debugging", icon="💾"):
-            st.session_state
-
-except KeyError:
-    pass
+    # Session State for Debugging
+    with st.expander("Session State for Debugging", icon="💾"):
+        st.session_state
