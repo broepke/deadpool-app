@@ -91,16 +91,16 @@ def run_snowflake_query(_conn, query):
 
 def is_admin():
     try:
-        user_roles = st.session_state["config"]["credentials"]["usernames"][
-            st.session_state.username
-        ].get("roles")
+        # Safely retrieve the roles or default to an empty list
+        user_roles = st.session_state.get("roles", []) or []
 
+        # Check if 'admin' is in the roles
         if "admin" in user_roles:
             return True
-        else:
-            return False
+        return False
 
-    except KeyError:
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
         return False
 
 

@@ -13,6 +13,7 @@ from dp_utilities import is_admin
 st.set_page_config(page_title="Deadpool", page_icon=":skull:")
 st.title("Deadpool 2024 :skull_and_crossbones:")
 
+
 # Get all credentials
 with open("config.yaml") as file:
     config = yaml.load(file, Loader=SafeLoader)
