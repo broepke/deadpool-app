@@ -8,9 +8,6 @@ st.set_page_config(page_title="Rules", page_icon=":skull:")
 
 st.title("Rules :skull_and_crossbones:")
 
-with st.expander("Session State for Debugging", icon="💾"):
-    st.session_state
-
 
 if st.session_state.get("authentication_status") is not None:
     authenticator = st.session_state.get("authenticator")
