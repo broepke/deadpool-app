@@ -11,6 +11,8 @@ credentials:
       last_name: O'Brien
       logged_in: false
       password: $2b$12$01XhsneBMWwZ/G1ykOUy7OOb5Kbe/hy8wAkvbjVzrC/tZp9E0vJj6
+      roles:
+      - user
     broepke@gmail.com:
       email: broepke@gmail.com
       failed_login_attempts: 0
@@ -18,6 +20,9 @@ credentials:
       last_name: Roepke
       logged_in: false
       password: $2b$12$CI2MOIAFgb/XBD9laECG8Omaf75WV3CVRVCwHc/CBqzkyTLdK.STy
+      roles:
+      - admin
+      - user
     bschanen@gmail.com:
       email: bschanen@gmail.com
       failed_login_attempts: 0
@@ -25,6 +30,8 @@ credentials:
       last_name: Schanen
       logged_in: false
       password: $2b$12$YdyBoi3DNNsKSCUSREaBNe39SVeK/e6Aa6XCVW4hJ8GH6LWEk7NVK
+      roles:
+      - user
     cgroepke2@gmail.com:
       email: cgroepke2@gmail.com
       failed_login_attempts: 0
@@ -32,6 +39,8 @@ credentials:
       last_name: Roepke
       logged_in: false
       password: $2b$12$8UqzhcGvIaPUnjB/cRgw9OVqBpaqPWOASZkXw/bztW7CgfJjH8RwK
+      roles:
+      - user
     christopherpvienneau@gmail.com:
       email: christopherpvienneau@gmail.com
       failed_login_attempts: 0
@@ -39,6 +48,9 @@ credentials:
       last_name: Vienneau
       logged_in: false
       password: $2b$12$Vmz6ocqB5dm/A3Km4fuKjOKRiTS/T4ko3qd7FnymWKTZxtC0eMFea
+      roles:
+      - admin
+      - user
     clm1970@gmail.com:
       email: clm1970@gmail.com
       failed_login_attempts: 0
@@ -46,6 +58,8 @@ credentials:
       last_name: Marble
       logged_in: false
       password: $2b$12$gEDIb.j3fv5skQKpIFegJOZii54QrJKWCFlQhoIyOk3E.2brkdiQ.
+      roles:
+      - user
     derek.cornwall@wtwco.com:
       email: derek.cornwall@wtwco.com
       failed_login_attempts: 0
@@ -53,6 +67,8 @@ credentials:
       last_name: Cornwall
       logged_in: false
       password: $2b$12$X.Q2QO8qjNenjN.Fss2iZO1pzm0ea8I94P/PtI9TPzQ7VsL2/kHGa
+      roles:
+      - user
     frazierandrewd@gmail.com:
       email: frazierandrewd@gmail.com
       failed_login_attempts: 0
@@ -60,6 +76,8 @@ credentials:
       last_name: Frazier
       logged_in: false
       password: $2b$12$HVjIloNQsmIj.uTRmBXkqefGQjb8/NQsJ/aawOgKngaDwOACKl5s.
+      roles:
+      - user
     jahnwarren@gmail.com:
       email: jahnwarren@gmail.com
       failed_login_attempts: 0
@@ -67,6 +85,8 @@ credentials:
       last_name: Jahn
       logged_in: false
       password: $2b$12$BaQwLzEiMCb6yZhaLMDd6epXaeV8nBN6JXxD4RAj0uULaCd6gaiRq
+      roles:
+      - user
     lwelch15@gmail.com:
       email: lwelch15@gmail.com
       failed_login_attempts: 0
@@ -74,6 +94,8 @@ credentials:
       last_name: Welch
       logged_in: false
       password: $2b$12$6V3rfa3lcpBwhvY5uyCj3ukoiOYQULNp10kn0xQhdNrl0WaIu1dCa
+      roles:
+      - user
     rjkennedy1260@gmail.com:
       email: rjkennedy1260@gmail.com
       failed_login_attempts: 0
@@ -81,6 +103,8 @@ credentials:
       last_name: Kennedy
       logged_in: false
       password: $2b$12$o8b/ljga/s7YRppGpslv8e1CgXMZeVMie5iGI5dhMDlw54qWfSsBG
+      roles:
+      - user
     smohs1@hotmail.com:
       email: smohs1@hotmail.com
       failed_login_attempts: 0
@@ -88,6 +112,8 @@ credentials:
       last_name: Mohs
       logged_in: false
       password: $2b$12$4TfNtdCk4V3nNMe5ScaYJeu1x3xAjS/k2HleVAue5KkOXCfV53EDO
+      roles:
+      - user
     thepromodepot@gmail.com:
       email: thepromodepot@gmail.com
       failed_login_attempts: 0
@@ -95,6 +121,8 @@ credentials:
       last_name: Wholihan
       logged_in: false
       password: $2b$12$0gQldRnQDm7QFOC0X3FMmeUgJuFyOVWnWDlEVn/Ok4iasjbtVY9NO
+      roles:
+      - user
     willcokeley@gmail.com:
       email: willcokeley@gmail.com
       failed_login_attempts: 0
@@ -102,3 +130,5 @@ credentials:
       last_name: Cokeley
       logged_in: false
       password: $2b$12$Fr5LkfQ/FYkjVkTnfcvxoeRHZEGE9YyAYqCLDk2DO7nIy7qWdZZO.
+      roles:
+      - user

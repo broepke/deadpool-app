@@ -10,7 +10,7 @@ import yaml
 from yaml.loader import SafeLoader
 
 st.set_page_config(page_title="Deadpool", page_icon=":skull:")
-
+st.title("Deadpool 2024 :skull_and_crossbones:")
 
 # Get all credentials
 with open("config.yaml") as file:
@@ -36,9 +36,6 @@ try:
     authenticator.login(location="main", key="deadpool-app-login-home")
 except LoginError as e:
     st.error(e)
-
-# --- Main Application Code
-st.title("Deadpool 2024 :skull_and_crossbones:")
 
 if st.session_state["authentication_status"]:
     authenticator.logout(location="sidebar", key="deadpool-app-logout-home")
@@ -71,11 +68,27 @@ elif st.session_state["authentication_status"] is None:
     st.warning("Please enter your username and password")
 
 
-# Quick check of the session state.
+# Check for Admin Access
 try:
-    user_name
-    if user_name == "broepke@gmail.com":
+    user_roles = st.session_state["config"]["credentials"]["usernames"][st.session_state.username].get("roles")
+
+    if "admin" in user_roles:
+        st.subheader("Admin Tools")
+        # Download button for updated config.yaml
+        def download_config():
+            config_data = yaml.dump(st.session_state["config"])
+            st.download_button(
+                label="Download Updated Config",
+                data=config_data,
+                file_name="config.yaml",
+                mime="text/yaml",
+            )
+
+        download_config()
+
+        # Session State for Debugging
         with st.expander("Session State for Debugging", icon="💾"):
             st.session_state
-except NameError:
+
+except KeyError:
     pass

@@ -31,7 +31,26 @@ else:
     st.page_link("Home.py", label="Home", icon="🏠")
     st.stop()
 
-# Quick check of the session state.
-if user_name == "broepke@gmail.com":
-    with st.expander("Session State for Debugging", icon="💾"):
-        st.session_state
+# Check for Admin Access
+try:
+    user_roles = st.session_state["config"]["credentials"]["usernames"][st.session_state.username].get("roles")
+
+    if "admin" in user_roles:
+        # Download button for updated config.yaml
+        def download_config():
+            config_data = yaml.dump(st.session_state["config"])
+            st.download_button(
+                label="Download Updated Config",
+                data=config_data,
+                file_name="config.yaml",
+                mime="text/yaml",
+            )
+
+        download_config()
+
+        # Session State for Debugging
+        with st.expander("Session State for Debugging", icon="💾"):
+            st.session_state
+
+except KeyError:
+    pass
