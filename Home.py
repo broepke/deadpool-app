@@ -33,7 +33,7 @@ st.session_state["config"] = config
 
 # --- Authentication Code
 try:
-    authenticator.login(key="deadpool-app-login-home")
+    authenticator.login(location="main", key="deadpool-app-login-home")
 except LoginError as e:
     st.error(e)
 

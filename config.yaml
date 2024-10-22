@@ -1,7 +1,7 @@
 cookie:
   expiry_days: 90
   key: deadpool-app
-  name: deadpool_authenticated
+  name: deadpool-app-authenticated
 credentials:
   usernames:
     alexander.g.obrien@gmail.com:
