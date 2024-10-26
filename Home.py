@@ -82,6 +82,7 @@ if is_admin():
             data=config_data,
             file_name="config.yaml",
             mime="text/yaml",
+            icon="📥",
         )
 
     download_config()
