@@ -22,13 +22,9 @@ if st.session_state.get("authentication_status") is not None:
 
     conn = snowflake_connection_helper()
 
-    df_ord = load_snowflake_table(conn, "players")
+    df_ord = load_snowflake_table(conn, "draft_selection")
 
-    df_sorted = df_ord.sort_values(by="YEAR_TWO").reset_index(drop=True)
-
-    df_sorted.drop(
-        columns=["EMAIL", "OPT_IN", "SMS", "ID"], inplace=True
-    )
+    df_sorted = df_ord.sort_values(by="SCORE", ascending=False).reset_index(drop=True)
 
     st.subheader("2024 Draft Order")
 
