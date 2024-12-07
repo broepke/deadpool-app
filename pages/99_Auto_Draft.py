@@ -3,6 +3,7 @@ Main page for Drafting new picks
 """
 
 from datetime import datetime
+import uuid
 import streamlit as st
 from dp_utilities import has_fuzzy_match
 from dp_utilities import send_sms
@@ -33,7 +34,7 @@ if st.session_state.get("authentication_status") is not None:
     user_name = st.session_state.username
     st.sidebar.write(f"Welcome, {name}")
     st.sidebar.write(f"Email: {email}")
-    
+
     conn = snowflake_connection_helper()
 
     df_players = load_snowflake_table(conn, "draft_next")
@@ -41,11 +42,9 @@ if st.session_state.get("authentication_status") is not None:
     try:
         df_player = df_players["EMAIL"].iloc[0]
 
-        df_picks = load_snowflake_table(conn, "picks")
-        # Filter for just this year
-        df_2024 = df_picks[df_picks["YEAR"] == 2024]
+        df_picks = load_snowflake_table(conn, "picks_current_year")
         # Convert into a list for fuzzy matching
-        current_drafts = df_2024["NAME"].tolist()
+        current_drafts = df_picks["NAME"].tolist()
 
         # Get a list of the people that opted into alerts
         df_opted = load_snowflake_table(conn, "draft_opted_in")
@@ -100,8 +99,9 @@ if "submitted" in st.session_state:
 
         else:
             # Set up a coupld of variables for the query
+            new_id = uuid.uuid4()
             wiki_page = pick.replace(" ", "_")
-            DRAFT_YEAR = 2024
+            DRAFT_YEAR = datetime.now().year
             timestamp = datetime.now(datetime.timezone.utc)
 
             df_draft_next = load_snowflake_table(conn, "draft_next")
@@ -109,19 +109,32 @@ if "submitted" in st.session_state:
             next_user_name = df_draft_next["NAME"].iloc[0]
             next_user_id = df_draft_next["ID"].iloc[0]
 
-            WRITE_QUERY = """
-            INSERT INTO picks (name, picked_by, wiki_page, year, timestamp)
-            VALUES (%s, %s, %s, %s, %s)
+            WRITE_PEOPLE_QUERY = """
+            INSERT INTO people (id, name, wiki_page)
+            VALUES (%s, %s, %s)
+            """
+
+            WRITE_PLAYER_PICKS_QUERY = """
+            INSERT INTO player_picks (player_id, year, people_id, timestamp)
+            VALUES (%s, %s, %s, %s)
             """
 
             # Execute the query with parameters
             conn.cursor().execute(
-                WRITE_QUERY,
-                (pick, next_user_id, wiki_page, DRAFT_YEAR, timestamp),
+                WRITE_PEOPLE_QUERY,
+                (new_id, pick, wiki_page),
             )
 
-            st.caption("Datebase query executed")
-            st.caption(f"{pick}, {next_user_id}, {wiki_page}, {DRAFT_YEAR}, {timestamp}")
+            # Execute the query with parameters
+            conn.cursor().execute(
+                WRITE_PLAYER_PICKS_QUERY,
+                (next_user_id, DRAFT_YEAR, new_id, timestamp),
+            )
+
+            st.caption("Database query executed")
+            st.caption(
+                f"{new_id}, {pick}, {next_user_id}, {wiki_page}, {DRAFT_YEAR}, {timestamp}"
+            )
 
             sms_message = next_user_name + " has picked " + pick
             send_sms(sms_message, opted_in_numbers)
@@ -148,4 +161,3 @@ if "submitted" in st.session_state:
         st.caption("Draft pick complete")
 
         reset()
-

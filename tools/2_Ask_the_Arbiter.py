@@ -108,7 +108,7 @@ if authenticated:
     df_picks = df2[df2["YEAR"] == 2024]
 
     # Fetch the Players table
-    df_scores = get_snowflake_table(conn, "scores")
+    df_scores = get_snowflake_table(conn, "scores_current_year")
 
     # If user inputs a new prompt, generate and draw a new response
     if prompt := st.chat_input():
