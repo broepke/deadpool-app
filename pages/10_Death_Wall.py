@@ -29,19 +29,17 @@ def query_wikidata_by_id(wiki_id):
     results = sparql.query().convert()
     return results["results"]["bindings"]
 
+
 def format_date(date_str):
     """Format the date string from full datetime to YYYY-MM-DD."""
     return date_str.split("T")[0] if "T" in date_str else date_str
 
+
 def display_person_info(row, data):
     if data:
         person = data[0]
-        birth_date = format_date(
-            person.get("birthDate", {}).get("value", "Unknown")
-        )
-        death_date = format_date(
-            person.get("deathDate", {}).get("value", "Unknown")
-        )
+        birth_date = format_date(person.get("birthDate", {}).get("value", "Unknown"))
+        death_date = format_date(person.get("deathDate", {}).get("value", "Unknown"))
         image_url = person.get("image", {}).get("value")
         description = person.get("description", {}).get("value", "")
 
@@ -53,13 +51,15 @@ def display_person_info(row, data):
     else:
         st.write(f"Could not find data for {row['NAME']}.")
 
+
 def load_data():
     conn = snowflake_connection_helper()
-    df = load_snowflake_table(conn, "picks")
-    df_dead = df.loc[df["DEATH_DATE"].notnull() & (df["YEAR"] == 2024)].sort_values(
+    df = load_snowflake_table(conn, "picks_current_year")
+    df_dead = df.loc[df["DEATH_DATE"].notnull()].sort_values(
         by="DEATH_DATE", ascending=False
     )
     return df_dead
+
 
 if st.session_state.get("authentication_status") is not None:
     authenticator = st.session_state.get("authenticator")
@@ -70,7 +70,7 @@ if st.session_state.get("authentication_status") is not None:
     user_name = st.session_state.username
     st.sidebar.write(f"Welcome, {name}")
     st.sidebar.write(f"Email: {email}")
-    
+
     df_dead = load_data()
 
     # Add a search box

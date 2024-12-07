@@ -27,7 +27,7 @@ if st.session_state.get("authentication_status") is not None:
     df_sorted = df_ord.sort_values(by="YEAR_TWO").reset_index(drop=True)
 
     df_sorted.drop(
-        columns=["EMAIL", "YEAR_ONE", "OPT_IN", "SMS", "ID"], inplace=True
+        columns=["EMAIL", "OPT_IN", "SMS", "ID"], inplace=True
     )
 
     st.subheader("2024 Draft Order")

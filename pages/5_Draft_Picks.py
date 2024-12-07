@@ -1,6 +1,7 @@
 """
 Simple display of all picks
 """
+
 import streamlit as st
 from dp_utilities import load_snowflake_table
 from dp_utilities import snowflake_connection_helper
@@ -20,21 +21,25 @@ if st.session_state.get("authentication_status") is not None:
     st.sidebar.write(f"Welcome, {name}")
     st.sidebar.write(f"Email: {email}")
 
-
     # Initialize connection.
     conn = snowflake_connection_helper()
 
     df_2024 = load_snowflake_table(conn, "picks_twenty_four")
     df_2023 = load_snowflake_table(conn, "picks_twenty_three")
 
-    st.header("2024 Draft Picks:")
+    st.header("Current Draft Picks:")
     st.dataframe(df_2024)
 
-    st.subheader("2024 Draft Picks by Person")
+    st.subheader("Current Draft Picks by Person")
 
     df_picks = load_snowflake_table(conn, "draft")
     df_picks.drop(columns="ID", inplace=True)
     st.dataframe(df_picks, use_container_width=True)
+
+    st.divider()
+
+    st.header("2024 Draft Picks:")
+    st.dataframe(df_2024)
 
     st.header("2023 Draft Picks:")
     st.dataframe(df_2023, use_container_width=True)
