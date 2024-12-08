@@ -9,6 +9,7 @@ from dp_utilities import has_fuzzy_match
 from dp_utilities import send_sms
 from dp_utilities import load_snowflake_table
 from dp_utilities import snowflake_connection_helper
+from dp_utilities import is_admin
 
 
 st.set_page_config(page_title="Drafting", page_icon=":skull:")
