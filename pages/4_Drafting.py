@@ -65,13 +65,11 @@ if st.session_state.get("authentication_status") is not None:
     conn = snowflake_connection_helper()
 
     df_picks = load_snowflake_table(conn, "picks_current_year")
-    # Convert into a list for fuzzy matching
-    current_drafts = df_picks["NAME"].tolist()
+    df_all_people = load_snowflake_table(conn, "people")
 
     # Get a list of the people that opted into alerts
     df_opted = load_snowflake_table(conn, "draft_opted_in")
     # Filter for just this year
-    # Convert into a list for fuzzy matching
     opted_in_numbers = df_opted["SMS"].tolist()
 
     st.write("Current User:", email)
@@ -94,7 +92,7 @@ else:
     st.page_link("Home.py", label="Home", icon="🏠")
     st.stop()
 
-# See: https://discuss.streamlit.io/t/submit-form-button-not-working/35059/2
+
 if "submitted" in st.session_state:
     if st.session_state.submitted:
         try:
@@ -103,45 +101,57 @@ if "submitted" in st.session_state:
             if not pick:
                 st.write("Please enter a valid selection.")
 
-            MATCH = has_fuzzy_match(pick, current_drafts)
+            # Quick check to see if the pick has already been taken but only for this year
+            existing_person, _ = has_fuzzy_match(pick, df_picks, "NAME")
 
-            if MATCH:
+            if existing_person:
                 st.write(
                     """That pick has already been taken, please try again. Please review the "Draft Picks" page for more information."""  # noqa: E501
                 )
 
             else:
                 # Set up a coupld of variables for the query
-                new_id = uuid.uuid4()
                 wiki_page = pick.replace(" ", "_")
-                DRAFT_YEAR = datetime.now().year
+                draft_year = datetime.now().year
                 timestamp = datetime.now(datetime.timezone.utc)
 
-                WRITE_PEOPLE_QUERY = """
-                INSERT INTO people (id, name, wiki_page)
-                VALUES (%s, %s, %s)
-                """
+                # Check against all people in the database (regardless of year)
+                # add them if they are not, otherwise skip it.
+                existing_person, existing_id = has_fuzzy_match(
+                    pick, df_all_people, "NAME"
+                )
+                if not existing_person:
+                    # Create a new UUID for the person
+                    new_id = uuid.uuid4()
 
+                    WRITE_PEOPLE_QUERY = """
+                    INSERT INTO people (id, name, wiki_page)
+                    VALUES (%s, %s, %s)
+                    """
+
+                    conn.cursor().execute(
+                        WRITE_PEOPLE_QUERY,
+                        (new_id, pick, wiki_page),
+                    )
+                else:
+                    # Replace the new_id with the existing_id if the person
+                    new_id = existing_id
+
+                # Continue and write the pick into the joining table
                 WRITE_PLAYER_PICKS_QUERY = """
                 INSERT INTO player_picks (player_id, year, people_id, timestamp)
                 VALUES (%s, %s, %s, %s)
                 """
 
-                # Execute the query with parameters
-                conn.cursor().execute(
-                    WRITE_PEOPLE_QUERY,
-                    (new_id, pick, wiki_page),
-                )
-
-                # Execute the query with parameters
                 conn.cursor().execute(
                     WRITE_PLAYER_PICKS_QUERY,
-                    (next_user_id, DRAFT_YEAR, new_id, timestamp),
+                    (next_user_id, draft_year, new_id, timestamp),
                 )
 
+                # Display the results including the query parameters
                 st.caption("Database query executed")
                 st.caption(
-                    f"{new_id}, {pick}, {next_user_id}, {wiki_page}, {DRAFT_YEAR}, {timestamp}"
+                    f"{new_id}, {pick}, {next_user_id}, {wiki_page}, {draft_year}, {timestamp}"
                 )
 
                 sms_message = user_name + " has picked " + pick

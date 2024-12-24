@@ -139,22 +139,27 @@ def the_arbiter(prompt, arbiter_version="main"):
         return "The Arbiter is sleeping: " + str(e)
 
 
-def has_fuzzy_match(value, value_set, threshold=85):
+def has_fuzzy_match(value, df, column, threshold=85):
     """NLP based text maching
 
     Args:
         value (str): value to check
-        value_set (list, str): list of all values you want to compare against
+        df (DataFrame): DF of all values you want to compare against
+        column (str): column in the DF to compare against
         threshold (int, optional): how much leway do you want to give the
         algoritm. Defaults to 85.
 
     Returns:
         bool: if there is a match or not
     """
-    for item in value_set:
+    
+    value_set = df[column].tolist()
+    
+    for index, item in enumerate(value_set):
         if fuzz.token_sort_ratio(value.lower(), item.lower()) >= threshold:
-            return True
-    return False
+            person_id = df.iloc[index]["ID"]
+            return True, person_id
+    return False, None
 
 
 def send_sms(message_text, distro_list):
