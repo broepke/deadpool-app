@@ -10,6 +10,9 @@ from twilio.rest import Client
 import streamlit as st
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
+import ldclient
+from ldclient import Context
+from ldclient.config import Config
 
 
 # Function to load the private key from secrets
@@ -184,3 +187,28 @@ def send_sms(message_text, distro_list):
         )
 
     return message.sid
+
+
+def get_ld_context():
+    
+    # Get the LaunchDarkly SDK key from Streamlit Secrets
+    sdk_key = st.secrets["other"]["launchdarkly_sdk_key"]
+    ldclient.set_config(Config(sdk_key))
+    
+    
+    # Get the user's information from Streamlit Authenticator
+    app_username = st.session_state.username
+    user_email = st.session_state.email
+    user_name = st.session_state.name
+    user_key = st.session_state["config"]["credentials"]["usernames"][app_username][
+        "id"
+    ]
+    
+   # Build the user context for LaunchDarkly
+    builder = Context.builder(user_key)
+    builder.kind("user")
+    builder.name(user_name)
+    builder.set("email", user_email)
+    context = builder.build()
+    
+    return context

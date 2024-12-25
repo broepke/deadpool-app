@@ -5,6 +5,7 @@ cookie:
 credentials:
   usernames:
     alexander.g.obrien@gmail.com:
+      id: c6729ac9-4245-4a23-85bb-d3f027a3d4e9
       email: alexander.g.obrien@gmail.com
       failed_login_attempts: 0
       first_name: Alexander
@@ -14,6 +15,7 @@ credentials:
       roles:
       - user
     broepke@gmail.com:
+      id: 1831699b-e255-45ff-8671-b5c840922735
       email: broepke@gmail.com
       failed_login_attempts: 0
       first_name: Brian
@@ -24,6 +26,7 @@ credentials:
       - admin
       - user
     bschanen@gmail.com:
+      id: aecdf4a2-0bad-4c96-89ca-82385a6f6ee0
       email: bschanen@gmail.com
       failed_login_attempts: 0
       first_name: Brian
@@ -33,6 +36,7 @@ credentials:
       roles:
       - user
     cgroepke2@gmail.com:
+      id: d0c9e165-0881-4e1a-b397-75520e8219b3
       email: cgroepke2@gmail.com
       failed_login_attempts: 0
       first_name: Chrissy
@@ -42,6 +46,7 @@ credentials:
       roles:
       - user
     christopherpvienneau@gmail.com:
+      id: b63187cf-4a15-4f70-9906-2686f2c6b835
       email: christopherpvienneau@gmail.com
       failed_login_attempts: 0
       first_name: Chris
@@ -52,6 +57,7 @@ credentials:
       - admin
       - user
     clm1970@gmail.com:
+      id: a6d5a84a-b8e2-47cc-8af1-cb5b02593d6d
       email: clm1970@gmail.com
       failed_login_attempts: 0
       first_name: Luke
@@ -61,6 +67,7 @@ credentials:
       roles:
       - user
     derek.cornwall@wtwco.com:
+      id: 0702751f-cb30-42d7-81d3-025b32f8dca0
       email: derek.cornwall@wtwco.com
       failed_login_attempts: 0
       first_name: Derek
@@ -70,6 +77,7 @@ credentials:
       roles:
       - user
     frazierandrewd@gmail.com:
+      id: bc913bed-5795-441d-916b-2a778383858e
       email: frazierandrewd@gmail.com
       failed_login_attempts: 0
       first_name: Andrew
@@ -79,6 +87,7 @@ credentials:
       roles:
       - user
     jahnwarren@gmail.com:
+      id: 3fe9975d-7516-4b86-9edc-f90448424819
       email: jahnwarren@gmail.com
       failed_login_attempts: 0
       first_name: Warren
@@ -88,6 +97,7 @@ credentials:
       roles:
       - user
     lwelch15@gmail.com:
+      id: adaf41a2-d0f6-44ae-96df-1693e02e88d6
       email: lwelch15@gmail.com
       failed_login_attempts: 0
       first_name: Loren
@@ -97,6 +107,7 @@ credentials:
       roles:
       - user
     rjkennedy1260@gmail.com:
+      id: 1769888a-8594-4fad-a95b-553d7fa1a897
       email: rjkennedy1260@gmail.com
       failed_login_attempts: 0
       first_name: Robert
@@ -106,6 +117,7 @@ credentials:
       roles:
       - user
     smohs1@hotmail.com:
+      id: 3a3282d1-dfda-477f-a8e5-4f7fa474c37a
       email: smohs1@hotmail.com
       failed_login_attempts: 0
       first_name: Steve
@@ -115,6 +127,7 @@ credentials:
       roles:
       - user
     thepromodepot@gmail.com:
+      id: 0f7bc0ea-6704-491d-8fe0-5a015a9851c9
       email: thepromodepot@gmail.com
       failed_login_attempts: 0
       first_name: John
@@ -124,6 +137,7 @@ credentials:
       roles:
       - user
     willcokeley@gmail.com:
+      id: 74c6942d-3a94-42f2-bed1-1457483d9eaa
       email: willcokeley@gmail.com
       failed_login_attempts: 0
       first_name: Will
