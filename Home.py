@@ -20,7 +20,8 @@ import streamlit_authenticator as stauth
 from streamlit_authenticator.utilities import LoginError
 import yaml
 from yaml.loader import SafeLoader
-from dp_utilities import is_admin
+from dp_utilities import is_admin, get_ld_context
+import ldclient
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -104,7 +105,7 @@ def display_arbiter_message(user_name: str) -> None:
         end_time = time.time()
         time_taken = end_time - start_time
         logger.debug(f"Arbiter message generated in {time_taken:.2f} seconds")
-        
+
         st.markdown("**A message from The Arbiter:** " + output)
         st.image(ARBITER_IMAGE, ARBITER_IMAGE_CAPTION)
     except Exception as e:
@@ -158,13 +159,20 @@ def main() -> None:
     # Handle authenticated user
     if st.session_state["authentication_status"]:
         authenticator.logout(location=AUTH_LOCATION_SIDEBAR, key=AUTH_KEY_HOME_LOGOUT)
-        
+
+        # Set LaunchDarkly Context for the user and send a login event
+        ld_context = get_ld_context()
+        ldclient.get().track(
+            event_name="deadpool-login", metric_value=1, context=ld_context
+        )
+        st.session_state["ld_context"] = ld_context
+
         # Display user information
         name = st.session_state.name
         email = st.session_state.email
         user_name = st.session_state.username
         logger.info(f"User authenticated: {email}")
-        
+
         st.sidebar.write(f"Welcome, {name}")
         st.sidebar.write(f"Email: {email}")
 
