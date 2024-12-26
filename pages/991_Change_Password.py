@@ -18,14 +18,14 @@ if st.session_state.get("authentication_status") is not None:
     try:
         if authenticator.reset_password(st.session_state["username"]):
             st.success("Password modified successfully")
+
+            config = st.session_state.config
+
+            with open("config.yaml", "w") as file:
+                yaml.dump(config, file, default_flow_style=False)
+
     except Exception as e:
         st.error(e)
-
-    config = st.session_state.config
-
-    with open("config.yaml", "w") as file:
-        yaml.dump(config, file, default_flow_style=False)
-
 else:
     st.warning("Please use the button below to navigate to Home and log in.")
     st.page_link("Home.py", label="Home", icon="🏠")
