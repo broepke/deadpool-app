@@ -21,11 +21,11 @@ import streamlit as st
 import altair as alt
 import pandas as pd
 from snowflake.connector import SnowflakeConnection
-
 from dp_utilities import (
     load_snowflake_table,
     run_snowflake_query,
     snowflake_connection_helper,
+    mp_track_page_view,
 )
 
 # Configure logging
@@ -73,6 +73,7 @@ LIMIT 200
 st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON)
 st.title(PAGE_HEADER)
 
+
 def display_user_info(name: str, email: str) -> None:
     """Display user information in the sidebar.
 
@@ -96,11 +97,11 @@ def load_nndb_data(conn: SnowflakeConnection) -> pd.DataFrame:
     try:
         df_nndb = load_snowflake_table(conn, "nndb")
         df_nndb = df_nndb[df_nndb["AGE"] < MAX_AGE]
-        
+
         # Add life status columns
         df_nndb["IS_ALIVE"] = df_nndb["DEATH_DATE"].isnull()
         df_nndb["IS_DECEASED"] = df_nndb["DEATH_DATE"].notnull()
-        
+
         logger.info("NNDB data loaded and preprocessed successfully")
         return df_nndb
     except Exception as e:
@@ -134,7 +135,7 @@ def display_age_distribution(df: pd.DataFrame) -> None:
         # Display descriptive statistics
         st.subheader("Descriptive Statistics on Age")
         st.dataframe(df["AGE"].describe(), use_container_width=True)
-        
+
         logger.debug("Age distribution displayed successfully")
     except Exception as e:
         error_msg = f"Error displaying age distribution: {str(e)}"
@@ -164,7 +165,7 @@ def display_occupation_stats(conn: SnowflakeConnection) -> None:
             )
         )
         st.altair_chart(occupation_chart, use_container_width=True)
-        
+
         logger.debug("Occupation statistics displayed successfully")
     except Exception as e:
         error_msg = f"Error displaying occupation stats: {str(e)}"
@@ -182,7 +183,7 @@ def display_risk_factors(conn: SnowflakeConnection) -> None:
         df_risk = run_snowflake_query(conn, SQL_RISK_FACTORS)
         st.subheader("High Risk People by Age")
         st.dataframe(df_risk, use_container_width=True)
-        
+
         logger.debug("Risk factors displayed successfully")
     except Exception as e:
         error_msg = f"Error displaying risk factors: {str(e)}"
@@ -207,7 +208,7 @@ def display_predictions(conn: SnowflakeConnection) -> None:
 
         st.subheader("The Arbiter's Picks for 2024 are as follows.")
         st.dataframe(df_nndb_preds, use_container_width=True)
-        
+
         logger.debug("Predictions displayed successfully")
     except Exception as e:
         error_msg = f"Error displaying predictions: {str(e)}"
@@ -224,25 +225,26 @@ def handle_authentication() -> None:
             authenticator.logout(location="sidebar", key=AUTH_KEY_NNDB_LOGOUT)
             authenticator.login(location="unrendered", key=AUTH_KEY_NNDB_LOGIN)
             
+            mp_track_page_view(PAGE_TITLE)
+
             # Get user information
             name = st.session_state.name
             email = st.session_state.email
-            user_name = st.session_state.username
             logger.info(f"Displaying NNDB stats for authenticated user: {email}")
-            
+
             # Display user info
             display_user_info(name, email)
-            
+
             # Load data and display statistics
             conn = snowflake_connection_helper()
             df_nndb = load_nndb_data(conn)
             df_nndb_dead = df_nndb[df_nndb["IS_DECEASED"]]
-            
+
             display_age_distribution(df_nndb_dead)
             display_occupation_stats(conn)
             display_risk_factors(conn)
             display_predictions(conn)
-            
+
         except Exception as e:
             error_msg = f"Error in NNDB page: {str(e)}"
             logger.error(error_msg)

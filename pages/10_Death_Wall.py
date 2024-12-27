@@ -22,8 +22,11 @@ import streamlit as st
 from SPARQLWrapper import SPARQLWrapper, JSON
 import pandas as pd
 from snowflake.connector import SnowflakeConnection
-
-from dp_utilities import load_snowflake_table, snowflake_connection_helper
+from dp_utilities import (
+    load_snowflake_table,
+    snowflake_connection_helper,
+    mp_track_page_view,
+)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -129,7 +132,7 @@ def display_person_info(row: pd.Series, data: List[Dict]) -> None:
             st.write(description)
             if image_url:
                 st.image(image_url, width=200)
-            
+
             logger.debug(f"Person info displayed: {row['NAME']}")
         else:
             st.write(f"Could not find data for {row['NAME']}.")
@@ -175,7 +178,9 @@ def filter_by_search(df: pd.DataFrame, search_term: str) -> pd.DataFrame:
     """
     try:
         filtered_df = df[df["NAME"].str.contains(search_term, case=False, na=False)]
-        logger.debug(f"Filtered results: {len(filtered_df)} matches for '{search_term}'")
+        logger.debug(
+            f"Filtered results: {len(filtered_df)} matches for '{search_term}'"
+        )
         return filtered_df
     except Exception as e:
         logger.error(f"Error filtering data: {str(e)}")
@@ -190,9 +195,7 @@ def display_pagination_info(start_idx: int, end_idx: int, total: int) -> None:
         end_idx: Ending index
         total: Total number of items
     """
-    st.write(
-        f"Showing {start_idx + 1}-{min(end_idx, total)} of {total} results"
-    )
+    st.write(f"Showing {start_idx + 1}-{min(end_idx, total)} of {total} results")
 
 
 def handle_authentication() -> None:
@@ -204,40 +207,41 @@ def handle_authentication() -> None:
             authenticator.logout(location="sidebar", key=AUTH_KEY_DEATH_WALL_LOGOUT)
             authenticator.login(location="unrendered", key=AUTH_KEY_DEATH_WALL_LOGIN)
             
+            mp_track_page_view(PAGE_TITLE)
+
             # Get user information
             name = st.session_state.name
             email = st.session_state.email
-            user_name = st.session_state.username
             logger.info(f"Displaying death wall for authenticated user: {email}")
-            
+
             # Display user info
             display_user_info(name, email)
-            
+
             # Load data
             conn = snowflake_connection_helper()
             df_dead = load_deceased_data(conn)
-            
+
             # Handle search
             search_term = st.text_input("Search for a person")
             if search_term:
                 df_dead = filter_by_search(df_dead, search_term)
-            
+
             # Handle pagination
             page_number = st.number_input("Page", min_value=1, value=DEFAULT_PAGE)
             start_idx = (page_number - 1) * ITEMS_PER_PAGE
             end_idx = start_idx + ITEMS_PER_PAGE
-            
+
             # Display results in columns
             df_page = df_dead.iloc[start_idx:end_idx]
             col1, col2 = st.columns(2)
-            
+
             for i, row in df_page.iterrows():
                 data = query_wikidata_by_id(row["WIKI_ID"])
                 with col1 if i % 2 == 0 else col2:
                     display_person_info(row, data)
-            
+
             display_pagination_info(start_idx, end_idx, len(df_dead))
-            
+
         except Exception as e:
             error_msg = f"Error in death wall page: {str(e)}"
             logger.error(error_msg)

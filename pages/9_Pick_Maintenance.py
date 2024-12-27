@@ -20,8 +20,11 @@ from typing import Final, Dict, Optional, NamedTuple
 import streamlit as st
 import pandas as pd
 from snowflake.connector import SnowflakeConnection
-
-from dp_utilities import load_snowflake_table, snowflake_connection_helper
+from dp_utilities import (
+    load_snowflake_table,
+    snowflake_connection_helper,
+    mp_track_page_view,
+)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -61,10 +64,12 @@ st.title(PAGE_HEADER)
 
 class PickData(NamedTuple):
     """Container for pick data."""
+
     id: str
     name: str
     wiki_page: str
     wiki_id: str
+
 
 def display_user_info(name: str, email: str) -> None:
     """Display user information in the sidebar.
@@ -115,7 +120,7 @@ def get_pick_details(df: pd.DataFrame, pick_name: str) -> Optional[PickData]:
                 id=row["ID"],
                 name=row["NAME"],
                 wiki_page=row["WIKI_PAGE"],
-                wiki_id=row["WIKI_ID"]
+                wiki_id=row["WIKI_ID"],
             )
         logger.warning(f"No pick found with name: {pick_name}")
         return None
@@ -154,14 +159,16 @@ def get_current_pick_data() -> PickData:
             id=st.session_state.get("reg_id", ""),
             name=st.session_state.get("reg_name", ""),
             wiki_page=st.session_state.get("reg_wiki_page", ""),
-            wiki_id=st.session_state.get("reg_wiki_id", "")
+            wiki_id=st.session_state.get("reg_wiki_id", ""),
         )
     except Exception as e:
         logger.error(f"Error getting current pick data: {str(e)}")
         return PickData("", "", "", "")
 
 
-def update_pick(conn: SnowflakeConnection, pick_data: PickData, new_data: PickData) -> None:
+def update_pick(
+    conn: SnowflakeConnection, pick_data: PickData, new_data: PickData
+) -> None:
     """Update pick information in database.
 
     Args:
@@ -172,19 +179,19 @@ def update_pick(conn: SnowflakeConnection, pick_data: PickData, new_data: PickDa
     try:
         conn.cursor().execute(
             SQL_UPDATE_PICK,
-            (new_data.name, new_data.wiki_page, new_data.wiki_id, pick_data.id)
+            (new_data.name, new_data.wiki_page, new_data.wiki_id, pick_data.id),
         )
-        
+
         # Log the update
         logger.info(f"Pick updated: {pick_data.name} -> {new_data.name}")
-        
+
         # Display confirmation
         st.caption("Database updated successfully")
         st.caption(f"Original Name: {pick_data.name}")
         st.caption(f"New Name: {new_data.name}")
         st.caption(f"New Wiki Page: {new_data.wiki_page}")
         st.caption(f"New Wiki ID: {new_data.wiki_id}")
-        
+
     except Exception as e:
         error_msg = f"Error updating pick: {str(e)}"
         logger.error(error_msg)
@@ -198,13 +205,13 @@ def display_pick_selection_form(df: pd.DataFrame) -> None:
         df: DataFrame containing all picks
     """
     st.header("Pick Selection")
-    
+
     pick_list = sorted(df["NAME"].to_list())
-    
+
     with st.form("Pick to Update"):
         sel_pick = st.selectbox("Select a pick", pick_list, key="sel_selected_pick")
         submitted = st.form_submit_button("Choose pick")
-        
+
         if submitted:
             pick_data = get_pick_details(df, sel_pick)
             update_session_state(pick_data)
@@ -217,9 +224,9 @@ def display_update_form(conn: SnowflakeConnection) -> None:
         conn: Snowflake database connection
     """
     st.header("Update Pick Information")
-    
+
     current_data = get_current_pick_data()
-    
+
     with st.form("Pick Data"):
         new_name = st.text_input(
             "Name:",
@@ -228,23 +235,18 @@ def display_update_form(conn: SnowflakeConnection) -> None:
             key="_reg_name",
         )
         new_wiki_page = st.text_input(
-            "Wiki Page:",
-            current_data.wiki_page,
-            MAX_INPUT_LENGTH,
-            key="_reg_wiki_page"
+            "Wiki Page:", current_data.wiki_page, MAX_INPUT_LENGTH, key="_reg_wiki_page"
         )
         new_wiki_id = st.text_input(
-            "Wiki ID:",
-            current_data.wiki_id,
-            key="_reg_wiki_id"
+            "Wiki ID:", current_data.wiki_id, key="_reg_wiki_id"
         )
-        
+
         if st.form_submit_button("Submit"):
             new_data = PickData(
                 id=current_data.id,
                 name=new_name.strip(),
                 wiki_page=new_wiki_page.strip(),
-                wiki_id=new_wiki_id.strip()
+                wiki_id=new_wiki_id.strip(),
             )
             update_pick(conn, current_data, new_data)
             update_session_state(None)  # Clear form after update
@@ -259,22 +261,23 @@ def handle_authentication() -> None:
             authenticator.logout(location="sidebar", key=AUTH_KEY_PICK_MAINT_LOGOUT)
             authenticator.login(location="unrendered", key=AUTH_KEY_PICK_MAINT_LOGIN)
             
+            mp_track_page_view(PAGE_TITLE)
+
             # Get user information
             name = st.session_state.name
             email = st.session_state.email
-            user_name = st.session_state.username
             logger.info(f"Displaying pick maintenance for authenticated user: {email}")
-            
+
             # Display user info and instructions
             display_user_info(name, email)
             st.markdown(INSTRUCTIONS)
-            
+
             # Load and display forms
             conn = snowflake_connection_helper()
             df_picks = load_pick_data(conn)
             display_pick_selection_form(df_picks)
             display_update_form(conn)
-            
+
         except Exception as e:
             error_msg = f"Error in pick maintenance page: {str(e)}"
             logger.error(error_msg)

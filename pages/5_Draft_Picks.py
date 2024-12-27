@@ -18,8 +18,11 @@ from typing import Final, Dict
 import streamlit as st
 import pandas as pd
 from snowflake.connector import SnowflakeConnection
-
-from dp_utilities import load_snowflake_table, snowflake_connection_helper
+from dp_utilities import (
+    load_snowflake_table,
+    snowflake_connection_helper,
+    mp_track_page_view,
+)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -36,6 +39,7 @@ HOME_PAGE: Final[str] = "Home.py"
 # Page configuration
 st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON)
 st.title(PAGE_HEADER)
+
 
 def display_user_info(name: str, email: str) -> None:
     """Display user information in the sidebar.
@@ -61,17 +65,13 @@ def load_draft_data(conn: SnowflakeConnection) -> Dict[str, pd.DataFrame]:
         # Load current and historical picks
         df_2024 = load_snowflake_table(conn, "picks_twenty_four")
         df_2023 = load_snowflake_table(conn, "picks_twenty_three")
-        
+
         # Load picks by person
         df_picks = load_snowflake_table(conn, "draft")
         df_picks.drop(columns="ID", inplace=True)
-        
+
         logger.info("Draft data loaded successfully")
-        return {
-            "current": df_2024,
-            "historical": df_2023,
-            "by_person": df_picks
-        }
+        return {"current": df_2024, "historical": df_2023, "by_person": df_picks}
     except Exception as e:
         error_msg = f"Error loading draft data: {str(e)}"
         logger.error(error_msg)
@@ -102,7 +102,7 @@ def display_draft_picks(data: Dict[str, pd.DataFrame]) -> None:
 
         st.header("2023 Draft Picks:")
         st.dataframe(data["historical"], use_container_width=True)
-        
+
         logger.debug("Draft picks displayed successfully")
     except Exception as e:
         error_msg = f"Error displaying draft picks: {str(e)}"
@@ -119,20 +119,22 @@ def handle_authentication() -> None:
             authenticator.logout(location="sidebar", key=AUTH_KEY_DRAFT_PICKS_LOGOUT)
             authenticator.login(location="unrendered", key=AUTH_KEY_DRAFT_PICKS_LOGIN)
             
+            mp_track_page_view(PAGE_TITLE)
+
             # Get user information
             name = st.session_state.name
             email = st.session_state.email
             user_name = st.session_state.username
             logger.info(f"Displaying draft picks for authenticated user: {email}")
-            
+
             # Display user info
             display_user_info(name, email)
-            
+
             # Load and display draft data
             conn = snowflake_connection_helper()
             draft_data = load_draft_data(conn)
             display_draft_picks(draft_data)
-            
+
         except Exception as e:
             error_msg = f"Error in draft picks page: {str(e)}"
             logger.error(error_msg)

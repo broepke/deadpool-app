@@ -19,8 +19,11 @@ from typing import Final, Dict
 import streamlit as st
 import pandas as pd
 from snowflake.connector import SnowflakeConnection
-
-from dp_utilities import load_snowflake_table, snowflake_connection_helper
+from dp_utilities import (
+    load_snowflake_table,
+    snowflake_connection_helper,
+    mp_track_page_view,
+)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -43,6 +46,7 @@ COLUMNS_TO_DROP: Final[list] = ["EMAIL", "ID"]
 # Page configuration
 st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON)
 st.title(PAGE_HEADER)
+
 
 def display_user_info(name: str, email: str) -> None:
     """Display user information in the sidebar.
@@ -78,7 +82,7 @@ def load_score_data(conn: SnowflakeConnection) -> Dict[str, pd.DataFrame]:
         return {
             "current": df_score_current,
             "2024": df_score_2024,
-            "2023": df_score_2023
+            "2023": df_score_2023,
         }
     except Exception as e:
         error_msg = f"Error loading score data: {str(e)}"
@@ -96,21 +100,16 @@ def display_leaderboard(title: str, data: pd.DataFrame) -> None:
     """
     try:
         st.header(title)
-        
+
         # Display table with highlighted maximum
         st.dataframe(
             data.style.highlight_max(axis=0, subset=[CHART_Y_COLUMN]),
             use_container_width=True,
         )
-        
+
         # Display bar chart
-        st.bar_chart(
-            data=data,
-            x=CHART_X_COLUMN,
-            y=CHART_Y_COLUMN,
-            color=CHART_COLOR
-        )
-        
+        st.bar_chart(data=data, x=CHART_X_COLUMN, y=CHART_Y_COLUMN, color=CHART_COLOR)
+
         logger.debug(f"Leaderboard displayed successfully: {title}")
     except Exception as e:
         error_msg = f"Error displaying leaderboard {title}: {str(e)}"
@@ -143,21 +142,22 @@ def handle_authentication() -> None:
             authenticator = st.session_state.get("authenticator")
             authenticator.logout(location="sidebar", key=AUTH_KEY_LEADERBOARD_LOGOUT)
             authenticator.login(location="unrendered", key=AUTH_KEY_LEADERBOARD_LOGIN)
+
+            mp_track_page_view(PAGE_TITLE)
             
             # Get user information
             name = st.session_state.name
             email = st.session_state.email
-            user_name = st.session_state.username
             logger.info(f"Displaying leaderboards for authenticated user: {email}")
-            
+
             # Display user info
             display_user_info(name, email)
-            
+
             # Load and display leaderboard data
             conn = snowflake_connection_helper()
             score_data = load_score_data(conn)
             display_all_leaderboards(score_data)
-            
+
         except Exception as e:
             error_msg = f"Error in leaderboard page: {str(e)}"
             logger.error(error_msg)

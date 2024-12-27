@@ -21,6 +21,7 @@ from dp_utilities import (
     send_sms,
     load_snowflake_table,
     snowflake_connection_helper,
+    mp_track_page_view
 )
 
 # Constants
@@ -244,6 +245,8 @@ def main():
     authenticator = st.session_state.get("authenticator")
     authenticator.logout(location="sidebar", key="deadpool-app-logout-drafting")
     authenticator.login(location="unrendered", key="deadpool-app-login-drafting")
+    
+    mp_track_page_view(PAGE_TITLE)
 
     # User information
     name = st.session_state.name

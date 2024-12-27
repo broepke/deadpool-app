@@ -5,8 +5,10 @@ from yaml.loader import SafeLoader
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
+PAGE_TITLE = "Forgot Password"
+PAGE_ICON = ":skull:"
 
-st.set_page_config(page_title="Forgot Password", page_icon=":skull:")
+st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON)
 st.title("Forgot Password :skull_and_crossbones:")
 
 # Get all credentials

@@ -18,7 +18,11 @@ import streamlit as st
 import pandas as pd
 from snowflake.connector import SnowflakeConnection
 
-from dp_utilities import load_snowflake_table, snowflake_connection_helper
+from dp_utilities import (
+    load_snowflake_table,
+    snowflake_connection_helper,
+    mp_track_page_view,
+)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -44,6 +48,7 @@ DRAFT_ORDER_EXPLANATION: Final[str] = """
 # Page configuration
 st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON)
 st.title(PAGE_HEADER)
+
 
 def display_user_info(name: str, email: str) -> None:
     """Display user information in the sidebar.
@@ -96,20 +101,21 @@ def handle_authentication() -> None:
             authenticator.logout(location="sidebar", key=AUTH_KEY_DRAFT_ORDER_LOGOUT)
             authenticator.login(location="unrendered", key=AUTH_KEY_DRAFT_ORDER_LOGIN)
             
+            mp_track_page_view(PAGE_TITLE)
+
             # Get user information
             name = st.session_state.name
             email = st.session_state.email
-            user_name = st.session_state.username
             logger.info(f"Displaying draft order for authenticated user: {email}")
-            
+
             # Display user info
             display_user_info(name, email)
-            
+
             # Load and display draft order
             conn = snowflake_connection_helper()
             df_sorted = load_draft_order(conn)
             display_draft_order(df_sorted)
-            
+
         except Exception as e:
             error_msg = f"Error displaying draft order: {str(e)}"
             logger.error(error_msg)

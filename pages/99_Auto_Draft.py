@@ -5,14 +5,19 @@ Main page for Drafting new picks
 from datetime import datetime
 import uuid
 import streamlit as st
-from dp_utilities import has_fuzzy_match
-from dp_utilities import send_sms
-from dp_utilities import load_snowflake_table
-from dp_utilities import snowflake_connection_helper
-from dp_utilities import is_admin
+from dp_utilities import (
+    has_fuzzy_match,
+    send_sms,
+    load_snowflake_table,
+    snowflake_connection_helper,
+    is_admin,
+    mp_track_page_view,
+)
 
+PAGE_TITLE = "Drafting"
+PAGE_ICON = ":skull:"
 
-st.set_page_config(page_title="Drafting", page_icon=":skull:")
+st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON)
 
 
 def submitted():
@@ -29,6 +34,9 @@ if st.session_state.get("authentication_status") is not None:
     authenticator = st.session_state.get("authenticator")
     authenticator.logout(location="sidebar", key="deadpool-app-logout-auto-draft")
     authenticator.login(location="unrendered", key="deadpool-app-login-auto-draft")
+    
+    mp_track_page_view(PAGE_TITLE)
+    
     name = st.session_state.name
     email = st.session_state.email
     user_name = st.session_state.username

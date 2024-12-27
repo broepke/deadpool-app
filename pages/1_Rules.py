@@ -9,6 +9,7 @@ general guidelines. It requires authentication to view the rules.
 import logging
 from typing import Final
 import streamlit as st
+from dp_utilities import mp_track_page_view
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -89,10 +90,11 @@ def handle_authentication() -> None:
             authenticator.logout(location="sidebar", key=AUTH_KEY_RULES_LOGOUT)
             authenticator.login(location="unrendered", key=AUTH_KEY_RULES_LOGIN)
             
+            mp_track_page_view(PAGE_TITLE)
+            
             # Get user information
             name = st.session_state.name
             email = st.session_state.email
-            user_name = st.session_state.username
             logger.info(f"Displaying rules for authenticated user: {email}")
             
             # Display user info and rules
