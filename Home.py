@@ -22,6 +22,10 @@ import yaml
 from yaml.loader import SafeLoader
 from dp_utilities import is_admin, get_ld_context
 import ldclient
+from mixpanel import Mixpanel
+
+# initialize Mixpanel
+mp = Mixpanel(st.secrets["other"]["mixpanel"])
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -166,6 +170,24 @@ def main() -> None:
             event_name="deadpool-login", metric_value=1, context=ld_context
         )
         st.session_state["ld_context"] = ld_context
+
+        mp.track(
+            st.session_state["config"]["credentials"]["usernames"][
+                st.session_state.username
+            ]["id"],
+            "Page View",
+            {"Page": "Home", "User": st.session_state.username},
+        )
+
+        mp.people_set(
+            st.session_state["config"]["credentials"]["usernames"][
+                st.session_state.username
+            ]["id"],
+            {
+                "name": st.session_state.name,
+                "$email": st.session_state.email,
+            },
+        )
 
         # Display user information
         name = st.session_state.name
