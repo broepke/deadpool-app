@@ -23,6 +23,7 @@ from cryptography.hazmat.primitives import serialization
 import ldclient
 from ldclient import Context
 from ldclient.config import Config
+from mixpanel import Mixpanel
 
 
 # Function to load the private key from secrets
@@ -276,3 +277,33 @@ def get_ld_context():
     context = builder.build()
 
     return context
+
+
+def mp_track_page_view(page_name):
+    """Track a page view event in Mixpanel.
+    
+    Sends a page view event to Mixpanel with the current user's username
+    and the name of the page being viewed. This function is called when
+    a user navigates to a new page in the Deadpool application.
+    """
+    
+    # initialize Mixpanel
+    mp = Mixpanel(st.secrets["other"]["mixpanel"])
+ 
+    mp.track(
+        st.session_state["config"]["credentials"]["usernames"][
+            st.session_state.username
+        ]["id"],
+        "Page View",
+        {"Page": page_name, "User": st.session_state.username},
+    )
+
+    mp.people_set(
+        st.session_state["config"]["credentials"]["usernames"][
+            st.session_state.username
+        ]["id"],
+        {
+            "name": st.session_state.name,
+            "$email": st.session_state.email,
+        },
+    )

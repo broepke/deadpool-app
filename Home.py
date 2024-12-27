@@ -20,19 +20,16 @@ import streamlit_authenticator as stauth
 from streamlit_authenticator.utilities import LoginError
 import yaml
 from yaml.loader import SafeLoader
-from dp_utilities import is_admin, get_ld_context
+from dp_utilities import is_admin, get_ld_context, mp_track_page_view
 import ldclient
-from mixpanel import Mixpanel
 
-# initialize Mixpanel
-mp = Mixpanel(st.secrets["other"]["mixpanel"])
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Constants
-PAGE_TITLE = "Deadpool"
+PAGE_TITLE = "Home"
 PAGE_ICON = ":skull:"
 APP_TITLE = "Deadpool 2024 :skull_and_crossbones:"
 CONFIG_FILE = "config.yaml"
@@ -171,23 +168,7 @@ def main() -> None:
         )
         st.session_state["ld_context"] = ld_context
 
-        mp.track(
-            st.session_state["config"]["credentials"]["usernames"][
-                st.session_state.username
-            ]["id"],
-            "Page View",
-            {"Page": "Home", "User": st.session_state.username},
-        )
-
-        mp.people_set(
-            st.session_state["config"]["credentials"]["usernames"][
-                st.session_state.username
-            ]["id"],
-            {
-                "name": st.session_state.name,
-                "$email": st.session_state.email,
-            },
-        )
+        mp_track_page_view(PAGE_TITLE)
 
         # Display user information
         name = st.session_state.name
