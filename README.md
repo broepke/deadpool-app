@@ -20,6 +20,7 @@ The following features are part of this overall application.
 * Daily automation that checks for celebrity deaths.
 * Slack notification for maintenance issues for the primary moderators.
 * LaunchDarkly feature flagging for new features.
+* Mixpanel for user analytics.
 * Searchable database of 26k plus living and dead famous people, including information about their deaths and health scraped from Wikipedia.
 * XGBoost-based binary classifier for predicting death based on known health issues. 
 
