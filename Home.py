@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 # Constants
 PAGE_TITLE = "Home"
 PAGE_ICON = ":skull:"
-APP_TITLE = "Deadpool 2024 :skull_and_crossbones:"
+APP_TITLE = "Deadpool 2025 :skull_and_crossbones:"
 CONFIG_FILE = "config.yaml"
 ARBITER_MESSAGE = "Greetings, savages. All judgements are final."
 ARBITER_IMAGE = "arbiter.jpg"
