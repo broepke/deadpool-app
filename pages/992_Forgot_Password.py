@@ -64,8 +64,9 @@ try:
             st.success("Email sent successfully!")
 
             # Update the Yaml file as well
-            # with open("config.yaml", "w") as file:
-            #     yaml.dump(config, file, default_flow_style=False)
+            with open("config.yaml", "w") as file:
+                yaml.dump(config, file, default_flow_style=False)
+
         else:
             st.error("Failed to send the email.")
     elif username_of_forgotten_password is False:
