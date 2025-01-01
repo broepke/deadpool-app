@@ -121,7 +121,7 @@ if st.session_state.get("authentication_status") is not None:
     opted_in_numbers = df_opted["SMS"].tolist()
 
     if is_admin():
-        st.write("Admin Mode Enabled")
+        st.info("Admin Mode Enabled")
         df_players = load_snowflake_table(conn, "draft_next")
         try:
             df_player = df_players["EMAIL"].iloc[0]
