@@ -7,6 +7,8 @@ numexpr
 python-Levenshtein
 twilio
 sendgrid
+mixpanel
+launchdarkly-server-sdk
 streamlit
 streamlit-authenticator
 streamlit_code_editor

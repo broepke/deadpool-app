@@ -1,5 +1,15 @@
 """
-Reusable components
+Utility functions for the Deadpool application providing database connectivity,
+authentication, messaging, and other shared functionality. This module contains
+reusable components that are used across different parts of the application.
+
+Functions in this module handle:
+- Snowflake database connections and queries
+- Session state management
+- User authentication and authorization
+- SMS messaging via Twilio
+- Feature flag management via LaunchDarkly
+- Natural language processing utilities
 """
 
 import requests
@@ -10,6 +20,10 @@ from twilio.rest import Client
 import streamlit as st
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
+import ldclient
+from ldclient import Context
+from ldclient.config import Config
+from mixpanel import Mixpanel
 
 
 # Function to load the private key from secrets
@@ -33,6 +47,15 @@ def load_private_key_from_secrets(private_key_str):
 
 @st.cache_resource(ttl=3600)
 def snowflake_connection_helper():
+    """Creates and returns a cached connection to Snowflake using credentials from streamlit secrets.
+    
+    The connection uses RSA key authentication and is cached for 1 hour to prevent
+    excessive connection creation. All connection parameters are retrieved from
+    streamlit secrets.
+
+    Returns:
+        snowflake.connector.connection.SnowflakeConnection: A connection object to Snowflake
+    """
     # Load the private key from secrets directly inside the function to avoid passing it as an argument
     private_key = load_private_key_from_secrets(
         st.secrets["connections"]["snowflake"]["private_key"]
@@ -53,19 +76,28 @@ def snowflake_connection_helper():
 
 
 def save_value(key):
-    """Simple methods for setting temp and permanent session state keys"""
+    """Updates the session state with a permanent value from a temporary input.
+    
+    Args:
+        key (str): The key name in the session state to update. The function will
+                  copy the value from '_key' to 'key' in the session state.
+    """
     st.session_state[key] = st.session_state["_" + key]
 
 
 def load_snowflake_table(_conn, table):
-    """Loads a specific Snowflake table using SQL
+    """Loads a specific Snowflake table using SQL.
+
+    Executes a SELECT * query on the specified table or view and returns
+    all rows as a pandas DataFrame. The function handles column name extraction
+    and data conversion automatically.
 
     Args:
-        _conn (conn): Snowflake connection
-        table (str): table or view - no DB or schema needed
+        _conn (snowflake.connector.connection.SnowflakeConnection): Active Snowflake connection
+        table (str): Name of the table or view to query (no database or schema needed)
 
     Returns:
-        DataFrame: dataframe of the entire table.
+        pandas.DataFrame: Complete contents of the specified table/view
     """
     query = f"SELECT * FROM {table}"
 
@@ -83,6 +115,15 @@ def load_snowflake_table(_conn, table):
 
 
 def run_snowflake_query(_conn, query):
+    """Executes a SQL query on Snowflake and returns the results as a pandas DataFrame.
+    
+    Args:
+        _conn (snowflake.connector.connection.SnowflakeConnection): Active Snowflake connection
+        query (str): SQL query to execute
+        
+    Returns:
+        pandas.DataFrame: Results of the query as a DataFrame
+    """
     with _conn.cursor() as cur:
         cur.execute(query)
         result = cur.fetch_pandas_all()
@@ -90,6 +131,15 @@ def run_snowflake_query(_conn, query):
 
 
 def is_admin():
+    """Checks if the current user has admin privileges.
+    
+    Examines the user's roles in the session state to determine if they
+    have admin access. Returns False if there's an error accessing the
+    session state or if the admin role is not present.
+    
+    Returns:
+        bool: True if user has admin role, False otherwise
+    """
     try:
         # Safely retrieve the roles or default to an empty list
         user_roles = st.session_state.get("roles", []) or []
@@ -105,13 +155,18 @@ def is_admin():
 
 
 def the_arbiter(prompt, arbiter_version="main"):
-    """Chatbot API call to LangChang LLM
+    """Chatbot API call to LangChain LLM.
+
+    Makes an API call to a specified version of the LLM chatbot service.
+    Handles different API endpoints based on the specified version.
 
     Args:
-        prompt (str): the prompt
+        prompt (str): The question or prompt to send to the LLM
+        arbiter_version (str, optional): Version of the LLM to use.
+            Can be "main" or "base". Defaults to "main".
 
     Returns:
-        str: Text output from the LLM
+        str: Text response from the LLM, or error message if the call fails
     """
 
     if arbiter_version == "main":
@@ -139,22 +194,33 @@ def the_arbiter(prompt, arbiter_version="main"):
         return "The Arbiter is sleeping: " + str(e)
 
 
-def has_fuzzy_match(value, value_set, threshold=85):
-    """NLP based text maching
+def has_fuzzy_match(value, df, column, threshold=85):
+    """Performs fuzzy text matching using natural language processing.
+
+    Uses the FuzzyWuzzy library to find approximate string matches,
+    accounting for typos, case differences, and word order variations.
+    The function compares the input value against all entries in the
+    specified DataFrame column and returns both match status and ID.
 
     Args:
-        value (str): value to check
-        value_set (list, str): list of all values you want to compare against
-        threshold (int, optional): how much leway do you want to give the
-        algoritm. Defaults to 85.
+        value (str): The string value to search for
+        df (pandas.DataFrame): DataFrame containing potential matches
+        column (str): Name of the column in df to search within
+        threshold (int, optional): Minimum similarity score (0-100) required
+            for a match. Higher values require closer matches. Defaults to 85.
 
     Returns:
-        bool: if there is a match or not
+        tuple: (bool, int or None) - First element indicates if a match was found,
+            second element is the ID of the matched row or None if no match
     """
-    for item in value_set:
+
+    value_set = df[column].tolist()
+
+    for index, item in enumerate(value_set):
         if fuzz.token_sort_ratio(value.lower(), item.lower()) >= threshold:
-            return True
-    return False
+            person_id = df.iloc[index]["ID"]
+            return True, person_id
+    return False, None
 
 
 def send_sms(message_text, distro_list):
@@ -179,3 +245,65 @@ def send_sms(message_text, distro_list):
         )
 
     return message.sid
+
+
+def get_ld_context():
+    """Creates and returns a LaunchDarkly context for the current user.
+    
+    Retrieves user information from the session state and builds a LaunchDarkly
+    context object that can be used for feature flag evaluation. The context
+    includes the user's key, name, and email.
+    
+    Returns:
+        ldclient.Context: LaunchDarkly context object for the current user
+    """
+    # Get the LaunchDarkly SDK key from Streamlit Secrets
+    sdk_key = st.secrets["other"]["launchdarkly_sdk_key"]
+    ldclient.set_config(Config(sdk_key))
+
+    # Get the user's information from Streamlit Authenticator
+    app_username = st.session_state.username
+    user_email = st.session_state.email
+    user_name = st.session_state.name
+    user_key = st.session_state["config"]["credentials"]["usernames"][app_username][
+        "id"
+    ]
+
+    # Build the user context for LaunchDarkly
+    builder = Context.builder(user_key)
+    builder.kind("user")
+    builder.name(user_name)
+    builder.set("email", user_email)
+    context = builder.build()
+
+    return context
+
+
+def mp_track_page_view(page_name):
+    """Track a page view event in Mixpanel.
+    
+    Sends a page view event to Mixpanel with the current user's username
+    and the name of the page being viewed. This function is called when
+    a user navigates to a new page in the Deadpool application.
+    """
+    
+    # initialize Mixpanel
+    mp = Mixpanel(st.secrets["other"]["mixpanel"])
+ 
+    mp.track(
+        st.session_state["config"]["credentials"]["usernames"][
+            st.session_state.username
+        ]["id"],
+        "Page View",
+        {"Page": page_name, "User": st.session_state.username},
+    )
+
+    mp.people_set(
+        st.session_state["config"]["credentials"]["usernames"][
+            st.session_state.username
+        ]["id"],
+        {
+            "name": st.session_state.name,
+            "$email": st.session_state.email,
+        },
+    )

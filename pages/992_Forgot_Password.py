@@ -5,8 +5,10 @@ from yaml.loader import SafeLoader
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
+PAGE_TITLE = "Forgot Password"
+PAGE_ICON = ":skull:"
 
-st.set_page_config(page_title="Forgot Password", page_icon=":skull:")
+st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON)
 st.title("Forgot Password :skull_and_crossbones:")
 
 # Get all credentials
@@ -62,8 +64,9 @@ try:
             st.success("Email sent successfully!")
 
             # Update the Yaml file as well
-            # with open("config.yaml", "w") as file:
-            #     yaml.dump(config, file, default_flow_style=False)
+            with open("config.yaml", "w") as file:
+                yaml.dump(config, file, default_flow_style=False)
+
         else:
             st.error("Failed to send the email.")
     elif username_of_forgotten_password is False:

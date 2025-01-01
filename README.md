@@ -19,7 +19,8 @@ The following features are part of this overall application.
 * Automatic population of ages and birth dates and validates Wikipedia ID (for death checking.)
 * Daily automation that checks for celebrity deaths.
 * Slack notification for maintenance issues for the primary moderators.
-* AWS-based Auto-Scale group for workflow execution on EC2 servers.
+* LaunchDarkly feature flagging for new features.
+* Mixpanel for user analytics.
 * Searchable database of 26k plus living and dead famous people, including information about their deaths and health scraped from Wikipedia.
 * XGBoost-based binary classifier for predicting death based on known health issues. 
 
@@ -36,6 +37,9 @@ The architecture comprises many common Data Analytics, Data Science, and Data En
 ![The Deadpool Architecture](dp_arch.png)
 
 ## Virtual Machine Deployment on EC2
+
+**NOTE**: *This is the original deployment method.  It has been replaced by a container-based deployment.*
+
 The application is hosted on AWS using:
 
 * Launch Template: With extensive user-data script (in this repo) for deploying and configuring the server and services.
@@ -47,7 +51,7 @@ The application is hosted on AWS using:
 
 Check the service status
 
-```
+```bash
 sudo systemctl status streamlit-agent
 sudo systemctl status github-webhook
 ```
@@ -56,7 +60,7 @@ sudo systemctl status github-webhook
 
 ### Docker
 
-```
+```bash
 docker build --no-cache -t deadpoolapp:latest .
 
 
@@ -70,7 +74,8 @@ To build the container and publish to ECR, Follow the steps in the app's **Push 
 ### ECS
 
 To add the **second Target Group**, we need to [Registering multiple target groups with a service](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/register-multiple-targetgroups.html) via the **AWS CLI**. First Export the **Service Description** to JSON so you can see where to add a new **Target Groups** and copy the structure of the other one.
-```
+
+```bash
 aws ecs describe-services \
     --services deadpool-fargate-service \
     --cluster deadpool-app-fargate \
@@ -81,7 +86,7 @@ aws ecs describe-services \
 
 And finally **Update** the service
 
-```
+```bash
 aws ecs update-service \
     --cluster deadpool-app-fargate \
     --service deadpool-fargate-service \
@@ -89,7 +94,7 @@ aws ecs update-service \
     targetGroupArn=arn:aws:elasticloadbalancing:us-east-1:############:targetgroup/deadpool-fargate-tg/3ba657d612a4194e,containerName=deadpool,containerPort=8501 \
     targetGroupArn=arn:aws:elasticloadbalancing:us-east-1:############:targetgroup/deadpool-fargate-tg-flask/84f8864279670ad9,containerName=deadpool,containerPort=5000
 ```
-`
+
 ## CI/CD
 
 ### GitHub WebHooks for Automatic Repo Updates

@@ -8,6 +8,7 @@ credentials:
       email: alexander.g.obrien@gmail.com
       failed_login_attempts: 0
       first_name: Alexander
+      id: c6729ac9-4245-4a23-85bb-d3f027a3d4e9
       last_name: O'Brien
       logged_in: false
       password: $2b$12$01XhsneBMWwZ/G1ykOUy7OOb5Kbe/hy8wAkvbjVzrC/tZp9E0vJj6
@@ -17,6 +18,7 @@ credentials:
       email: broepke@gmail.com
       failed_login_attempts: 0
       first_name: Brian
+      id: 1831699b-e255-45ff-8671-b5c840922735
       last_name: Roepke
       logged_in: false
       password: $2b$12$CI2MOIAFgb/XBD9laECG8Omaf75WV3CVRVCwHc/CBqzkyTLdK.STy
@@ -27,6 +29,7 @@ credentials:
       email: bschanen@gmail.com
       failed_login_attempts: 0
       first_name: Brian
+      id: aecdf4a2-0bad-4c96-89ca-82385a6f6ee0
       last_name: Schanen
       logged_in: false
       password: $2b$12$YdyBoi3DNNsKSCUSREaBNe39SVeK/e6Aa6XCVW4hJ8GH6LWEk7NVK
@@ -36,6 +39,7 @@ credentials:
       email: cgroepke2@gmail.com
       failed_login_attempts: 0
       first_name: Chrissy
+      id: d0c9e165-0881-4e1a-b397-75520e8219b3
       last_name: Roepke
       logged_in: false
       password: $2b$12$8UqzhcGvIaPUnjB/cRgw9OVqBpaqPWOASZkXw/bztW7CgfJjH8RwK
@@ -45,6 +49,7 @@ credentials:
       email: christopherpvienneau@gmail.com
       failed_login_attempts: 0
       first_name: Chris
+      id: b63187cf-4a15-4f70-9906-2686f2c6b835
       last_name: Vienneau
       logged_in: false
       password: $2b$12$Vmz6ocqB5dm/A3Km4fuKjOKRiTS/T4ko3qd7FnymWKTZxtC0eMFea
@@ -55,6 +60,7 @@ credentials:
       email: clm1970@gmail.com
       failed_login_attempts: 0
       first_name: Luke
+      id: a6d5a84a-b8e2-47cc-8af1-cb5b02593d6d
       last_name: Marble
       logged_in: false
       password: $2b$12$gEDIb.j3fv5skQKpIFegJOZii54QrJKWCFlQhoIyOk3E.2brkdiQ.
@@ -64,6 +70,7 @@ credentials:
       email: derek.cornwall@wtwco.com
       failed_login_attempts: 0
       first_name: Derek
+      id: 0702751f-cb30-42d7-81d3-025b32f8dca0
       last_name: Cornwall
       logged_in: false
       password: $2b$12$X.Q2QO8qjNenjN.Fss2iZO1pzm0ea8I94P/PtI9TPzQ7VsL2/kHGa
@@ -73,6 +80,7 @@ credentials:
       email: frazierandrewd@gmail.com
       failed_login_attempts: 0
       first_name: Andrew
+      id: bc913bed-5795-441d-916b-2a778383858e
       last_name: Frazier
       logged_in: false
       password: $2b$12$HVjIloNQsmIj.uTRmBXkqefGQjb8/NQsJ/aawOgKngaDwOACKl5s.
@@ -82,6 +90,7 @@ credentials:
       email: jahnwarren@gmail.com
       failed_login_attempts: 0
       first_name: Warren
+      id: 3fe9975d-7516-4b86-9edc-f90448424819
       last_name: Jahn
       logged_in: false
       password: $2b$12$BaQwLzEiMCb6yZhaLMDd6epXaeV8nBN6JXxD4RAj0uULaCd6gaiRq
@@ -91,6 +100,7 @@ credentials:
       email: lwelch15@gmail.com
       failed_login_attempts: 0
       first_name: Loren
+      id: adaf41a2-d0f6-44ae-96df-1693e02e88d6
       last_name: Welch
       logged_in: false
       password: $2b$12$6V3rfa3lcpBwhvY5uyCj3ukoiOYQULNp10kn0xQhdNrl0WaIu1dCa
@@ -100,6 +110,7 @@ credentials:
       email: rjkennedy1260@gmail.com
       failed_login_attempts: 0
       first_name: Robert
+      id: 1769888a-8594-4fad-a95b-553d7fa1a897
       last_name: Kennedy
       logged_in: false
       password: $2b$12$o8b/ljga/s7YRppGpslv8e1CgXMZeVMie5iGI5dhMDlw54qWfSsBG
@@ -109,6 +120,7 @@ credentials:
       email: smohs1@hotmail.com
       failed_login_attempts: 0
       first_name: Steve
+      id: 3a3282d1-dfda-477f-a8e5-4f7fa474c37a
       last_name: Mohs
       logged_in: false
       password: $2b$12$4TfNtdCk4V3nNMe5ScaYJeu1x3xAjS/k2HleVAue5KkOXCfV53EDO
@@ -118,6 +130,7 @@ credentials:
       email: thepromodepot@gmail.com
       failed_login_attempts: 0
       first_name: John
+      id: 0f7bc0ea-6704-491d-8fe0-5a015a9851c9
       last_name: Wholihan
       logged_in: false
       password: $2b$12$0gQldRnQDm7QFOC0X3FMmeUgJuFyOVWnWDlEVn/Ok4iasjbtVY9NO
@@ -127,6 +140,7 @@ credentials:
       email: willcokeley@gmail.com
       failed_login_attempts: 0
       first_name: Will
+      id: 74c6942d-3a94-42f2-bed1-1457483d9eaa
       last_name: Cokeley
       logged_in: false
       password: $2b$12$Fr5LkfQ/FYkjVkTnfcvxoeRHZEGE9YyAYqCLDk2DO7nIy7qWdZZO.
