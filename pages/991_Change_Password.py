@@ -7,7 +7,7 @@ PAGE_ICON = ":skull:"
 
 st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON)
 
-st.title("Reset Password :skull_and_crossbones:")
+st.title("Change Password :skull_and_crossbones:")
 
 if st.session_state.get("authentication_status") is not None:
     authenticator = st.session_state.get("authenticator")
