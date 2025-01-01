@@ -63,15 +63,16 @@ def load_draft_data(conn: SnowflakeConnection) -> Dict[str, pd.DataFrame]:
     """
     try:
         # Load current and historical picks
+        df_current = load_snowflake_table(conn, "picks_current_year")
         df_2024 = load_snowflake_table(conn, "picks_twenty_four")
-        df_2023 = load_snowflake_table(conn, "picks_twenty_three")
+        # df_2023 = load_snowflake_table(conn, "picks_twenty_three")
 
         # Load picks by person
         df_picks = load_snowflake_table(conn, "draft")
         df_picks.drop(columns="ID", inplace=True)
 
         logger.info("Draft data loaded successfully")
-        return {"current": df_2024, "historical": df_2023, "by_person": df_picks}
+        return {"current": df_current, "historical": df_2024, "by_person": df_picks}
     except Exception as e:
         error_msg = f"Error loading draft data: {str(e)}"
         logger.error(error_msg)
@@ -124,7 +125,6 @@ def handle_authentication() -> None:
             # Get user information
             name = st.session_state.name
             email = st.session_state.email
-            user_name = st.session_state.username
             logger.info(f"Displaying draft picks for authenticated user: {email}")
 
             # Display user info
