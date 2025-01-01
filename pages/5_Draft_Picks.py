@@ -1,5 +1,5 @@
 """
-Draft Picks Display for Deadpool 2024.
+Draft Picks Display for Deadpool 2025.
 
 This module displays all draft picks for the Deadpool game, including:
 - Current year's draft picks
@@ -98,10 +98,10 @@ def display_draft_picks(data: Dict[str, pd.DataFrame]) -> None:
         st.divider()
 
         # Display year-specific picks
-        st.header("2024 Draft Picks:")
+        st.header("2025 Draft Picks:")
         st.dataframe(data["current"])
 
-        st.header("2023 Draft Picks:")
+        st.header("2024 Draft Picks:")
         st.dataframe(data["historical"], use_container_width=True)
 
         logger.debug("Draft picks displayed successfully")
