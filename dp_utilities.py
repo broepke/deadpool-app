@@ -213,6 +213,9 @@ def has_fuzzy_match(value, df, column, threshold=85):
         tuple: (bool, int or None) - First element indicates if a match was found,
             second element is the ID of the matched row or None if no match
     """
+    # Handle empty dataframe/list case
+    if not df or (isinstance(df, pd.DataFrame) and len(df) == 0):
+        return False, None
 
     value_set = df[column].tolist()
 

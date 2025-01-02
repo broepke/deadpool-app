@@ -59,7 +59,7 @@ with st.form("Player to Update"):
     if submitted:
         filtered_df = df_players[df_players["EMAIL"] == sel_player]
 
-        if not filtered_df.empty:
+        if len(filtered_df) > 0:
             SEL_ID = filtered_df.iloc[0]["ID"]
             SEL_FIRST_NAME = filtered_df.iloc[0]["FIRST_NAME"]
             SEL_LAST_NAME = filtered_df.iloc[0]["LAST_NAME"]

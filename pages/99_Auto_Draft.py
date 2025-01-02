@@ -107,7 +107,7 @@ if "submitted" in st.session_state:
 
         else:
             # Set up a coupld of variables for the query
-            new_id = uuid.uuid4()
+            new_id = str(uuid.uuid4())  # Convert UUID to string
             wiki_page = pick.replace(" ", "_")
             DRAFT_YEAR = datetime.now().year
             timestamp = datetime.now(datetime.timezone.utc)

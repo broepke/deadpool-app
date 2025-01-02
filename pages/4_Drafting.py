@@ -74,7 +74,7 @@ def draft_logic(current_email: str, conn: SnowflakeConnection) -> Tuple[bool, st
     """
     df_draft = load_snowflake_table(conn, "draft_next")
 
-    if df_draft.empty:
+    if len(df_draft) == 0:
         st.write(f"And with that the {DRAFT_YEAR} Draft is over!")
         return False, ""
 
@@ -153,7 +153,7 @@ def handle_draft_submission(
 
         # Check against historical picks
         existing_person, existing_id = has_fuzzy_match(pick, df_all_people, "NAME")
-        new_id = existing_id if existing_person else uuid.uuid4()
+        new_id = existing_id if existing_person else str(uuid.uuid4())  # Convert UUID to string
 
         # Add new person if they don't exist
         if not existing_person:
@@ -202,7 +202,7 @@ def send_draft_notifications(
 
     # Notify next player
     df_next_sms = load_snowflake_table(conn, "draft_next")
-    if not df_next_sms.empty:
+    if len(df_next_sms) > 0:
         next_name = df_next_sms["NAME"].iloc[0]
         next_sms = df_next_sms["SMS"].iloc[0]
 
@@ -284,7 +284,7 @@ def main():
             df_picks,
             df_all_people,
             opted_in_numbers,
-            user_name,
+            name,
         )
         st.divider()
         display_draft_notes()

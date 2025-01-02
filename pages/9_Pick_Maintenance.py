@@ -114,7 +114,7 @@ def get_pick_details(df: pd.DataFrame, pick_name: str) -> Optional[PickData]:
     """
     try:
         filtered_df = df[df["NAME"] == pick_name]
-        if not filtered_df.empty:
+        if len(filtered_df) > 0:
             row = filtered_df.iloc[0]
             return PickData(
                 id=row["ID"],
