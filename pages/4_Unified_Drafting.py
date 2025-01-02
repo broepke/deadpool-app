@@ -163,7 +163,10 @@ def draft_pick(
 
         # Record the pick
         # For admin mode, get ID from DataFrame, otherwise use the provided user_info directly
-        player_id = user_info["ID"].iloc[0] if isinstance(user_info, pd.DataFrame) else user_info
+        if isinstance(user_info, pd.DataFrame) and not user_info.empty:
+            player_id = user_info["ID"].iloc[0]
+        else:
+            player_id = user_info
         conn.cursor().execute(
             SQL_INSERT_PLAYER_PICKS,
             (player_id, DRAFT_YEAR, person_id, timestamp),
