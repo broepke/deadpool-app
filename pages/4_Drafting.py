@@ -46,7 +46,7 @@ VALUES (%s, %s, %s, %s)
 """
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON)
@@ -117,7 +117,7 @@ def draft_pick(
     user_info: Any,
     conn: Any,
     opted_in_numbers: List[str],
-    current_drafts: List[str],
+    current_drafts: pd.DataFrame,
     user_name: str,
     admin_mode: bool = False
 ) -> None:
@@ -132,25 +132,53 @@ def draft_pick(
         user_name: Name of the user making the pick
         admin_mode: Whether the draft is being made by an admin
     """
-    logger.info(f"Processing draft submission for pick: {pick}")
+    logger.info(f"Processing draft submission for pick: {pick} in {'admin' if admin_mode else 'regular'} mode")
 
     try:
+        logger.debug("Starting draft_pick processing")
+        logger.debug(f"Pick: {pick}")
+
+        # Validate user_info based on mode
+        if admin_mode:
+            if not isinstance(user_info, pd.DataFrame):
+                logger.error("Admin mode requires DataFrame user_info")
+                st.error("Invalid admin user information format")
+                return
+            if len(user_info) == 0 or "ID" not in user_info.columns:
+                logger.error("Admin user_info DataFrame is empty or missing ID column")
+                st.error("Invalid admin user data structure")
+                return
+            logger.debug(f"Admin mode - User info DataFrame:\n{user_info}")
+            player_id = user_info["ID"].iloc[0]
+            player_email = user_info["EMAIL"].iloc[0]
+            logger.info(f"Admin drafting for player: {player_email}")
+        else:
+            if not isinstance(user_info, str):
+                logger.error("Regular mode requires string user_info (player ID)")
+                st.error("Invalid user information format")
+                return
+            player_id = user_info
+            logger.debug(f"Regular mode - Player ID: {player_id}")
+
         if not pick or not validate_pick(pick):
+            logger.debug("Pick validation failed")
             return
 
         # Check for duplicate picks this year
+        logger.debug("Checking for duplicates")
         has_match, match_id = has_fuzzy_match(pick, current_drafts, "NAME")
         if has_match:
-            st.error(
-                """That pick has already been taken. Please try again. 
-                Please review the "Draft Picks" page for more information."""
-            )
+            error_msg = "That pick has already been taken. Please review the 'Draft Picks' page."
+            logger.warning(f"Duplicate pick attempted: {pick}, matching {match_id}")
+            st.error(error_msg)
             st.info(f"Match found: {match_id}")
             return
 
         # Check if person exists in database
+        logger.debug("Checking if person exists in database")
         df_all_people = load_snowflake_table(conn, "people")
         existing_person, existing_id = has_fuzzy_match(pick, df_all_people, "NAME")
+        logger.debug(f"Person exists: {existing_person}, ID: {existing_id}")
         
         # Use existing ID if person exists, otherwise generate new one
         person_id = existing_id if existing_person else str(uuid.uuid4())
@@ -159,28 +187,31 @@ def draft_pick(
 
         # Only insert new person if they don't exist
         if not existing_person:
+            logger.info(f"Adding new person to database: {pick}")
             conn.cursor().execute(SQL_INSERT_PEOPLE, (person_id, pick, wiki_page))
-
         # Record the pick
-        # For admin mode, get ID from DataFrame, otherwise use the provided user_info directly
-        if isinstance(user_info, pd.DataFrame) and not user_info.empty:
-            player_id = user_info["ID"].iloc[0]
-        else:
-            player_id = user_info
+        logger.info(f"Recording pick: {pick} for player {player_id}")
         conn.cursor().execute(
             SQL_INSERT_PLAYER_PICKS,
             (player_id, DRAFT_YEAR, person_id, timestamp),
         )
 
         # Send notifications
-        send_draft_notifications(pick, user_name, opted_in_numbers, conn)
+        if admin_mode:
+            logger.info("Admin mode - Sending notifications on behalf of player")
+            # In admin mode, use the drafted player's name instead of admin's name
+            player_name = user_info["NAME"].iloc[0]
+            send_draft_notifications(pick, player_name, opted_in_numbers, conn)
+        else:
+            logger.info("Regular mode - Sending notifications")
+            send_draft_notifications(pick, st.session_state.name, opted_in_numbers, conn)
         
-        st.success("Draft pick complete")
+        st.success(f"Draft pick complete{' (Admin Mode)' if admin_mode else ''}")
         reset()
 
     except Exception as e:
-        logger.error(f"Error processing draft pick: {str(e)}")
-        st.error(f"Error occurred: {str(e)}")
+        logger.error(f"Error processing draft pick in {'admin' if admin_mode else 'regular'} mode: {str(e)}")
+        st.error(f"Error occurred while processing draft pick: {str(e)}")
         reset()
 
 
@@ -199,7 +230,12 @@ def send_draft_notifications(
         conn: Snowflake database connection
     """
     # Notify opted-in users about the pick
-    pick_message = f"{user_name} has picked {pick}"
+    # In admin mode, user_name will be the player's name from the database
+    # In regular mode, user_name will be the username, so we need to get the full name from session state
+    if is_admin():
+        pick_message = f"{user_name} has picked {pick}"
+    else:
+        pick_message = f"{st.session_state.name} has picked {pick}"
     send_sms(pick_message, opted_in_numbers)
 
     # Notify next player
@@ -259,8 +295,30 @@ def main() -> None:
 
     # Database connections and data loading
     conn = snowflake_connection_helper()
+    logger.debug("Loading current year picks")
     df_picks = load_snowflake_table(conn, "picks_current_year")
-    current_drafts = df_picks["NAME"].tolist()
+    logger.debug(f"Picks table type: {type(df_picks)}")
+    logger.debug(f"Picks table shape: {df_picks.shape}")
+    logger.debug(f"Picks table columns: {df_picks.columns.tolist()}")
+    
+    # Convert picks to list and create DataFrame for fuzzy matching
+    logger.debug("Creating current drafts DataFrame")
+    try:
+        current_drafts_df = pd.DataFrame({
+            'NAME': df_picks["NAME"].tolist(),
+            'ID': df_picks["ID"].tolist() if "ID" in df_picks.columns else df_picks.index
+        })
+        logger.debug(f"Current drafts DataFrame columns: {current_drafts_df.columns.tolist()}")
+        logger.debug(f"Current drafts DataFrame sample:\n{current_drafts_df.head()}")
+        
+        current_drafts = current_drafts_df
+        logger.debug(f"Processed current drafts type: {type(current_drafts)}")
+        logger.debug(f"Current drafts count: {len(current_drafts)}")
+    except Exception as e:
+        logger.error(f"Error processing current drafts: {str(e)}")
+        current_drafts = pd.DataFrame(columns=['NAME', 'ID'])
+        logger.debug("Created empty current drafts DataFrame due to error")
+    
     df_opted = load_snowflake_table(conn, "draft_opted_in")
     opted_in_numbers = df_opted["SMS"].tolist()
 
@@ -270,27 +328,27 @@ def main() -> None:
         df_players = load_snowflake_table(conn, "draft_next")
         
         try:
-            df_player = df_players["EMAIL"].iloc[0]
-            st.write("Drafting for:", df_player)
-            with st.form("Draft Picks"):
-                pick = st.text_input(
-                    "Please choose the celebrity pick for the next player:",
-                    "",
-                    key="celeb_auto_pick",
-                ).strip()
+            if len(df_players) > 0:
+                next_player_email = df_players["EMAIL"].iloc[0]
+                st.write("Drafting for:", next_player_email)
+                with st.form("Draft Picks"):
+                    pick = st.text_input(
+                        "Please choose the celebrity pick for the next player:",
+                        "",
+                        key="celeb_auto_pick",
+                    ).strip()
 
-                if st.form_submit_button("Submit", on_click=submitted):
-                    draft_pick(
-                        pick, df_players, conn, opted_in_numbers, current_drafts,
-                        user_name, admin_mode=True
-                    )
-                    st.divider()
-                    display_draft_notes()
-                    
-        except IndexError:
-            st.info("There are no additional players to draft for.")
-            logger.info("No more players in draft queue")
-            
+                    if st.form_submit_button("Submit", on_click=submitted):
+                        draft_pick(
+                            pick, df_players, conn, opted_in_numbers, current_drafts,
+                            user_name, admin_mode=True
+                        )
+                        st.divider()
+                        display_draft_notes()
+            else:
+                st.info("There are no additional players to draft for.")
+                logger.info("No more players in draft queue")
+                
         except Exception as e:
             logger.error(f"Error in admin mode: {str(e)}")
             st.error(f"An error occurred: {str(e)}")

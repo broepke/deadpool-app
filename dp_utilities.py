@@ -214,14 +214,25 @@ def has_fuzzy_match(value, df, column, threshold=85):
             second element is the ID of the matched row or None if no match
     """
     # Handle empty dataframe/list case
-    if not df or (isinstance(df, pd.DataFrame) and len(df) == 0):
-        return False, None
-
-    value_set = df[column].tolist()
+    if isinstance(df, pd.DataFrame):
+        if len(df) == 0:
+            return False, None
+        value_set = df[column].tolist()
+    elif isinstance(df, list):
+        if not df:
+            return False, None
+        value_set = df
+    else:
+        raise ValueError(f"Expected DataFrame or list, got {type(df)}")
 
     for index, item in enumerate(value_set):
         if fuzz.token_sort_ratio(value.lower(), item.lower()) >= threshold:
-            person_id = df.iloc[index]["ID"]
+            # Get ID differently based on input type
+            if isinstance(df, pd.DataFrame):
+                person_id = df.iloc[index]["ID"]
+            else:
+                # For list input, we can't get an ID
+                person_id = None
             return True, person_id
     return False, None
 
