@@ -10,6 +10,9 @@ PAGE_ICON = ":skull:"
 
 st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON)
 st.title("Forgot Password :skull_and_crossbones:")
+st.write(
+    "Enter your **email** below and we will send you a new password."
+)
 
 # Get all credentials
 with open("config.yaml") as file:

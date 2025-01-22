@@ -8,6 +8,16 @@ PAGE_ICON = ":skull:"
 st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON)
 
 st.title("Change Password :skull_and_crossbones:")
+st.write("""
+**Password must be:**
+
+* Between 8 and 20 characters long.
+* Contain at least one lowercase letter.
+* Contain at least one uppercase letter.
+* Contain at least one digit.
+* Contain at least one special character from [@$!%*?&].
+
+""")
 
 if st.session_state.get("authentication_status") is not None:
     authenticator = st.session_state.get("authenticator")

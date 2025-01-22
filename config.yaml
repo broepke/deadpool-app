@@ -21,7 +21,7 @@ credentials:
       id: 1831699b-e255-45ff-8671-b5c840922735
       last_name: Roepke
       logged_in: false
-      password: $2b$12$CI2MOIAFgb/XBD9laECG8Omaf75WV3CVRVCwHc/CBqzkyTLdK.STy
+      password: $2b$12$rPnlRb5rZfzAo9pf/NPbLe70dSV4oUKYJ9eX8qSXBdVEWbd5shSJa
       roles:
       - admin
       - user
