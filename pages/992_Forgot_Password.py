@@ -62,7 +62,7 @@ try:
     )
     if username_of_forgotten_password:
         subject = "Your New Password"
-        body = f"Hello,\n\nYour new password is:\n\n{new_random_password}\n\nPeace out,\nThe Arbiter"
+        body = f"Hello,\n\nYour new password is:\n\n{new_random_password}\n\nPlease go to https://deadpool.streamlit.app, log in and change your password as needed.\n\nPeace out,\nThe Arbiter"
         if send_email(email_of_forgotten_password, subject, body):
             st.success("Email sent successfully!")
 
