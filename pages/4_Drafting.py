@@ -185,16 +185,23 @@ def draft_pick(
         wiki_page = pick.replace(" ", "_")
         timestamp = datetime.now(timezone.utc)
 
+        # Start transaction
+        conn.cursor().execute("BEGIN")
+
         # Only insert new person if they don't exist
         if not existing_person:
             logger.info(f"Adding new person to database: {pick}")
             conn.cursor().execute(SQL_INSERT_PEOPLE, (person_id, pick, wiki_page))
+
         # Record the pick
         logger.info(f"Recording pick: {pick} for player {player_id}")
         conn.cursor().execute(
             SQL_INSERT_PLAYER_PICKS,
             (player_id, DRAFT_YEAR, person_id, timestamp),
         )
+
+        # Commit transaction
+        conn.cursor().execute("COMMIT")
 
         # Send notifications
         if admin_mode:
@@ -212,6 +219,7 @@ def draft_pick(
     except Exception as e:
         logger.error(f"Error processing draft pick in {'admin' if admin_mode else 'regular'} mode: {str(e)}")
         st.error(f"Error occurred while processing draft pick: {str(e)}")
+        conn.cursor().execute("ROLLBACK")
         reset()
 
 
