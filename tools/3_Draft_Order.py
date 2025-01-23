@@ -71,9 +71,9 @@ def load_draft_order(conn: SnowflakeConnection) -> pd.DataFrame:
         DataFrame containing sorted draft order
     """
     try:
-        df_ord = load_snowflake_table(conn, "draft_selection")
+        df_ord = load_snowflake_table(conn, "draft_order")
         logger.info("Draft order data loaded successfully")
-        return df_ord.sort_values(by="SCORE", ascending=False).reset_index(drop=True)
+        return df_ord.sort_values(by="DRAFT_ORDER", ascending=False).reset_index(drop=True)
     except Exception as e:
         error_msg = f"Error loading draft order: {str(e)}"
         logger.error(error_msg)

@@ -54,6 +54,7 @@ credentials:
       logged_in: false
       password: $2b$12$Vmz6ocqB5dm/A3Km4fuKjOKRiTS/T4ko3qd7FnymWKTZxtC0eMFea
       roles:
+      - admin
       - user
     clm1970@gmail.com:
       email: clm1970@gmail.com
