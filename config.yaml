@@ -83,7 +83,7 @@ credentials:
       id: bc913bed-5795-441d-916b-2a778383858e
       last_name: Frazier
       logged_in: false
-      password: $2b$12$HVjIloNQsmIj.uTRmBXkqefGQjb8/NQsJ/aawOgKngaDwOACKl5s.
+      password: $2b$12$AjpTJ2lsUG7RkjCKg2EwsOkENtmVGzZu3K4Q4j4eTbTWSTZeMBQoO
       roles:
       - user
     jahnwarren@gmail.com:
