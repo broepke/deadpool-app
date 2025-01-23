@@ -186,7 +186,7 @@ def draft_pick(
         timestamp = datetime.now(timezone.utc)
 
         # Start transaction
-        conn.cursor().execute("BEGIN")
+        conn.cursor().execute("START TRANSACTION")
 
         # Only insert new person if they don't exist
         if not existing_person:
