@@ -93,7 +93,7 @@ def display_draft_picks(data: Dict[str, pd.DataFrame]) -> None:
 
         # Display picks by person
         st.subheader("Current Draft Picks by Person")
-        st.dataframe(data["by_person"], use_container_width=True)
+        st.dataframe(data["by_person"].sort_values (by='DRAFT_ORDER'), use_container_width=True)
 
         st.divider()
 
