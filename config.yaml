@@ -66,8 +66,8 @@ credentials:
       password: $2b$12$gEDIb.j3fv5skQKpIFegJOZii54QrJKWCFlQhoIyOk3E.2brkdiQ.
       roles:
       - user
-    derek.cornwall@wtwco.com:
-      email: derek.cornwall@wtwco.com
+    dcornwall@yahoo.com:
+      email: dcornwall@yahoo.com
       failed_login_attempts: 0
       first_name: Derek
       id: 0702751f-cb30-42d7-81d3-025b32f8dca0
