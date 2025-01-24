@@ -1,9 +1,6 @@
 Flask
 gunicorn
 fuzzywuzzy
-openai
-tabulate
-numexpr
 python-Levenshtein
 twilio
 sendgrid
@@ -11,12 +8,5 @@ mixpanel
 launchdarkly-server-sdk
 streamlit
 streamlit-authenticator
-streamlit_code_editor
 SPARQLWrapper
-vanna[snowflake]
-langchain
-langchain-openai
-langchain-community
-langchain-experimental
-langchainhub
 snowflake-snowpark-python
